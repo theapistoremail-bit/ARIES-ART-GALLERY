@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Aboreto&display=swap" rel="stylesheet">
+    <title>Eventos - Aries Art Gallery</title>
+    <style>
+        body {
+            font-family: 'Aboreto', cursive;
+            margin: 0;
+            padding: 0;
+            background-color: white;
+            color: black;
+        }
+        header, footer {
+            background-color: red;
+            color: white;
+            text-align: center;
+            padding: 1em 0;
+        }
+        nav {
+            display: flex;
+            justify-content: space-around;
+            background-color: red;
+            padding: 1em 0;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .event-section {
+            margin: 2em auto;
+            max-width: 1200px;
+            padding: 2em;
+            border-top: 2px solid red;
+        }
+        .event-section h2 {
+            color: red;
+            text-align: center;
+            margin-bottom: 1em;
+        }
+        .slideshow-container {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto 2em;
+            overflow: hidden;
+            border: 2px solid #fff;
+        }
+        .slides {
+            display: none;
+            width: 100%;
+        }
+        .slides img {
+            width: 100%;
+            display: block;
+        }
+        .slides .text {
+            position: absolute;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 20px;
+            font-weight: bold;
+            color: white;
+            text-align: center;
+        }
+        .prev, .next {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            width: auto;
+            margin-top: -22px;
+            padding: 16px;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+            transition: 0.6s ease;
+            border-radius: 0 3px 3px 0;
+        }
+        .next {
+            right: 0;
+            border-radius: 3px 0 0 3px;
+        }
+        .prev:hover, .next:hover {
+            background-color: rgba(0,0,0,0.8);
+        }
+        .dot-container {
+            text-align: center;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.5);
+        }
+        .dot {
+            cursor: pointer;
+            height: 15px;
+            width: 15px;
+            margin: 0 2px;
+            background-color: #bbb;
+            border-radius: 50%;
+            display: inline-block;
+            transition: background-color 0.6s ease;
+        }
+        .active, .dot:hover {
+            background-color: #717171;
+        }
+    </style>
+    <script>
+        function autoSlides(slideshowClass) {
+            let slideIndex = 0;
+            const slides = document.querySelectorAll(`.${slideshowClass} .slides`);
+            const dots = document.querySelectorAll(`.${slideshowClass} .dot`);
+
+            function showSlides() {
+                for (let i = 0; i < slides.length; i++) {
+                    slides[i].style.display = "none";
+                }
+                slideIndex++;
+                if (slideIndex > slides.length) { slideIndex = 1 }
+                for (let i = 0; i < dots.length; i++) {
+                    dots[i].className = dots[i].className.replace(" active", "");
+                }
+                slides[slideIndex - 1].style.display = "block";
+                dots[slideIndex - 1].className += " active";
+                setTimeout(showSlides, 4000); // Cambia de slide cada 4 segundos
+            }
+            showSlides();
+        }
+
+        window.onload = function() {
+            autoSlides("slideshow1");
+            autoSlides("slideshow2");
+            autoSlides("slideshow3");
+        };
+    </script>
+</head>
+<body>
+    <header>
+        <h1>Eventos - Aries Art Gallery</h1>
+    </header>
+    <nav>
+        <a href="#">Inicio</a>
+        <a href="#">Registro</a>
+        <a href="#">Iniciar Sesión</a>
+        <a href="#">Galería</a>
+        <a href="#">Contacto</a>
+    </nav>
+
+    <div class="event-section">
+        <h2>Exposición de Arte Emergente</h2>
+        <div class="slideshow-container slideshow1">
+            <div class="slides">
+                <img src="C:\Users\ASUS\Desktop\project\Copia de Banner de LinkedIn Tecnología Abstracto Azul y Blanco.png" alt="Arte Contemporáneo 1">
+                <div class="text">Obra 1 - Contemporáneo</div>
+            </div>
+            <div class="slides">
+                <img src="C:\Users\ASUS\Desktop\project\Banner EXPO.jpg" alt="Arte Contemporáneo 2">
+                <div class="text">Obra 2 - Contemporáneo</div>
+            </div>
+            <a class="prev" onclick="plusSlides(-1, 'slideshow1')">&#10094;</a>
+            <a class="next" onclick="plusSlides(1, 'slideshow1')">&#10095;</a>
+        </div>
+        <div class="dot-container">
+            <span class="dot" onclick="currentSlide(1, 'slideshow1')"></span> 
+            <span class="dot" onclick="currentSlide(2, 'slideshow1')"></span> 
+        </div>
+    </div>
+<div class="event-section">
+        <h2>Concurso De Ilustración </h2>
+        <div class="slideshow-container slideshow1">
+            <div class="slides">
+                <img src="C:\Users\ASUS\Desktop\project\ILL.png" alt="Arte Contemporáneo 1">
+                <div class="text">Obra 1 - Contemporáneo</div>
+            </div>
+            <div class="slides">
+                <img src="arte2.jpg" alt="Arte Contemporáneo 2">
+                <div class="text">Obra 2 - Contemporáneo</div>
+            </div>
+            <a class="prev" onclick="plusSlides(-1, 'slideshow1')">&#10094;</a>
+            <a class="next" onclick="plusSlides(1, 'slideshow1')">&#10095;</a>
+        </div>
+        <div class="dot-container">
+            <span class="dot" onclick="currentSlide(1, 'slideshow1')"></span> 
+            <span class="dot" onclick="currentSlide(2, 'slideshow1')"></span> 
+        </div>
+    </div>
+<div class="event-section">
+        <h2>Exposición de Arte Contemporáneo</h2>
+        <div class="slideshow-container slideshow1">
+            <div class="slides">
+                <img src="arte1.jpg" alt="Arte Contemporáneo 1">
+                <div class="text">Obra 1 - Contemporáneo</div>
+            </div>
+            <div class="slides">
+                <img src="arte2.jpg" alt="Arte Contemporáneo 2">
+                <div class="text">Obra 2 - Contemporáneo</div>
+            </div>
+            <a class="prev" onclick="plusSlides(-1, 'slideshow1')">&#10094;</a>
+            <a class="next" onclick="plusSlides(1, 'slideshow1')">&#10095;</a>
+        </div>
+        <div class="dot-container">
+            <span class="dot" onclick="currentSlide(1, 'slideshow1')"></span> 
+            <span class="dot" onclick="currentSlide(2, 'slideshow1')"></span> 
+        </div>
+    </div>
+
+<div class="event-section">
+        <h2>Exposición y Subasta En Linea</h2>
+        <div class="slideshow-container slideshow1">
+            <div class="slides">
+                <img src="arte1.jpg" alt="Arte Contemporáneo 1">
+                <div class="text">Obra 1 - Contemporáneo</div>
+            </div>
+            <div class="slides">
+                <img src="arte2.jpg" alt="Arte Contemporáneo 2">
+                <div class="text">Obra 2 - Contemporáneo</div>
+            </div>
+            <a class="prev" onclick="plusSlides(-1, 'slideshow1')">&#10094;</a>
+            <a class="next" onclick="plusSlides(1, 'slideshow1')">&#10095;</a>
+        </div>
+        <div class="dot-container">
+            <span class="dot" onclick="currentSlide(1, 'slideshow1')"></span> 
+            <span class="dot" onclick="currentSlide(2, 'slideshow1')"></span> 
+        </div>
+    </div>
+
+<div class="event-section">
+        <h2>ARTE GENERATIVO</h2>
+        <div class="slideshow-container slideshow1">
+            <div class="slides">
+                <img src="arte1.jpg" alt="Arte Contemporáneo 1">
+                <div class="text">Obra 1 - Contemporáneo</div>
+            </div>
+            <div class="slides">
+                <img src="arte2.jpg" alt="Arte Contemporáneo 2">
+                <div class="text">Obra 2 - Contemporáneo</div>
+            </div>
+            <a class="prev" onclick="plusSlides(-1, 'slideshow1')">&#10094;</a>
+            <a class="next" onclick="plusSlides(1, 'slideshow1')">&#10095;</a>
+        </div>
+        <div class="dot-container">
+            <span class="dot" onclick="currentSlide(1, 'slideshow1')"></span> 
+            <span class="dot" onclick="currentSlide(2, 'slideshow1')"></span> 
+        </div>
+    </div>
+
+
+
+  
+    <footer>
+        <p>&copy; 2024 Aries Art Gallery. Todos los derechos reservados.</p>
+    </footer>
+</body>
+</html>

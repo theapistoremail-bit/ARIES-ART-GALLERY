@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Aboreto&display=swap" rel="stylesheet">
+    <title>Planes y Precios - Aries Art Gallery</title>
+    <style>
+        body {
+            font-family: 'Aboreto', cursive;
+            margin: 0;
+            padding: 0;
+            background-color: white;
+            color: black;
+        }
+        header {
+            background-color: red;
+            color: white;
+            padding: 1em 0;
+            text-align: center;
+        }
+        nav {
+            display: flex;
+            justify-content: space-around;
+            background-color: red;
+            padding: 1em 0;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2em;
+        }
+        .plans {
+            display: flex;
+            justify-content: space-around;
+            gap: 20px;
+            margin-top: 2em;
+        }
+        .plan {
+            border: 1px solid red;
+            border-radius: 10px;
+            background-color: white;
+            text-align: center;
+            padding: 2em;
+            flex: 1;
+        }
+        .plan h2 {
+            color: red;
+            margin-bottom: 1em;
+        }
+        .plan .price {
+            font-size: 2em;
+            color: black;
+            margin: 1em 0;
+        }
+        .plan ul {
+            list-style: none;
+            padding: 0;
+            margin: 1em 0;
+        }
+        .plan ul li {
+            margin: 0.5em 0;
+        }
+        .cta-button {
+            display: inline-block;
+            padding: 0.5em 2em;
+            background-color: red;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            margin-top: 1em;
+        }
+        footer {
+            background-color: red;
+            color: white;
+            text-align: center;
+            padding: 1em 0;
+            position: relative;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Aries Art Gallery</h1>
+    </header>
+    <nav>
+        <a href="#inicio">Inicio</a>
+        <a href="#planes">Planes</a>
+        <a href="#galeria">Galería</a>
+        <a href="#contacto">Contacto</a>
+    </nav>
+    <div class="container">
+        <h1>Planes de Suscripción</h1>
+        <div class="plans">
+            <div class="plan">
+                <h2>Plan Básico</h2>
+                <p class="price">$0/mes</p>
+                <ul>
+                    <li>Acceso a tu propia galerías digital</li>
+                    <li>Descuentos en productos del marketplace</li>
+                    <li>Soporte estándar</li>
+                </ul>
+                <a href="#suscribirse" class="cta-button">Suscribirse</a>
+            </div>
+            <div class="plan">
+                <h2>Plan Premium</h2>
+                <p class="price">$5/mes</p>
+                <ul>
+                    <li> </li>
+                    <li>Acceso a tu propia galerías digital</li>
+                    <li>Descuentos exclusivos y productos de edición limitada</li>
+                    <li>Soporte prioritario</li>
+                </ul>
+                <a href="#suscribirse" class="cta-button">Suscribirse</a>
+            </div>
+            <div class="plan">
+                <h2>Plan VIP</h2>
+                <p class="price">$25/mes</p>
+                <ul>
+                    <li>Acceso a tu propia galerías digital</li>
+                    <li>Acceso a herramientas y metricas de promoción de tu obra</li>
+                    <li>Descuentos exclusivos y productos de edición limitada</li>
+                    <li>Eventos exclusivos</li>
+                    <li>Asesoría personalizada</li>
+                </ul>
+                <a href="#suscribirse" class="cta-button">Suscribirse</a>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <p>&copy; 2024 Aries Art Gallery. Todos los derechos reservados.</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Aboreto&display=swap" rel="stylesheet">
+    <title>Tienda - Aries Art Gallery</title>
+    <style>
+        body {
+            font-family: 'Aboreto', cursive;
+            margin: 0;
+            padding: 0;
+            background-color: white;
+            color: black;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        header, footer {
+            background-color: red;
+            color: white;
+            text-align: center;
+            padding: 1em 0;
+        }
+        nav {
+            display: flex;
+            justify-content: space-around;
+            background-color: red;
+            padding: 1em 0;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .store-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 2em;
+            max-width: 1200px;
+            margin: auto;
+        }
+        .product-box {
+            width: 200px;
+            border: 2px solid #fff;
+            border-radius: 10px;
+            overflow: hidden;
+            background-color: #f9f9f9;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .product-box:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        }
+        .product-box img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        .product-info {
+            padding: 1em;
+            text-align: center;
+        }
+        .product-info h3 {
+            margin: 0.5em 0;
+            font-size: 1.2em;
+            color: red;
+        }
+        .product-info p {
+            margin: 0.5em 0;
+        }
+        .buy-button {
+            display: inline-block;
+            padding: 0.5em 1.5em;
+            background-color: red;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        .buy-button:hover {
+            background-color: darkred;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Tienda de Aries Art Gallery</h1>
+    </header>
+    <nav>
+        <a href="pagina1.html">Inicio</a>
+        <a href="galeria.html">Galería</a>
+        <a href="eventos.html">Eventos</a>
+        <a href="contacto.html">Contacto</a>
+    </nav>
+    <div class="store-container"></div>
+    <footer>
+        <p>&copy; 2024 Aries Art Gallery. Todos los derechos reservados.</p>
+    </footer>
+
+    <script>
+        const obras = [
+            { nombre: "Obra Maestra 1", autor: "Artista A", precio: 500, imagen: "img/obra1.jpg", paypal: "https://www.paypal.com/paypalme/AriesGallery/500" },
+            { nombre: "Obra Maestra 2", autor: "Artista B", precio: 750, imagen: "img/obra2.jpg", paypal: "https://www.paypal.com/paypalme/AriesGallery/750" },
+            { nombre: "Obra Maestra 3", autor: "Artista C", precio: 1200, imagen: "img/obra3.jpg", paypal: "https://www.paypal.com/paypalme/AriesGallery/1200" },
+            { nombre: "Obra Maestra 4", autor: "Artista D", precio: 850, imagen: "img/obra4.jpg", paypal: "https://www.paypal.com/paypalme/AriesGallery/850" },
+            { nombre: "Obra Maestra 5", autor: "Artista E", precio: 1000, imagen: "img/obra5.jpg", paypal: "https://www.paypal.com/paypalme/AriesGallery/1000" }
+        ];
+
+        const container = document.querySelector('.store-container');
+
+        for (let i = 1; i <= 100; i++) {
+            const obra = obras[i % obras.length];  // Reutilizar obras
+            const productBox = document.createElement('div');
+            productBox.classList.add('product-box');
+
+            productBox.innerHTML = `
+                <img src="${obra.imagen}" alt="${obra.nombre}">
+                <div class="product-info">
+                    <h3>${obra.nombre} (${i})</h3>
+                    <p>Autor: ${obra.autor}</p>
+                    <p>Precio: $${obra.precio} USD</p>
+                    <a href="${obra.paypal}" target="_blank" class="buy-button">Comprar</a>
+                </div>
+            `;
+
+            container.appendChild(productBox);
+        }
+    </script>
+</body>
+</html>

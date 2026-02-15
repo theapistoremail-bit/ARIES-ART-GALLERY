@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Aboreto&display=swap" rel="stylesheet">
+    <title>Tienda - Aries Art Gallery</title>
+    <style>
+        body {
+            font-family: 'Aboreto', cursive;
+            margin: 0;
+            padding: 0;
+            background-color: white;
+            color: black;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: red;
+            color: white;
+            padding: 1em 0;
+            text-align: center;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-around;
+            background-color: red;
+            padding: 1em 0;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .store-container {
+            max-width: 1200px;
+            margin: 2em auto;
+            padding: 1em;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .product-box {
+            position: relative;
+            background-color: #f8f8f8;
+            overflow: hidden;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .product-box:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .product-box img {
+            width: 100%;
+            display: block;
+            border-bottom: 2px solid red;
+        }
+
+        .product-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 10px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            text-align: center;
+        }
+
+        .product-box:hover .product-info {
+            opacity: 1;
+        }
+
+        .product-info h3 {
+            margin: 0;
+            font-size: 1.2em;
+        }
+
+        .product-info p {
+            margin: 5px 0;
+            font-size: 0.9em;
+        }
+
+        .buy-button {
+            background-color: red;
+            color: white;
+            padding: 0.5em 1em;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            margin-top: 10px;
+            display: inline-block;
+        }
+
+        footer {
+            background-color: red;
+            color: white;
+            text-align: center;
+            padding: 1em 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Tienda de Aries Art Gallery</h1>
+    </header>
+
+    <nav>
+        <a href="index.html">Inicio</a>
+        <a href="galeria.html">Galería</a>
+        <a href="eventos.html">Eventos</a>
+        <a href="contacto.html">Contacto</a>
+        <a href="tienda.html">Tienda</a>
+    </nav>
+
+    <div class="store-container">
+        <!-- GENERACIÓN DINÁMICA DE 100 PRODUCTOS -->
+        <script>
+            const container = document.querySelector('.store-container');
+            for (let i = 1; i <= 100; i++) {
+                const productBox = document.createElement('div');
+                productBox.classList.add('product-box');
+                
+                productBox.innerHTML = `
+                    <img src="obra${i % 5 + 1}.jpg" alt="Obra ${i}">
+                    <div class="product-info">
+                        <h3>Obra Maestra ${i}</h3>
+                        <p>Precio: $${Math.floor(Math.random() * 1000) + 100} USD</p>
+                        <a href="#" class="buy-button">Comprar</a>
+                    </div>
+                `;
+                container.appendChild(productBox);
+            }
+        </script>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Aries Art Gallery. Todos los derechos reservados.</p>
+    </footer>
+</body>
+</html>
