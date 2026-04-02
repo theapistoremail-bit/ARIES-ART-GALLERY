@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Aboreto&display=swap" rel="stylesheet">
+    <title>Ancient Art Museum</title>
+    <style>
+        body {
+            font-family: 'Aboreto', cursive;
+            margin: 0;
+            padding: 0;
+            background-color: white;
+            color: black;
+        }
+        header {
+            background-color: red;
+            color: white;
+            text-align: center;
+            padding: 1em 0;
+        }
+        nav {
+            background-color: red;
+            padding: 1em;
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: space-around;
+            padding: 0;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .hero {
+            background-image: url('hero-background.jpg');
+            background-size: cover;
+            text-align: center;
+            padding: 4em 2em;
+        }
+        .hero-text {
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            display: inline-block;
+            padding: 2em;
+        }
+        .hero-text h2 {
+            font-size: 2.5em;
+            margin: 0;
+        }
+        .hero-text p {
+            font-size: 1.2em;
+        }
+        .cta-button {
+            display: inline-block;
+            padding: 0.5em 2em;
+            background-color: red;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            margin-top: 1em;
+        }
+        .slideshow-container {
+            position: relative;
+            max-width: 800px;
+            margin: auto;
+            overflow: hidden;
+            border: 5px solid #000;
+        }
+        .slides {
+            display: none;
+        }
+        .slides img {
+            width: 100%;
+        }
+        .slides .text {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            padding: 10px;
+            text-align: center;
+            border-radius: 10px;
+        }
+        .prev, .next {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            width: auto;
+            margin-top: -22px;
+            padding: 16px;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+            transition: 0.6s ease;
+            border-radius: 0 3px 3px 0;
+            user-select: none;
+        }
+        .next {
+            right: 0;
+            border-radius: 3px 0 0 3px;
+        }
+        .prev:hover, .next:hover {
+            background-color: rgba(0,0,0,0.8);
+        }
+        .dot-container {
+            text-align: center;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.5);
+        }
+        .dot {
+            cursor: pointer;
+            height: 15px;
+            width: 15px;
+            margin: 0 2px;
+            background-color: #bbb;
+            border-radius: 50%;
+            display: inline-block;
+            transition: background-color 0.6s ease;
+        }
+        .active, .dot:hover {
+            background-color: #717171;
+        }
+        footer {
+            background-color: red;
+            color: white;
+            text-align: center;
+            padding: 1em 0;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
+
+        /* Responsive Design */
+        @media (min-width: 768px) {
+            .hero {
+                background-size: cover;
+                text-align: center;
+                padding: 4em 2em;
+            }
+
+            .slideshow-container {
+                max-width: 800px;
+            }
+        }
+
+        @media (max-width: 767px) {
+            nav ul {
+                flex-direction: column;
+            }
+
+            .hero-text {
+                padding: 1em;
+                font-size: 1em;
+            }
+
+            .slideshow-container {
+                max-width: 100%;
+            }
+
+            .hero-text h2 {
+                font-size: 1.5em;
+            }
+
+            .hero-text p {
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Ancient Art Museum</h1>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#gallery">Gallery</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+    <main>
+        <section class="hero">
+            <div class="hero-text">
+                <h2>Explore the Ancient Wonders</h2>
+                <p>Discover the beauty of ancient art and artifacts from around the world.</p>
+                <a href="#gallery" class="cta-button">Explore Gallery</a>
+            </div>
+        </section>
+        <section class="slideshow-container">
+            <div class="slides fade">
+                <img src="image1.jpg" style="width:100%">
+                <div class="text"><a href="link1">Ancient Art Piece 1</a></div>
+            </div>
+            <div class="slides fade">
+                <img src="image2.jpg" style="width:100%">
+                <div class="text"><a href="link2">Ancient Art Piece 2</a></div>
+            </div>
+            <div class="slides fade">
+                <img src="image3.jpg" style="width:100%">
+                <div class="text"><a href="link3">Ancient Art Piece 3</a></div>
+            </div>
+            <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+            <a class="next" onclick="plusSlides(1)">&#10095;</a>
+        </section>
+        <div class="dot-container">
+            <span class="dot" onclick="currentSlide(1)"></span> 
+            <span class="dot" onclick="currentSlide(2)"></span> 
+            <span class="dot" onclick="currentSlide(3)"></span> 
+        </div>
+    </main>
+    <footer>
+        <p>&copy; 2024 Ancient Art Museum. All rights reserved.</p>
+    </footer>
+    <script>
+        let slideIndex = 1
