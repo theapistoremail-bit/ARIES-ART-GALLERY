@@ -24,6 +24,7 @@
         nav {
             display: flex;
             justify-content: space-around;
+            flex-wrap: wrap; /* FIX ruptura */
             background-color: red;
             padding: 1em 0;
         }
@@ -31,6 +32,7 @@
             color: white;
             text-decoration: none;
             font-weight: bold;
+            margin: 0.3em; /* micro ajuste invisible */
         }
         .container {
             max-width: 1200px;
@@ -79,9 +81,8 @@
             color: white;
             text-align: center;
             padding: 1em 0;
-            position: absolute;
             width: 100%;
-            bottom: 0;
+            position: relative; /* FIX footer */
         }
     </style>
 </head>
@@ -95,6 +96,10 @@
         <a href="#login">Iniciar Sesión</a>
         <a href="#galeria">Galería</a>
         <a href="#contacto">Contacto</a>
+        <a href="#eventos">Eventos</a>
+        <a href="#tienda">Tienda</a>
+        <a href="#noticias">Noticias</a>
+        <a href="#planes">Planes</a>
     </nav>
     <div class="container">
         <div class="form-container">
@@ -127,4 +132,3 @@
     </footer>
 </body>
 </html>
-
