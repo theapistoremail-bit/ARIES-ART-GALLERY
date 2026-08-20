@@ -29,11 +29,13 @@
             justify-content: space-around;
             background-color: red;
             padding: 1em 0;
+            flex-wrap: wrap;
         }
         nav a {
             color: white;
             text-decoration: none;
             font-weight: bold;
+            padding: 5px 10px;
         }
         .slideshow-container {
             position: relative;
@@ -142,6 +144,8 @@
             let slides = document.getElementsByClassName("slides");
             let dots = document.getElementsByClassName("dot");
             
+            if (slides.length === 0) return;
+
             for (i = 0; i < slides.length; i++) {
                 slides[i].style.display = "none";  
             }
@@ -156,183 +160,9 @@
             slides[slideIndex - 1].style.display = "block";  
             dots[slideIndex - 1].className += " active";
 
-            // Cambia de diapositiva cada 3 segundos
             setTimeout(showSlides, 3000); 
         }
 
-        // Inicia el slideshow automáticamente al cargar la página
-        window.onload = showSlides;
-    </script>
-</head>
-<body>
-    <header>
-        <img src="ariesart.jpg" alt="logo" width="85" height="85">
-        <h1>Aries Art Gallery And Store</h1>
-    </header>
-    <nav>
-        <a href="<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Aboreto&display=swap" rel="stylesheet">
-    <title>Aries Art Gallery</title>
-    <style>
-        body {
-            font-family: 'Aboreto', cursive;
-            margin: 0;
-            padding: 0;
-            background-color: white;
-            color: black;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-        header {
-            background-color: red;
-            color: white;
-            padding: 1em 0;
-            text-align: center;
-        }
-        nav {
-            display: flex;
-            justify-content: space-around;
-            background-color: red;
-            padding: 1em 0;
-        }
-        nav a {
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        .slideshow-container {
-            position: relative;
-            max-width: 800px;
-            margin: auto;
-            overflow: hidden;
-            border: 2px solid #fff;
-        }
-        .slides {
-            display: none;
-            width: 100%;
-            position: relative;
-        }
-        .slides img {
-            width: 100%;
-            display: block;
-        }
-        .slides .text {
-            position: absolute;
-            top: 95%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 24px;
-            font-weight: bold;
-            color: white;
-            text-align: center;
-        }
-        .prev, .next {
-            cursor: pointer;
-            position: absolute;
-            top: 50%;
-            width: auto;
-            margin-top: -22px;
-            padding: 16px;
-            color: white;
-            font-weight: bold;
-            font-size: 18px;
-            transition: 0.6s ease;
-            border-radius: 0 3px 3px 0;
-            user-select: none;
-        }
-        .next {
-            right: 0;
-            border-radius: 3px 0 0 3px;
-        }
-        .prev:hover, .next:hover {
-            background-color: rgba(0,0,0,0.8);
-        }
-        .dot-container {
-            text-align: center;
-            padding: 10px;
-            background: rgba(0, 0, 0, 0.5);
-        }
-        .dot {
-            cursor: pointer;
-            height: 15px;
-            width: 15px;
-            margin: 0 2px;
-            background-color: #bbb;
-            border-radius: 50%;
-            display: inline-block;
-            transition: background-color 0.6s ease;
-        }
-        .active, .dot:hover {
-            background-color: #717171;
-        }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2em;
-            flex: 1;
-        }
-        .hero {
-            text-align: center;
-            padding: 2em 0;
-        }
-        .hero h1 {
-            color: red;
-        }
-        .hero p {
-            color: black;
-            font-size: 1.2em;
-        }
-        .cta-button {
-            display: inline-block;
-            padding: 0.5em 2em;
-            background-color: red;
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
-            border-radius: 5px;
-        }
-        footer {
-            background-color: red;
-            color: white;
-            text-align: center;
-            padding: 1em 0;
-            width: 100%;
-        }
-    </style>
-    <script>
-        let slideIndex = 0;
-
-        function showSlides() {
-            let i;
-            let slides = document.getElementsByClassName("slides");
-            let dots = document.getElementsByClassName("dot");
-            
-            for (i = 0; i < slides.length; i++) {
-                slides[i].style.display = "none";  
-            }
-            
-            slideIndex++;
-            if (slideIndex > slides.length) { slideIndex = 1 }
-            
-            for (i = 0; i < dots.length; i++) {
-                dots[i].className = dots[i].className.replace(" active", "");
-            }
-            
-            slides[slideIndex - 1].style.display = "block";  
-            dots[slideIndex - 1].className += " active";
-
-            // Cambia de diapositiva cada 3 segundos
-            setTimeout(showSlides, 3000); 
-        }
-
-        // Inicia el slideshow automáticamente al cargar la página
         window.onload = showSlides;
     </script>
 </head>
@@ -343,54 +173,6 @@
     </header>
     <nav>
         <a href="index.html">Inicio</a>
-        <a href="registro.html">Registrarse</a>
-        <a href="iniciar.html">Iniciar Sesión</a>
-        <a href="galeria.html">Galería</a>
-        <a href="contacto.html">Contacto</a>
-        <a href="EVENTOS.HTML">Eventos</a>
-        <a href="TIENDA.html">Tienda</a>
-        <a href="Noticias.html">Noticias</a>
-        <a href="subs.html">Planes</a>
-    </nav>
-    <div class="slideshow-container">
-        <div class="slides">
-            <a href="https://example.com">
-                <img src="Default_obra_pictorica_eslilo_modigliani_hermosa_copia_1.jpg" alt="Slide 1">
-                <div class="text">Participa Como Artista</div>
-            </a>
-        </div>
-        <div class="slides">
-            <a href="https://example.com">
-                <img src="Default_obra_pictorica_eslilo_modigliani_hermosa_copia_2.jpg" alt="Slide 2">
-                <div class="text">Muestra tus obras en tu propia galería virtual</div>
-            </a>
-        </div>
-        <div class="slides">
-            <a href="https://example.com">
-                <img src="Default_obra_pictorica_eslilo_modigliani_hermosa_copia_3.jpg" alt="Slide 3">
-                <div class="text">Obras de todas partes del mundo</div>
-            </a>
-        </div>
-        <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
-        <a class="next" onclick="plusSlides(1)">&#10095;</a>
-    </div>
-    <div class="dot-container">
-        <span class="dot" onclick="currentSlide(1)"></span> 
-        <span class="dot" onclick="currentSlide(2)"></span> 
-        <span class="dot" onclick="currentSlide(3)"></span> 
-    </div>
-    <div class="container">
-        <div class="hero">
-            <h1>Bienvenidos a Aries Art Gallery</h1>
-            <p>Descubre las mejores obras de arte en nuestra exclusiva galería. Únete a nuestra comunidad de amantes del arte.</p>
-            <a href="subs.html" class="cta-button">Regístrate Ahora</a>
-        </div>
-    </div>
-    <footer>
-        <p>&copy; 2024 Aries Art Gallery. Todos los derechos reservados.</p>
-    </footer>
-</body>
-</html>">Inicio</a>
         <a href="registro.html">Registrarse</a>
         <a href="iniciar.html">Iniciar Sesión</a>
         <a href="galeria.html">Galería</a>
