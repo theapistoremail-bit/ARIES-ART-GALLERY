@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Aboreto&display=swap" rel="stylesheet">
+
+    <title>Noticias - Aries Art Gallery</title>
+
+    <style>
+        html {
+            color-scheme: light;
+        }
+
+        body {
+            font-family: 'Aboreto', cursive;
+            margin: 0;
+            padding: 0;
+            background-color: white;
+            color: black;
+        }
+
+        header {
+            background-color: red;
+            color: white;
+            padding: 1em 0;
+            text-align: center;
+        }
+
+        header img {
+            display: block;
+            margin: 0 auto 10px;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            background-color: red;
+            padding: 1em 0;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 5px 10px;
+            margin: 0.3em;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2em;
+        }
+
+        .titulo {
+            text-align: center;
+            color: red;
+            margin-bottom: 2em;
+        }
+
+        .noticias {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2em;
+        }
+
+        .noticia {
+            border: 1px solid red;
+            border-radius: 10px;
+            overflow: hidden;
+            background-color: white;
+        }
+
+        .noticia img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .noticia-contenido {
+            padding: 1.5em;
+        }
+
+        .noticia h2 {
+            color: red;
+            margin-top: 0;
+        }
+
+        .fecha {
+            font-family: sans-serif;
+            color: #666;
+            font-size: 0.85em;
+        }
+
+        .noticia p {
+            line-height: 1.6;
+        }
+
+        .boton {
+            display: inline-block;
+            padding: 0.7em 1.5em;
+            background-color: red;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            margin-top: 1em;
+        }
+
+        .boton:hover {
+            opacity: 0.8;
+        }
+
+        footer {
+            background-color: red;
+            color: white;
+            text-align: center;
+            padding: 1em 0;
+            margin-top: 3em;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <img src="ariesart.jpg" alt="Aries Art Gallery" width="85" height="85">
+    <h1>Aries Art Gallery And Store</h1>
+</header>
+
+<nav>
+    <a href="index.html">Inicio</a>
+    <a href="registro.html">Registrarse</a>
+    <a href="iniciar.html">Iniciar Sesión</a>
+    <a href="galeria.html">Galería</a>
+    <a href="contacto.html">Contacto</a>
+    <a href="EVENTOS.HTML">Eventos</a>
+    <a href="TIENDA.html">Tienda</a>
+    <a href="Noticias.html">Noticias</a>
+    <a href="subs.html">Planes</a>
+</nav>
+
+<div class="container">
+
+    <h1 class="titulo">Noticias</h1>
+
+    <section class="noticias">
+
+        <article class="noticia">
+            <img src="Default_obra_pictorica_eslilo_modigliani_hermosa_copia_1.jpg"
+                 alt="Nueva exposición">
+            <div class="noticia-contenido">
+                <span class="fecha">20 de agosto de 2026</span>
+                <h2>Nueva exposición en Aries Art Gallery</h2>
+                <p>
+                    Descubre nuestra nueva selección de obras y conoce
+                    a los artistas que forman parte de nuestra comunidad.
+                </p>
+                <a href="galeria.html" class="boton">Ver galería</a>
+            </div>
+        </article>
+
+        <article class="noticia">
+            <img src="Default_obra_pictorica_eslilo_modigliani_hermosa_copia_2.jpg"
+                 alt="Galerías virtuales">
+            <div class="noticia-contenido">
+                <span class="fecha">18 de agosto de 2026</span>
+                <h2>Tu propia galería virtual</h2>
+                <p>
+                    Ahora puedes mostrar tus obras y construir un espacio
+                    artístico propio dentro de nuestra comunidad.
+                </p>
+                <a href="registro.html" class="boton">Participar</a>
+            </div>
+        </article>
+
+        <article class="noticia">
+            <img src="Default_obra_pictorica_eslilo_modigliani_hermosa_copia_3.jpg"
+                 alt="Artistas de todo el mundo">
+            <div class="noticia-contenido">
+                <span class="fecha">15 de agosto de 2026</span>
+                <h2>Arte de todas partes del mundo</h2>
+                <p>
+                    Conoce nuevas propuestas artísticas y descubre
+                    diferentes estilos provenientes de distintos lugares.
+                </p>
+                <a href="galeria.html" class="boton">Descubrir obras</a>
+            </div>
+        </article>
+
+    </section>
+
+</div>
+
+<footer>
+    <p>&copy; 2026 Aries Art Gallery. Todos los derechos reservados.</p>
+</footer>
+
+</body>
+</html>
