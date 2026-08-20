@@ -3,1090 +3,215 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Aboreto&family=Playfair+Display:wght@600;700&family=Bebas+Neue&family=Inter:wght@400;500;600;700&family=Cinzel:wght@600&display=swap" rel="stylesheet">
-    <title>Mi Perfil - Aries Art Gallery</title>
+    <link href="https://fonts.googleapis.com/css2?family=Aboreto&display=swap" rel="stylesheet">
+
+    <title>Iniciar Sesión - Aries Art Gallery</title>
 
     <style>
         html { color-scheme: light; }
-        * { box-sizing: border-box; }
-
-        /* ---------- PALETA FIJA DEL DASHBOARD (siempre profesional, fondo blanco) ---------- */
-        :root {
-            --ink: #16161a;
-            --ink-soft: #6b6b70;
-            --line: #e7e7ea;
-            --accent: #C0142C;
-            --accent-dark: #7a0f1f;
-            --accent-soft: #fbe9eb;
-            --font-display: 'Playfair Display', serif;
-            --font-body: 'Inter', sans-serif;
-            --radius: 10px;
-            --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 8px 24px rgba(0,0,0,0.04);
-        }
 
         body {
-            font-family: var(--font-body);
+            font-family: 'Aboreto', cursive;
             margin: 0;
             padding: 0;
-            background-color: #ffffff;
-            color: var(--ink);
+            background-color: white;
+            color: black;
         }
 
-        /* ---------- TOP BAR (identidad de marca, minimal, con franja roja) ---------- */
-        .topbar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 1em 2em;
-            border-bottom: 1px solid var(--line);
-            border-top: 4px solid var(--accent);
-        }
-
-        .marca {
-            font-family: var(--font-display);
-            font-size: 1.3em;
-            font-weight: 700;
-            color: var(--ink);
-            text-decoration: none;
-        }
-
-        .topbar-acciones {
-            display: flex;
-            align-items: center;
-            gap: 1em;
-        }
-
-        #btnLogout {
-            background: none;
-            border: 1px solid var(--line);
-            color: var(--ink);
-            font-family: var(--font-body);
-            font-weight: 600;
-            padding: 0.5em 1.1em;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.85em;
-        }
-
-        #btnLogout:hover { border-color: var(--ink); }
-
-        /* ---------- LAYOUT: contenido + menú lateral derecho ---------- */
-        .page-layout {
-            max-width: 1300px;
-            margin: 0 auto;
-            padding: 2em 2em 4em 2em;
-            display: grid;
-            grid-template-columns: 1fr 280px;
-            gap: 2.5em;
-            align-items: start;
-        }
-
-        @media (max-width: 900px) {
-            .page-layout { grid-template-columns: 1fr; padding: 1.5em; }
-            .sidebar { order: 2; }
-            .main-content { order: 1; }
-        }
-
-        .perfil-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 1em;
-            margin-bottom: 2em;
-        }
-
-        .perfil-header h1 {
-            font-family: var(--font-display);
-            font-size: 1.6em;
-            margin: 0 0 0.15em 0;
-        }
-
-        .perfil-header p {
-            color: var(--ink-soft);
-            margin: 0;
-            font-size: 0.9em;
-        }
-
-        .btn-preview {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5em;
-            background: var(--ink);
+        header {
+            background-color: red;
             color: white;
-            border: none;
-            padding: 0.7em 1.3em;
-            border-radius: 8px;
-            font-family: var(--font-body);
-            font-weight: 600;
-            font-size: 0.9em;
-            cursor: pointer;
-            white-space: nowrap;
+            padding: 1em 0;
+            text-align: center;
         }
 
-        .btn-preview:hover { background: #000; }
+        nav {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap; /* FIX ruptura */
+            background-color: red;
+            padding: 1em 0;
+        }
 
-        /* ---------- DRAG & DROP ---------- */
-        .dropzone {
-            border: 1.5px dashed #c9c9ce;
-            border-radius: var(--radius);
-            background-color: #fafafa;
-            padding: 3.5em 1.5em;
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 0.3em;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2em;
+        }
+
+        .form-container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 2em;
+            border: 1px solid red;
+            border-radius: 10px;
+            background-color: white;
+        }
+
+        .form-container h1 {
+            color: red;
             text-align: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
+        }
+
+        .form-group {
             margin-bottom: 1.5em;
         }
-
-        .dropzone:hover { border-color: var(--accent); background-color: var(--accent-soft); }
-
-        .dropzone.dragover {
-            border-color: var(--accent);
-            background-color: var(--accent-soft);
-        }
-
-        .dropzone .icono {
-            font-size: 2.2em;
-            display: block;
-            margin-bottom: 0.4em;
-            opacity: 0.7;
-        }
-
-        .dropzone p {
-            margin: 0.2em 0;
-            font-family: var(--font-display);
-            font-size: 1.15em;
-            color: var(--ink);
-        }
-
-        .dropzone small { color: var(--ink-soft); }
-
-        #inputImagen { display: none; }
-
-        .preview-wrap {
-            display: none;
-            text-align: center;
-            margin-bottom: 1.5em;
-        }
-
-        .preview-wrap img {
-            max-width: 220px;
-            max-height: 220px;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-        }
-
-        .form-detalles {
-            display: none;
-            background: white;
-            border: 1px solid var(--line);
-            border-radius: var(--radius);
-            padding: 1.6em;
-            box-shadow: var(--shadow);
-            margin-bottom: 2.5em;
-        }
-
-        .form-group { margin-bottom: 1.2em; }
 
         .form-group label {
             display: block;
-            margin-bottom: 0.4em;
-            color: var(--ink);
-            font-weight: 600;
-            font-size: 0.85em;
+            margin-bottom: 0.5em;
+            color: red;
         }
 
-        .form-group input,
-        .form-group textarea {
+        .form-group input {
             width: 100%;
-            padding: 0.65em;
-            border: 1px solid var(--line);
-            border-radius: 6px;
+            padding: 0.5em;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
             background-color: white;
-            color: var(--ink);
-            font-family: var(--font-body);
+            color: black;
         }
-
-        .form-group input:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: var(--accent);
-        }
-
-        .form-group textarea { resize: vertical; min-height: 70px; }
 
         .cta-button {
             display: inline-block;
             width: 100%;
-            padding: 0.75em 2em;
-            background-color: var(--accent);
+            padding: 0.5em 2em;
+            background-color: red;
             color: white;
-            font-weight: 700;
-            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
             text-align: center;
             border: none;
             cursor: pointer;
-            font-family: var(--font-body);
         }
 
-        .cta-button.secundario {
-            background-color: transparent;
-            color: var(--ink);
-            border: 1px solid var(--line);
-            margin-top: 0.6em;
+        .cta-button:disabled {
+            background-color: #e08080;
+            cursor: not-allowed;
         }
 
-        .cta-button:disabled { opacity: 0.5; cursor: not-allowed; }
-
-        .mensaje { text-align: center; margin-top: 1em; font-size: 0.9em; }
-        .mensaje.error { color: #c0392b; }
-        .mensaje.ok { color: #1c7c3f; }
-
-        /* ---------- PERSONALIZACIÓN DEL FEED PÚBLICO ---------- */
-        .personalizacion {
-            background: white;
-            border: 1px solid var(--line);
-            border-radius: var(--radius);
-            padding: 1.6em;
-            margin-bottom: 2.5em;
-        }
-
-        .personalizacion h2 {
-            font-family: var(--font-display);
-            font-size: 1.15em;
-            margin: 0 0 0.2em 0;
-        }
-
-        .personalizacion .subtitulo {
-            color: var(--ink-soft);
-            font-size: 0.85em;
-            margin: 0 0 1.4em 0;
-        }
-
-        .personalizacion .grupo { margin-bottom: 1.3em; }
-        .personalizacion .grupo:last-child { margin-bottom: 0; }
-
-        .personalizacion .grupo > label {
-            display: block;
-            font-weight: 600;
-            font-size: 0.78em;
-            color: var(--ink-soft);
-            margin-bottom: 0.6em;
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
-        }
-
-        .opciones-fila { display: flex; flex-wrap: wrap; gap: 0.6em; align-items: center; }
-
-        .tema-btn {
-            border: 1px solid var(--line);
-            border-radius: 8px;
-            padding: 0.5em 0.9em;
-            cursor: pointer;
-            background: white;
-            font-size: 0.85em;
-            font-family: var(--font-body);
-            color: var(--ink);
-        }
-
-        .tema-btn.activo { border-color: var(--ink); font-weight: 700; background: #f5f5f6; }
-
-        .swatch {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            cursor: pointer;
-            border: 1px solid var(--line);
-        }
-
-        .swatch.activo { box-shadow: 0 0 0 2px white, 0 0 0 4px var(--ink); }
-
-        /* ---------- GALERÍA (mis obras, dentro del dashboard: siempre neutra) ---------- */
-        .obras-titulo { font-family: var(--font-display); font-size: 1.2em; margin-bottom: 0.3em; }
-
-        .obras-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 16px;
+        .mensaje {
+            text-align: center;
             margin-top: 1em;
-        }
-
-        @media (max-width: 640px) {
-            .obras-grid { grid-template-columns: repeat(2, 1fr); }
-        }
-
-        .obra-card {
-            border: 1px solid var(--line);
-            border-radius: var(--radius);
-            overflow: hidden;
-            background: white;
-        }
-
-        .obra-card img { width: 100%; height: 160px; object-fit: cover; display: block; }
-
-        .obra-info { padding: 0.7em; }
-        .obra-info h3 { margin: 0 0 0.25em 0; font-size: 0.92em; }
-        .obra-info p { margin: 0.15em 0; font-size: 0.8em; color: var(--ink-soft); }
-        .obra-info .precio { color: var(--accent); font-weight: 700; }
-
-        .vacio { text-align: center; color: var(--ink-soft); margin-top: 1.5em; font-size: 0.9em; }
-
-        /* ---------- MENÚ LATERAL DERECHO ---------- */
-        .sidebar-card {
-            background: white;
-            border: 1px solid var(--line);
-            border-radius: var(--radius);
-            padding: 1.3em;
-            margin-bottom: 1.2em;
-        }
-
-        .sidebar-card h3 {
-            font-family: var(--font-display);
-            font-size: 1em;
-            margin: 0 0 0.8em 0;
-        }
-
-        .plan-badge {
-            display: inline-block;
-            padding: 0.25em 0.8em;
-            border-radius: 20px;
-            font-size: 0.75em;
-            font-weight: 700;
-            background: #f0f0f1;
-            color: var(--ink-soft);
-        }
-
-        .plan-badge.premium { background: var(--accent-soft); color: var(--accent-dark); }
-
-        .limite-obras {
-            margin-top: 0.8em;
-            font-size: 0.8em;
-            color: var(--ink-soft);
-        }
-
-        .limite-obras .barra {
-            height: 6px;
-            border-radius: 4px;
-            background: #f0f0f1;
-            margin-top: 0.4em;
-            overflow: hidden;
-        }
-
-        .limite-obras .barra-rellena {
-            height: 100%;
-            background: var(--accent);
-            border-radius: 4px;
-        }
-
-        .aviso-limite {
-            display: none;
-            background: var(--accent-soft);
-            border: 1px solid var(--accent);
-            color: var(--accent-dark);
-            padding: 0.9em 1.1em;
-            border-radius: var(--radius);
-            font-size: 0.85em;
-            margin-bottom: 1.5em;
-        }
-
-        .aviso-limite a { color: var(--accent-dark); font-weight: 700; }
-
-        .insight-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 0.5em 0;
-            border-bottom: 1px solid #f2f2f3;
-            font-size: 0.88em;
-        }
-
-        .insight-row:last-child { border-bottom: none; }
-        .insight-row .valor { font-weight: 700; color: var(--ink); }
-        .insight-row .valor.proximamente {
-            color: #b3b3b8;
-            font-weight: 600;
-            font-size: 0.72em;
-            text-transform: uppercase;
-        }
-
-        .metaverso-card { text-align: center; }
-        .metaverso-card .candado { font-size: 1.8em; margin: 0.2em 0; }
-        .metaverso-card p { font-size: 0.83em; color: var(--ink-soft); margin: 0.4em 0 0.8em 0; }
-
-        .btn-mini {
-            display: inline-block;
-            padding: 0.5em 1.2em;
-            border-radius: 6px;
-            font-size: 0.83em;
-            font-weight: 700;
-            text-decoration: none;
-            cursor: pointer;
-            border: none;
-        }
-
-        .btn-mini.premium-cta { background: var(--ink); color: white; }
-        .btn-mini.entrar-cta { background: var(--accent); color: white; }
-
-        .portafolio-link {
-            display: block;
-            text-align: center;
-            padding: 0.6em;
-            border: 1px solid var(--line);
-            border-radius: 6px;
-            color: var(--ink);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.88em;
-        }
-
-        .portafolio-link:hover { border-color: var(--ink); }
-
-        .menu-links { display: flex; flex-direction: column; gap: 0.6em; }
-        .menu-links a {
-            color: var(--ink);
-            text-decoration: none;
+            font-family: sans-serif;
             font-size: 0.9em;
-            font-weight: 500;
-            padding: 0.3em 0;
-        }
-        .menu-links a:hover { color: var(--accent); }
-
-        /* ---------- MODAL: vista previa pública (aquí SÍ aplica el tema elegido) ---------- */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.55);
-            z-index: 100;
-            align-items: flex-start;
-            justify-content: center;
-            padding: 3em 1em;
-            overflow-y: auto;
         }
 
-        .modal-overlay.abierto { display: flex; }
-
-        .modal-box {
-            background: white;
-            border-radius: 14px;
-            max-width: 950px;
-            width: 100%;
-            overflow: hidden;
-        }
-
-        .modal-topbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1em 1.5em;
-            border-bottom: 1px solid var(--line);
-            font-family: var(--font-body);
-        }
-
-        .modal-topbar span { font-weight: 700; font-size: 0.85em; color: var(--ink-soft); }
-
-        .cerrar-modal {
-            background: none;
-            border: none;
-            font-size: 1.3em;
-            cursor: pointer;
-            color: var(--ink-soft);
-        }
-
-        /* Contenedor del feed público con tema aplicado */
-        #feedPublico {
-            padding: 2.5em 2em;
-            font-family: 'Aboreto', cursive;
-        }
-
-        #feedPublico .feed-header { text-align: center; margin-bottom: 1.5em; }
-        #feedPublico .feed-header h2 { margin: 0 0 0.2em 0; }
-        #feedPublico .feed-header p { margin: 0; opacity: 0.75; font-family: 'Inter', sans-serif; font-size: 0.9em; }
-
-        #feedPublico .feed-grid {
-            display: grid;
-            grid-template-columns: repeat(var(--fcols, 3), 1fr);
-            gap: 18px;
-            padding: 1.5em;
-            border-radius: 12px;
-        }
-
-        @media (max-width: 640px) {
-            #feedPublico .feed-grid { grid-template-columns: repeat(2, 1fr) !important; }
-        }
-
-        #feedPublico .feed-card {
-            border-radius: var(--fradius, 10px);
-            overflow: hidden;
-            box-shadow: var(--fshadow, 0 2px 10px rgba(0,0,0,0.08));
-            border: var(--fborder, 1px solid #eee);
-            background: white;
-        }
-
-        #feedPublico .feed-card img { width: 100%; height: 180px; object-fit: cover; display: block; }
-        #feedPublico .feed-card .info { padding: 0.8em; font-family: 'Inter', sans-serif; }
-        #feedPublico .feed-card h3 { margin: 0 0 0.3em 0; font-size: 0.95em; }
-        #feedPublico .feed-card p { margin: 0.2em 0; font-size: 0.85em; opacity: 0.75; }
-        #feedPublico .feed-card .precio { font-weight: 700; }
-
-        /* Temas aplicados SOLO dentro del feed de vista previa */
-        #feedPublico[data-tema="elegante"] {
-            background: #fdfaf7; color: #2b2b2b;
-            --fradius: 4px; --fshadow: 0 3px 12px rgba(0,0,0,0.1); --fborder: 1px solid #e6dcdc;
-        }
-        #feedPublico[data-tema="elegante"] .precio { color: #8B0000; }
-
-        #feedPublico[data-tema="popart"] {
-            background: #FFF7CC; color: #111;
-            --fradius: 2px; --fshadow: 4px 4px 0 #111; --fborder: 2px solid #111;
-            font-family: 'Bebas Neue', cursive;
-        }
-        #feedPublico[data-tema="popart"] .precio { color: #FF2E63; }
-
-        #feedPublico[data-tema="minimalista"] {
-            background: #ffffff; color: #111;
-            --fradius: 2px; --fshadow: none; --fborder: 1px solid #ddd;
-        }
-        #feedPublico[data-tema="minimalista"] .precio { color: #111; }
-
-        #feedPublico[data-tema="oscuro"] {
-            background: #0d0d12; color: #eee;
-            --fradius: 10px; --fshadow: 0 0 14px rgba(176,38,255,0.35); --fborder: 1px solid #3a2a52;
-            font-family: 'Cinzel', serif;
-        }
-        #feedPublico[data-tema="oscuro"] .feed-card { background: #1c1c26; }
-        #feedPublico[data-tema="oscuro"] .precio { color: #B026FF; }
+        .mensaje.error { color: red; }
+        .mensaje.ok { color: green; }
 
         footer {
-            background-color: white;
-            color: var(--ink-soft);
+            background-color: red;
+            color: white;
             text-align: center;
-            padding: 1.5em 0;
+            padding: 1em 0;
             width: 100%;
-            border-top: 1px solid var(--line);
-            font-size: 0.85em;
+            position: relative; /* FIX footer */
         }
     </style>
 </head>
 
 <body>
 
-<div class="topbar">
-    <a href="INICIO.html" class="marca">Aries Art Gallery</a>
-    <div class="topbar-acciones">
-        <button id="btnLogout">Cerrar Sesión</button>
-    </div>
-</div>
+<header>
+    <h1>Aries Art Gallery</h1>
+</header>
 
-<div class="page-layout">
+<nav>
+    <a href="INICIO.html">Inicio</a>
+    <a href="registro.html">Registrarse</a>
+    <a href="iniciar.html">Iniciar Sesión</a>
+    <a href="galeria.html">Galería</a>
+    <a href="contacto.html">Contacto</a>
+    <a href="EVENTOS.HTML">Eventos</a>
+    <a href="TIENDA.html">Tienda</a>
+    <a href="Noticias.html">Noticias</a>
+    <a href="subs.html">Planes</a>
+</nav>
 
-    <!-- ================= CONTENIDO PRINCIPAL ================= -->
-    <div class="main-content">
+<div class="container">
+    <div class="form-container">
+        <h1>Iniciar Sesión</h1>
 
-        <div class="perfil-header">
-            <div>
-                <h1 id="nombreUsuario">Bienvenido/a</h1>
-                <p id="emailUsuario"></p>
-            </div>
-            <button class="btn-preview" id="btnVerPreview">👁 Ver cómo me ven los demás</button>
-        </div>
-
-        <p class="aviso-limite" id="avisoLimite">
-            Alcanzaste el límite de obras exhibidas de tu plan actual.
-            <a href="subs.html">Mejora tu plan</a> para publicar más.
-        </p>
-
-        <!-- Drag & Drop -->
-        <div class="dropzone" id="dropzone">
-            <span class="icono">＋</span>
-            <p>Arrastra tu obra aquí</p>
-            <small>o haz clic para seleccionar una imagen (JPG, PNG)</small>
-            <input type="file" id="inputImagen" accept="image/*">
-        </div>
-
-        <div class="preview-wrap" id="previewWrap">
-            <img id="previewImg" src="" alt="Vista previa">
-        </div>
-
-        <form class="form-detalles" id="formObra">
+        <form id="loginForm">
             <div class="form-group">
-                <label>Título</label>
-                <input type="text" id="titulo" required>
+                <label>Correo Electrónico</label>
+                <input type="email" id="email" required>
             </div>
+
             <div class="form-group">
-                <label>Descripción</label>
-                <textarea id="descripcion"></textarea>
+                <label>Contraseña</label>
+                <input type="password" id="password" required>
             </div>
+
             <div class="form-group">
-                <label>Precio (USD)</label>
-                <input type="number" id="precio" min="0" step="0.01">
+                <button type="submit" class="cta-button" id="btnLogin">Iniciar Sesión</button>
             </div>
-            <button class="cta-button" id="btnSubir" type="submit">Publicar Obra</button>
-            <button class="cta-button secundario" id="btnCancelar" type="button">Cancelar</button>
+
             <p id="mensaje" class="mensaje"></p>
         </form>
-
-        <!-- Personalización del feed público -->
-        <div class="personalizacion">
-            <h2>Personaliza tu Feed Público</h2>
-            <p class="subtitulo">Así es como se ve tu galería para los visitantes. El panel de administración siempre se mantiene neutro.</p>
-
-            <div class="grupo">
-                <label>Estilo visual</label>
-                <div class="opciones-fila" id="temaOpciones">
-                    <button type="button" class="tema-btn" data-tema="elegante">Elegante</button>
-                    <button type="button" class="tema-btn" data-tema="popart">Pop Art</button>
-                    <button type="button" class="tema-btn" data-tema="minimalista">Minimalista</button>
-                    <button type="button" class="tema-btn" data-tema="oscuro">Oscuro Artístico</button>
-                </div>
-            </div>
-
-            <div class="grupo">
-                <label>Distribución</label>
-                <div class="opciones-fila" id="layoutOpciones">
-                    <button type="button" class="tema-btn" data-cols="2">2 columnas</button>
-                    <button type="button" class="tema-btn" data-cols="3">3 columnas</button>
-                    <button type="button" class="tema-btn" data-cols="4">4 columnas</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Biografía / Semblanza pública -->
-        <div class="personalizacion">
-            <h2>Mi Semblanza</h2>
-            <p class="subtitulo">Esta biografía corta aparece en tu perfil público, visible para cualquier visitante.</p>
-            <div class="form-group" style="margin-bottom: 0.8em;">
-                <textarea id="bioTexto" maxlength="400" placeholder="Cuéntale a los visitantes quién eres, tu técnica, tu inspiración..." style="min-height: 100px;"></textarea>
-            </div>
-            <button class="cta-button secundario" id="btnGuardarBio" type="button" style="width:auto; padding: 0.6em 1.4em;">Guardar Semblanza</button>
-            <span id="bioMensaje" style="font-size:0.8em; color:#1c7c3f; margin-left:0.8em;"></span>
-        </div>
-
-        <h2 class="obras-titulo">Mis Obras</h2>
-        <div id="obrasGrid" class="obras-grid"></div>
-        <p id="vacioMsg" class="vacio" style="display:none;">Todavía no has subido ninguna obra.</p>
     </div>
-
-    <!-- ================= MENÚ LATERAL DERECHO ================= -->
-    <div class="sidebar">
-
-        <div class="sidebar-card">
-            <h3>Menú</h3>
-            <div class="menu-links">
-                <a href="perfil.html">Mi Perfil</a>
-                <a href="galeria.html">Galería General</a>
-                <a href="contacto.html">Contacto</a>
-                <a href="EVENTOS.HTML">Eventos</a>
-                <a href="TIENDA.html">Tienda</a>
-                <a href="Noticias.html">Noticias</a>
-                <a href="subs.html">Planes</a>
-            </div>
-        </div>
-
-        <div class="sidebar-card">
-            <h3>Mi Plan</h3>
-            <span class="plan-badge" id="planBadge">Gratuito</span>
-            <div class="limite-obras">
-                <span id="limiteTexto">0 de 5 obras exhibidas</span>
-                <div class="barra"><div class="barra-rellena" id="barraLimite" style="width:0%"></div></div>
-            </div>
-        </div>
-
-        <div class="sidebar-card">
-            <h3>Insights</h3>
-            <div class="insight-row"><span>Obras publicadas</span><span class="valor" id="statObras">0</span></div>
-            <div class="insight-row"><span>Visitantes</span><span class="valor proximamente">Próximamente</span></div>
-            <div class="insight-row"><span>Ventas</span><span class="valor proximamente">Próximamente</span></div>
-            <div class="insight-row"><span>Ingresos</span><span class="valor proximamente">Próximamente</span></div>
-        </div>
-
-        <div class="sidebar-card">
-            <h3>Portafolio</h3>
-            <a href="galeria.html" class="portafolio-link">Ver galería pública</a>
-        </div>
-
-        <div class="sidebar-card metaverso-card" id="metaversoCard">
-            <h3>Ciudad del Arte Virtual</h3>
-            <div class="candado">🔒</div>
-            <p>Disponible solo para miembros Premium y VIP.</p>
-            <a href="subs.html" class="btn-mini premium-cta">Desbloquear</a>
-        </div>
-
-    </div>
-
 </div>
 
 <footer>
     <p>&copy; 2024 Aries Art Gallery. Todos los derechos reservados.</p>
 </footer>
 
-<!-- ================= MODAL: vista previa pública ================= -->
-<div class="modal-overlay" id="modalPreview">
-    <div class="modal-box">
-        <div class="modal-topbar">
-            <span>VISTA PREVIA · así te ven tus visitantes</span>
-            <button class="cerrar-modal" id="cerrarModal">✕</button>
-        </div>
-        <div id="feedPublico" data-tema="elegante">
-            <div class="feed-header">
-                <h2 id="feedNombre">Artista</h2>
-                <p id="feedBio">Galería personal</p>
-            </div>
-            <div class="feed-grid" id="feedGrid"></div>
-            <p id="feedVacio" class="vacio" style="display:none; opacity:0.7;">Este artista aún no ha publicado obras.</p>
-        </div>
-    </div>
-</div>
-
+<!-- SUPABASE -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
-    const SUPABASE_URL = "https://ervucqpuhttdztiikelw.supabase.co";
-    const SUPABASE_KEY = "sb_publishable_b4thpt6kZH9dInOnp1ii0w_Up1xO43t";
-    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const SUPABASE_URL = "https://ervucqpuhttdztiikelw.supabase.co";
+const SUPABASE_KEY = "sb_publishable_b4thpt6kZH9dInOnp1ii0w_Up1xO43t";
 
-    const BUCKET = "obras-imagenes";
-    const TABLA = "obras";
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    let usuarioActual = null;
-    let archivoSeleccionado = null;
-    let ultimasObras = [];
-    let planActual = "free";
+const btnLogin = document.getElementById("btnLogin");
+const mensaje = document.getElementById("mensaje");
 
-    // Límites de obras exhibidas por plan (Básico / Premium / VIP en subs.html)
-    const LIMITES_PLAN = { free: 5, premium: 10, vip: 100 };
-    const NOMBRES_PLAN = { free: "Gratuito", premium: "Premium", vip: "VIP" };
+function mostrarMensaje(texto, tipo) {
+    mensaje.textContent = texto;
+    mensaje.className = "mensaje " + tipo;
+}
 
-    // --- Elementos ---
-    const dropzone = document.getElementById("dropzone");
-    const inputImagen = document.getElementById("inputImagen");
-    const previewWrap = document.getElementById("previewWrap");
-    const previewImg = document.getElementById("previewImg");
-    const formObra = document.getElementById("formObra");
-    const btnSubir = document.getElementById("btnSubir");
-    const btnCancelar = document.getElementById("btnCancelar");
-    const mensaje = document.getElementById("mensaje");
-    const grid = document.getElementById("obrasGrid");
-    const vacioMsg = document.getElementById("vacioMsg");
+document.getElementById("loginForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    mostrarMensaje("", "");
 
-    function mostrarMensaje(texto, tipo) {
-        mensaje.textContent = texto;
-        mensaje.className = "mensaje " + tipo;
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+
+    btnLogin.disabled = true;
+    btnLogin.textContent = "Entrando...";
+
+    const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password
+    });
+
+    btnLogin.disabled = false;
+    btnLogin.textContent = "Iniciar Sesión";
+
+    if (error) {
+        mostrarMensaje("Error: " + error.message, "error");
+        return;
     }
 
-    // --- Drag & Drop ---
-    dropzone.addEventListener("click", () => inputImagen.click());
-
-    ["dragenter", "dragover"].forEach(evt => {
-        dropzone.addEventListener(evt, (e) => { e.preventDefault(); dropzone.classList.add("dragover"); });
-    });
-
-    ["dragleave", "drop"].forEach(evt => {
-        dropzone.addEventListener(evt, (e) => { e.preventDefault(); dropzone.classList.remove("dragover"); });
-    });
-
-    dropzone.addEventListener("drop", (e) => {
-        const archivos = e.dataTransfer.files;
-        if (archivos.length > 0) manejarArchivo(archivos[0]);
-    });
-
-    inputImagen.addEventListener("change", (e) => {
-        if (e.target.files.length > 0) manejarArchivo(e.target.files[0]);
-    });
-
-    function manejarArchivo(archivo) {
-        if (!archivo.type.startsWith("image/")) {
-            mostrarMensaje("Selecciona un archivo de imagen válido.", "error");
-            return;
-        }
-        archivoSeleccionado = archivo;
-        const lector = new FileReader();
-        lector.onload = (e) => {
-            previewImg.src = e.target.result;
-            previewWrap.style.display = "block";
-            formObra.style.display = "block";
-            mostrarMensaje("", "");
-        };
-        lector.readAsDataURL(archivo);
-    }
-
-    btnCancelar.addEventListener("click", () => {
-        archivoSeleccionado = null;
-        formObra.reset();
-        formObra.style.display = "none";
-        previewWrap.style.display = "none";
-        inputImagen.value = "";
-    });
-
-    // --- Personalización del FEED PÚBLICO (no afecta el dashboard) ---
-    function claveTema(uid) { return `perfil_tema_${uid}`; }
-    function claveCols(uid) { return `perfil_cols_${uid}`; }
-
-    function marcarActivo(selector, atributo, valor) {
-        document.querySelectorAll(selector).forEach(b => {
-            b.classList.toggle("activo", b.dataset[atributo] === String(valor));
-        });
-    }
-
-    let temaSeleccionado = "elegante";
-    let colsSeleccionadas = "3";
-
-    document.getElementById("temaOpciones").addEventListener("click", (e) => {
-        const btn = e.target.closest(".tema-btn[data-tema]");
-        if (!btn || !usuarioActual) return;
-        temaSeleccionado = btn.dataset.tema;
-        marcarActivo("#temaOpciones .tema-btn", "tema", temaSeleccionado);
-        localStorage.setItem(claveTema(usuarioActual.id), temaSeleccionado);
-    });
-
-    document.getElementById("layoutOpciones").addEventListener("click", (e) => {
-        const btn = e.target.closest(".tema-btn[data-cols]");
-        if (!btn || !usuarioActual) return;
-        colsSeleccionadas = btn.dataset.cols;
-        marcarActivo("#layoutOpciones .tema-btn", "cols", colsSeleccionadas);
-        localStorage.setItem(claveCols(usuarioActual.id), colsSeleccionadas);
-    });
-
-    function cargarPreferencias() {
-        const uid = usuarioActual.id;
-        temaSeleccionado = localStorage.getItem(claveTema(uid)) || "elegante";
-        colsSeleccionadas = localStorage.getItem(claveCols(uid)) || "3";
-        marcarActivo("#temaOpciones .tema-btn", "tema", temaSeleccionado);
-        marcarActivo("#layoutOpciones .tema-btn", "cols", colsSeleccionadas);
-    }
-
-    // --- Modal: vista previa pública ---
-    const modalPreview = document.getElementById("modalPreview");
-    const feedPublico = document.getElementById("feedPublico");
-    const feedGrid = document.getElementById("feedGrid");
-    const feedVacio = document.getElementById("feedVacio");
-
-    document.getElementById("btnVerPreview").addEventListener("click", () => {
-        feedPublico.setAttribute("data-tema", temaSeleccionado);
-        feedGrid.style.setProperty("--fcols", colsSeleccionadas);
-        document.getElementById("feedNombre").textContent =
-            usuarioActual?.user_metadata?.nombre || "Artista";
-        document.getElementById("feedBio").textContent =
-            document.getElementById("bioTexto").value.trim() || "Galería personal";
-
-        feedGrid.innerHTML = "";
-        if (!ultimasObras || ultimasObras.length === 0) {
-            feedVacio.style.display = "block";
-        } else {
-            feedVacio.style.display = "none";
-            ultimasObras.forEach((obra) => {
-                const card = document.createElement("div");
-                card.className = "feed-card";
-                card.innerHTML = `
-                    <img src="${obra.imagen_url}" alt="${obra.titulo}">
-                    <div class="info">
-                        <h3>${obra.titulo}</h3>
-                        <p>${obra.descripcion || ""}</p>
-                        ${obra.precio ? `<p class="precio">$${obra.precio}</p>` : ""}
-                    </div>
-                `;
-                feedGrid.appendChild(card);
-            });
-        }
-
-        modalPreview.classList.add("abierto");
-    });
-
-    document.getElementById("cerrarModal").addEventListener("click", () => {
-        modalPreview.classList.remove("abierto");
-    });
-
-    modalPreview.addEventListener("click", (e) => {
-        if (e.target === modalPreview) modalPreview.classList.remove("abierto");
-    });
-
-    // --- Sesión / carga inicial ---
-    async function init() {
-        const { data: { session } } = await supabaseClient.auth.getSession();
-
-        if (!session) {
-            window.location.href = "iniciar.html";
-            return;
-        }
-
-        usuarioActual = session.user;
-        const nombre = usuarioActual.user_metadata?.nombre || "Artista";
-        document.getElementById("nombreUsuario").textContent = "Bienvenido/a, " + nombre;
-        document.getElementById("emailUsuario").textContent = usuarioActual.email;
-
-        // Trae (o crea) el perfil público: plan y biografía viven en la tabla "perfiles"
-        let { data: perfil } = await supabaseClient
-            .from("perfiles")
-            .select("*")
-            .eq("id", usuarioActual.id)
-            .maybeSingle();
-
-        if (!perfil) {
-            await supabaseClient.from("perfiles").upsert({
-                id: usuarioActual.id,
-                nombre: nombre,
-                plan: "free"
-            });
-            perfil = { plan: "free", bio: "" };
-        }
-
-        planActual = perfil.plan || "free";
-        document.getElementById("bioTexto").value = perfil.bio || "";
-
-        const planBadge = document.getElementById("planBadge");
-        const metaversoCard = document.getElementById("metaversoCard");
-
-        planBadge.textContent = NOMBRES_PLAN[planActual] || "Gratuito";
-
-        if (planActual === "premium" || planActual === "vip") {
-            planBadge.classList.add("premium");
-            metaversoCard.innerHTML = `
-                <h3>Ciudad del Arte Virtual</h3>
-                <div class="candado">🌆</div>
-                <p>Tu acceso está activo. Explora la galería virtual en el metaverso.</p>
-                <a href="#" class="btn-mini entrar-cta" onclick="alert('El acceso al metaverso estará disponible próximamente.'); return false;">Entrar</a>
-            `;
-        }
-
-        cargarPreferencias();
-        cargarObras();
-    }
-
-    document.getElementById("btnGuardarBio").addEventListener("click", async () => {
-        const bio = document.getElementById("bioTexto").value.trim();
-        const bioMensaje = document.getElementById("bioMensaje");
-        bioMensaje.textContent = "Guardando...";
-
-        const { error } = await supabaseClient.from("perfiles").upsert({
-            id: usuarioActual.id,
-            bio: bio
-        });
-
-        bioMensaje.textContent = error ? "Error al guardar." : "Guardado ✓";
-        setTimeout(() => { bioMensaje.textContent = ""; }, 2500);
-    });
-
-    function actualizarLimite() {
-        const limite = LIMITES_PLAN[planActual] || 5;
-        const usados = ultimasObras.length;
-        const porcentaje = Math.min(100, Math.round((usados / limite) * 100));
-
-        document.getElementById("limiteTexto").textContent = `${usados} de ${limite} obras exhibidas`;
-        document.getElementById("barraLimite").style.width = porcentaje + "%";
-
-        const dropzone = document.getElementById("dropzone");
-        const aviso = document.getElementById("avisoLimite");
-
-        if (usados >= limite) {
-            aviso.style.display = "block";
-            dropzone.style.opacity = "0.5";
-            dropzone.style.pointerEvents = "none";
-        } else {
-            aviso.style.display = "none";
-            dropzone.style.opacity = "1";
-            dropzone.style.pointerEvents = "auto";
-        }
-    }
-
-    async function cargarObras() {
-        const { data, error } = await supabaseClient
-            .from(TABLA)
-            .select("*")
-            .eq("user_id", usuarioActual.id)
-            .order("created_at", { ascending: false });
-
-        if (error) { console.error(error); return; }
-
-        ultimasObras = data || [];
-        grid.innerHTML = "";
-        document.getElementById("statObras").textContent = ultimasObras.length;
-        actualizarLimite();
-
-        if (ultimasObras.length === 0) {
-            vacioMsg.style.display = "block";
-            return;
-        }
-
-        vacioMsg.style.display = "none";
-        ultimasObras.forEach((obra) => {
-            const card = document.createElement("div");
-            card.className = "obra-card";
-            card.innerHTML = `
-                <img src="${obra.imagen_url}" alt="${obra.titulo}">
-                <div class="obra-info">
-                    <h3>${obra.titulo}</h3>
-                    <p>${obra.descripcion || ""}</p>
-                    ${obra.precio ? `<p class="precio">$${obra.precio}</p>` : ""}
-                </div>
-            `;
-            grid.appendChild(card);
-        });
-    }
-
-    formObra.addEventListener("submit", async (e) => {
-        e.preventDefault();
-        mostrarMensaje("", "");
-
-        if (!archivoSeleccionado) {
-            mostrarMensaje("Selecciona una imagen primero.", "error");
-            return;
-        }
-
-        const limite = LIMITES_PLAN[planActual] || 5;
-        if (ultimasObras.length >= limite) {
-            mostrarMensaje("Alcanzaste el límite de tu plan. Mejora tu plan para subir más obras.", "error");
-            return;
-        }
-
-        const titulo = document.getElementById("titulo").value.trim();
-        const descripcion = document.getElementById("descripcion").value.trim();
-        const precio = document.getElementById("precio").value;
-
-        btnSubir.disabled = true;
-        btnSubir.textContent = "Publicando...";
-
-        try {
-            const rutaArchivo = `${usuarioActual.id}/${Date.now()}_${archivoSeleccionado.name}`;
-
-            const { error: errorSubida } = await supabaseClient
-                .storage.from(BUCKET).upload(rutaArchivo, archivoSeleccionado);
-            if (errorSubida) throw errorSubida;
-
-            const { data: urlData } = supabaseClient.storage.from(BUCKET).getPublicUrl(rutaArchivo);
-
-            const { error: errorInsert } = await supabaseClient.from(TABLA).insert({
-                user_id: usuarioActual.id,
-                artista: usuarioActual.user_metadata?.nombre || usuarioActual.email,
-                titulo: titulo,
-                descripcion: descripcion,
-                precio: precio ? parseFloat(precio) : null,
-                imagen_url: urlData.publicUrl
-            });
-            if (errorInsert) throw errorInsert;
-
-            mostrarMensaje("¡Obra publicada!", "ok");
-            formObra.reset();
-            formObra.style.display = "none";
-            previewWrap.style.display = "none";
-            archivoSeleccionado = null;
-            inputImagen.value = "";
-            cargarObras();
-
-        } catch (err) {
-            console.error(err);
-            mostrarMensaje("Error: " + err.message, "error");
-        } finally {
-            btnSubir.disabled = false;
-            btnSubir.textContent = "Publicar Obra";
-        }
-    });
-
-    document.getElementById("btnLogout").addEventListener("click", async () => {
-        await supabaseClient.auth.signOut();
-        window.location.href = "iniciar.html";
-    });
-
-    init();
+    // 🔥 REDIRECCIÓN AL PANEL (coincide con el archivo real: perfil.html)
+    window.location.href = "perfil.html";
+});
 </script>
 
 </body>
