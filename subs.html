@@ -3,10 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Aboreto&display=swap" rel="stylesheet">
+
     <title>Planes y Precios - Aries Art Gallery</title>
+
     <style>
         body {
             font-family: 'Aboreto', cursive;
@@ -15,34 +18,48 @@
             background-color: white;
             color: black;
         }
+
         header {
             background-color: red;
             color: white;
             padding: 1em 0;
             text-align: center;
         }
+
         nav {
             display: flex;
             justify-content: space-around;
+            flex-wrap: wrap;
             background-color: red;
             padding: 1em 0;
         }
+
         nav a {
             color: white;
             text-decoration: none;
             font-weight: bold;
+            padding: 5px 10px;
         }
+
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 2em;
         }
+
+        h1 {
+            text-align: center;
+            color: red;
+        }
+
         .plans {
             display: flex;
-            justify-content: space-around;
+            justify-content: center;
             gap: 20px;
             margin-top: 2em;
+            flex-wrap: wrap;
         }
+
         .plan {
             border: 1px solid red;
             border-radius: 10px;
@@ -50,24 +67,31 @@
             text-align: center;
             padding: 2em;
             flex: 1;
+            min-width: 250px;
+            max-width: 300px;
         }
+
         .plan h2 {
             color: red;
             margin-bottom: 1em;
         }
-        .plan .price {
+
+        .price {
             font-size: 2em;
             color: black;
             margin: 1em 0;
         }
+
         .plan ul {
             list-style: none;
             padding: 0;
             margin: 1em 0;
         }
+
         .plan ul li {
-            margin: 0.5em 0;
+            margin: 0.7em 0;
         }
+
         .cta-button {
             display: inline-block;
             padding: 0.5em 2em;
@@ -78,66 +102,177 @@
             border-radius: 5px;
             margin-top: 1em;
         }
+
+        .featured {
+            border: 3px solid red;
+            box-shadow: 0 0 20px rgba(255,0,0,0.25);
+        }
+
+        .badge {
+            background-color: red;
+            color: white;
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 5px;
+            font-size: 0.8em;
+            margin-bottom: 1em;
+        }
+
         footer {
             background-color: red;
             color: white;
             text-align: center;
             padding: 1em 0;
-            position: relative;
             width: 100%;
+            margin-top: 3em;
+        }
+
+        @media (max-width: 900px) {
+            .plans {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .plan {
+                width: 90%;
+                max-width: 500px;
+            }
         }
     </style>
 </head>
+
 <body>
-    <header>
-        <h1>Aries Art Gallery</h1>
-    </header>
-    <nav>
-        <a href="#inicio">Inicio</a>
-        <a href="#planes">Planes</a>
-        <a href="#galeria">Galería</a>
-        <a href="#contacto">Contacto</a>
-    </nav>
-    <div class="container">
-        <h1>Planes de Suscripción</h1>
-        <div class="plans">
-            <div class="plan">
-                <h2>Plan Básico</h2>
-                <p class="price">$0/mes</p>
-                <ul>
-                    <li>Acceso a tu propia galerías digital</li>
-                    <li>Descuentos en productos del marketplace</li>
-                    <li>Soporte estándar</li>
-                </ul>
-                <a href="#suscribirse" class="cta-button">Suscribirse</a>
-            </div>
-            <div class="plan">
-                <h2>Plan Premium</h2>
-                <p class="price">$5/mes</p>
-                <ul>
-                    <li> </li>
-                    <li>Acceso a tu propia galerías digital</li>
-                    <li>Descuentos exclusivos y productos de edición limitada</li>
-                    <li>Soporte prioritario</li>
-                </ul>
-                <a href="#suscribirse" class="cta-button">Suscribirse</a>
-            </div>
-            <div class="plan">
-                <h2>Plan VIP</h2>
-                <p class="price">$25/mes</p>
-                <ul>
-                    <li>Acceso a tu propia galerías digital</li>
-                    <li>Acceso a herramientas y metricas de promoción de tu obra</li>
-                    <li>Descuentos exclusivos y productos de edición limitada</li>
-                    <li>Eventos exclusivos</li>
-                    <li>Asesoría personalizada</li>
-                </ul>
-                <a href="#suscribirse" class="cta-button">Suscribirse</a>
-            </div>
+
+<header>
+    <h1>Aries Art Gallery</h1>
+</header>
+
+<nav>
+    <a href="index.html">Inicio</a>
+    <a href="registro.html">Registrarse</a>
+    <a href="iniciar.html">Iniciar Sesión</a>
+    <a href="galeria.html">Galería</a>
+    <a href="contacto.html">Contacto</a>
+    <a href="EVENTOS.HTML">Eventos</a>
+    <a href="TIENDA.html">Tienda</a>
+    <a href="Noticias.html">Noticias</a>
+    <a href="subs.html">Planes</a>
+</nav>
+
+<div class="container">
+
+    <h1>Planes de Suscripción</h1>
+
+    <div class="plans">
+
+        <div class="plan">
+            <h2>Gratis</h2>
+
+            <p class="price">$0/mes</p>
+
+            <ul>
+                <li>Galería digital básica</li>
+                <li>Perfil de artista</li>
+                <li>Publicación de obras</li>
+                <li>Soporte estándar</li>
+            </ul>
+
+            <a href="#suscribirse" class="cta-button">
+                Comenzar Gratis
+            </a>
         </div>
+
+        <div class="plan">
+            <h2>Creator</h2>
+
+            <p class="price">$5/mes</p>
+
+            <ul>
+                <li>Todo lo del plan Gratis</li>
+                <li>Galería personalizada</li>
+                <li>Mayor visibilidad</li>
+                <li>Descuentos en marketplace</li>
+                <li>Soporte mejorado</li>
+            </ul>
+
+            <a href="#suscribirse" class="cta-button">
+                Suscribirse
+            </a>
+        </div>
+
+        <div class="plan">
+            <h2>Pro</h2>
+
+            <p class="price">$15/mes</p>
+
+            <ul>
+                <li>Todo lo del plan Creator</li>
+                <li>Herramientas de promoción</li>
+                <li>Métricas de visitas</li>
+                <li>Mayor exposición de obras</li>
+                <li>Soporte prioritario</li>
+            </ul>
+
+            <a href="#suscribirse" class="cta-button">
+                Suscribirse
+            </a>
+        </div>
+
+        <div class="plan">
+            <h2>VIP</h2>
+
+            <p class="price">$25/mes</p>
+
+            <ul>
+                <li>Todo lo del plan Pro</li>
+                <li>Eventos exclusivos</li>
+                <li>Promoción destacada</li>
+                <li>Asesoría personalizada</li>
+                <li>Acceso anticipado a funciones</li>
+            </ul>
+
+            <a href="#suscribirse" class="cta-button">
+                Suscribirse
+            </a>
+        </div>
+
+        <div class="plan featured">
+
+            <div class="badge">
+                Mejor Valor
+            </div>
+
+            <h2>Membresía Anual</h2>
+
+            <p class="price">$1,699 MXN/año</p>
+
+            <ul>
+                <li>Todo lo incluido en el Plan Pro</li>
+                <li>Galería virtual personalizada</li>
+                <li>Herramientas y métricas de promoción</li>
+                <li>Acceso prioritario a eventos especiales</li>
+                <li>Descuentos exclusivos en marketplace</li>
+                <li>Soporte prioritario</li>
+                <li>Prioridad en nuevas funciones</li>
+            </ul>
+
+            <p>
+                Ahorra más que pagando mes a mes.
+            </p>
+
+            <a href="#suscribirse" class="cta-button">
+                Obtener Membresía Anual
+            </a>
+
+        </div>
+
     </div>
-    <footer>
-        <p>&copy; 2024 Aries Art Gallery. Todos los derechos reservados.</p>
-    </footer>
+
+</div>
+
+<footer>
+    <p>&copy; 2026 Aries Art Gallery. Todos los derechos reservados.</p>
+</footer>
+
 </body>
 </html>
