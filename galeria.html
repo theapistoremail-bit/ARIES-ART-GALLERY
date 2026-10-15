@@ -9,11 +9,14 @@
     <title>Aries Art Gallery</title>
     <style>
         body {
-            font-family: 'Aboreto', cursive;
+            font-family: 'Aboreto', Georgia, serif;
             margin: 0;
             padding: 0;
             background-color: white;
             color: black;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
         header {
             background-color: red;
@@ -32,6 +35,7 @@
             text-decoration: none;
             font-weight: bold;
         }
+        main { flex: 1; }
         .slideshow-container {
             position: relative;
             max-width: 800px;
@@ -40,19 +44,18 @@
             border: 4px solid black;
             border-radius: 10px;
         }
-        .slides {
-            display: none;
-            width: 100%;
-        }
+        .slides { display: none; width: 100%; }
+        .slides.is-active { display: block; }
         .iframe-container {
             position: relative;
             width: 100%;
-            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            padding-bottom: 56.25%; /* 16:9 */
             height: 0;
             overflow: hidden;
             background-color: #000;
         }
-        .iframe-container iframe {
+        .iframe-container iframe,
+        .iframe-container video {
             position: absolute;
             top: 0;
             left: 0;
@@ -60,55 +63,42 @@
             height: 100%;
             border: 0;
         }
-        .dot-container {
-            text-align: center;
-            padding: 10px;
-        }
+        .dot-container { text-align: center; padding: 10px; }
         .dot {
             height: 15px;
             width: 15px;
             margin: 0 2px;
+            padding: 0;
+            border: 0;
             background-color: #bbb;
             border-radius: 50%;
             display: inline-block;
+            cursor: pointer;
             transition: background-color 0.6s ease;
         }
-        .active {
-            background-color: #717171;
+        .dot.active { background-color: #717171; }
+        .entrar-box { text-align: center; margin: 0 0 2em; }
+        .entrar {
+            display: inline-block;
+            padding: 0.7em 2em;
+            background-color: red;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
         }
+        .entrar:hover, .entrar:focus-visible { background-color: darkred; }
         footer {
             background-color: red;
             color: white;
             text-align: center;
             padding: 1em 0;
             width: 100%;
-            bottom: 0;
         }
     </style>
-    <script>
-        let slideIndex = 0;
-
-        function showSlides() {
-            const slides = document.getElementsByClassName("slides");
-            const dots = document.getElementsByClassName("dot");
-            for (let i = 0; i < slides.length; i++) {
-                slides[i].style.display = "none";  
-            }
-            for (let i = 0; i < dots.length; i++) {
-                dots[i].className = dots[i].className.replace(" active", "");
-            }
-            slideIndex++;
-            if (slideIndex > slides.length) { slideIndex = 1; }    
-            slides[slideIndex - 1].style.display = "block";  
-            dots[slideIndex - 1].className += " active";
-            setTimeout(showSlides, 3000); // Cambia cada 3 segundos
-        }
-
-        document.addEventListener("DOMContentLoaded", showSlides);
-    </script>
 </head>
 <body>
-    <header>
+    <header id="inicio">
         <h1>Aries Art Gallery</h1>
     </header>
     <nav>
@@ -118,30 +108,58 @@
         <a href="#galeria">Galería</a>
         <a href="#contacto">Contacto</a>
     </nav>
-    <div class="slideshow-container">
-        <div class="slides">
-            <div class="iframe-container">
-                <"iframe src="https://www.viverse.com/DsmcDvm?full3d=&no-cookie=" title="Aries Art Gallery " frameborder="allowfullscreen></iframe>
+    <main>
+        <div class="slideshow-container" id="galeria">
+            <div class="slides">
+                <div class="iframe-container">
+                    <iframe id="visor" title="Aries Art Gallery" allow="fullscreen; xr-spatial-tracking" allowfullscreen></iframe>
+                </div>
+            </div>
+            <div class="slides">
+                <div class="iframe-container">
+                    <video src="videos/video2.mp4" controls playsinline preload="metadata" title="Aries Art Gallery 2"></video>
+                </div>
+            </div>
+            <div class="slides">
+                <div class="iframe-container">
+                    <video src="videos/video3.mp4" controls playsinline preload="metadata" title="Aries Art Gallery 3"></video>
+                </div>
             </div>
         </div>
-        <div class="slides">
-            <div class="iframe-container">
-                <iframe src="https://example.com/3d-environment2" allowfullscreen></iframe>
-            </div>
-        </div>
-        <div class="slides">
-            <div class="iframe-container">
-                <iframe src="https://example.com/3d-environment3" allowfullscreen></iframe>
-            </div>
-        </div>
-    </div>
-    <div class="dot-container">
-        <span class="dot"></span> 
-        <span class="dot"></span> 
-        <span class="dot"></span> 
-    </div>
+        <div class="dot-container" id="dots"></div>
+        <p class="entrar-box"><a id="entrar" class="entrar" href="#" target="_blank" rel="noopener noreferrer">Entrar a la galería</a></p>
+    </main>
     <footer>
         <p>&copy; 2024 Aries Art Gallery. Todos los derechos reservados.</p>
     </footer>
+
+    <script>
+        (function () {
+            // Cambia aquí el enlace de tu galería: lo usan el visor y el botón.
+            const GALERIA_URL = "https://www.viverse.com/DsmcDvm";
+            document.getElementById("visor").src = GALERIA_URL + "?full3d=&no-cookie=";
+            document.getElementById("entrar").href = GALERIA_URL;
+
+            const slides = document.querySelectorAll(".slides");
+            const dotsBox = document.getElementById("dots");
+            const dots = Array.from(slides).map(function (_, i) {
+                const d = document.createElement("button");
+                d.type = "button";
+                d.className = "dot";
+                d.setAttribute("aria-label", "Ir a la vista " + (i + 1));
+                d.addEventListener("click", function () { show(i); });
+                dotsBox.appendChild(d);
+                return d;
+            });
+            function show(n) {
+                document.querySelectorAll(".slides video").forEach(function (v) { v.pause(); });
+                slides.forEach(function (s, i) {
+                    s.classList.toggle("is-active", i === n);
+                    dots[i].classList.toggle("active", i === n);
+                });
+            }
+            show(0);
+        })();
+    </script>
 </body>
 </html>
