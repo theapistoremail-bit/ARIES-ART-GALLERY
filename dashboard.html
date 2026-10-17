@@ -2,66 +2,503 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Dashboard</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Aboreto&display=swap" rel="stylesheet">
-
+<script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@3.5.0/dist/model-viewer.min.js"></script>
+<!-- Google Analytics 4: reemplaza G-XXXXXXXXXX por tu ID de medición -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-XXXXXXXXXX');</script>
+<title>Panel - Aries Art Gallery</title>
 <style>
-body {
-    font-family: 'Aboreto', cursive;
-    text-align:center;
-    background:white;
-}
-
-header {
-    background:red;
-    color:white;
-    padding:1em;
-}
-
-button {
-    padding:10px;
-    margin-top:20px;
-    background:red;
-    color:white;
-    border:none;
-}
+  :root{--rojo:#d40000;--hondo:#9e0000;--tinta:#2a1212;--suave:#6e5555;--linea:#f1d3d3;--sombra:0 10px 30px rgba(158,0,0,.08)}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:'Aboreto',cursive;font-size:15px;letter-spacing:.03em;line-height:1.5;background:#fff;color:var(--tinta);min-height:100vh}
+  h1,h2,h3{font-weight:400;margin:0;letter-spacing:.08em}
+  button,input,select{font:inherit;letter-spacing:inherit;color:inherit}
+  :focus-visible{outline:3px solid var(--tinta);outline-offset:2px}
+  .top{display:flex;justify-content:space-between;align-items:center;padding:.9em 1.6em;position:sticky;top:0;z-index:5;background:var(--rojo);color:#fff}
+  .top h1{font-size:1.3em;letter-spacing:.14em}
+  .der{display:flex;gap:1em;align-items:center}
+  .coins{border:1px solid rgba(255,255,255,.7);border-radius:99px;padding:.25em .9em;font-size:.9em}
+  details.user{position:relative}
+  details.user summary{cursor:pointer;list-style:none;background:#fff;color:var(--rojo);border-radius:99px;padding:.3em 1em}
+  .pop{position:absolute;right:0;top:130%;min-width:210px;background:#fff;color:var(--tinta);border:1px solid var(--linea);border-radius:14px;padding:1em;box-shadow:var(--sombra)}
+  .pop p{margin:0 0 .8em;color:var(--suave);font-size:.9em}
+  main{max-width:1100px;margin:0 auto;padding:2em 1.5em 3em}
+  .pantalla{position:relative;background:#000;border:1px solid var(--rojo);border-radius:6px;box-shadow:0 0 0 10px #fff,0 0 0 11px var(--rojo),0 24px 50px rgba(158,0,0,.18);overflow:hidden;aspect-ratio:16/9;margin:11px}
+  .pantalla iframe{width:100%;height:100%;border:0;display:block}
+  .vivo{position:absolute;top:12px;left:14px;z-index:2;background:#fff;color:var(--rojo);border-radius:99px;padding:.2em .9em;font-size:.8em;pointer-events:none}
+  .dock{display:flex;align-items:center;gap:.6em;margin:2.2em 0 1em;background:#fff;border:1px solid var(--linea);border-radius:99px;box-shadow:var(--sombra);padding:.4em}
+  .dock-toggle{flex:none;display:flex;align-items:center;gap:.5em;background:var(--rojo);color:#fff;border:0;border-radius:99px;padding:.6em 1.1em;cursor:pointer;letter-spacing:.1em}
+  .dock-toggle svg{width:16px;height:16px;transform:rotate(180deg);transition:transform .3s}
+  .dock.cerrado .dock-toggle svg{transform:none}
+  .dock-items{flex:1;min-width:0;display:flex;gap:.2em;overflow-x:auto;max-width:100vw;scrollbar-width:none;transition:max-width .35s,opacity .25s}
+  .dock-items::-webkit-scrollbar{display:none}
+  .dock.cerrado .dock-items{max-width:0;opacity:0;overflow:hidden;visibility:hidden}
+  .tile{flex:none;display:flex;align-items:center;gap:.5em;background:none;border:0;border-radius:99px;padding:.6em 1em;cursor:pointer;white-space:nowrap}
+  .tile:hover{background:#fff3f3}
+  .tile[aria-pressed=true]{background:var(--rojo);color:#fff}
+  .tile i{font-style:normal;font-size:.7em;color:var(--rojo);border:1px solid var(--rojo);border-radius:99px;padding:0 .6em}
+  .tile[aria-pressed=true] i{color:#fff;border-color:#fff}
+  .metricas{flex:none;display:flex;gap:.1em;padding-left:.6em;border-left:1px solid var(--linea)}
+  .met{display:flex;align-items:baseline;gap:.4em;background:none;border:0;border-radius:99px;padding:.3em .7em;cursor:pointer}
+  .met:hover{background:#fff3f3}
+  .met b{color:var(--rojo);font-weight:400;font-size:1.2em}
+  .met span{color:var(--suave);font-size:.8em}
+  .p{background:#fff;border:1px solid var(--linea);border-radius:18px;padding:1.6em;margin-bottom:2em;box-shadow:var(--sombra)}
+  .p h2{color:var(--rojo);margin-bottom:1.2em;padding-bottom:.6em;border-bottom:1px solid var(--linea)}
+  .p h3{color:var(--hondo)}
+  .sella{position:relative}
+  .veladura{position:absolute;inset:0;z-index:3;border-radius:14px;background:rgba(255,255,255,.55);backdrop-filter:blur(8px) saturate(1.3);-webkit-backdrop-filter:blur(8px) saturate(1.3);border:1px solid rgba(212,0,0,.25);box-shadow:inset 0 0 40px rgba(255,255,255,.8);display:flex;align-items:center;justify-content:center;color:var(--rojo);font-size:clamp(1.3em,4vw,2em);letter-spacing:.14em}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1.4em}
+  .obra{background:#fff;border:1px solid var(--linea);border-radius:14px;padding:10px;display:grid;gap:.4em;align-content:start}
+  .lienzo{aspect-ratio:1;padding:8px;border:1px solid var(--rojo);background:#fff}
+  .lienzo img,.lienzo video,.lienzo model-viewer{width:100%;height:100%;object-fit:cover;display:block}
+  .obra h3{font-size:1em;margin:.4em .3em 0}
+  .obra small{color:var(--suave);margin:0 .3em}
+  .precio{margin:0 .3em;color:var(--rojo)}
+  .precio small{display:block;margin:0}
+  .acc{display:flex;gap:.5em;flex-wrap:wrap;padding:.2em .3em}
+  .chip{background:#fff;border:1px solid var(--rojo);color:var(--hondo);border-radius:99px;padding:.25em .85em;cursor:pointer}
+  .chip:hover{background:#fff3f3}
+  .chip.si{background:var(--rojo);color:#fff}
+  .coms{padding:.3em}
+  .coms p{margin:.3em 0;font-size:.9em}
+  .coms form{display:flex;gap:.4em;margin-top:.5em}
+  input,select{background:#fff;border:1px solid #e3bcbc;border-radius:8px;padding:.6em .8em;width:100%}
+  .coms input{flex:1}
+  .btn{background:var(--rojo);color:#fff;border:0;border-radius:8px;padding:.75em 1.6em;cursor:pointer;white-space:nowrap;letter-spacing:.08em}
+  .btn:hover{background:var(--hondo)}
+  .btn:disabled{opacity:.5}
+  form.subir{display:grid;gap:1em;max-width:520px;margin-bottom:1.5em}
+  form.subir label{display:grid;gap:.3em;color:var(--hondo)}
+  #calc,#sm{color:var(--suave);font-size:.9em;margin:0}
+  .chat{max-width:640px;display:flex;flex-direction:column;height:50vh;border:1px solid var(--linea);border-radius:14px;margin-top:1.2em}
+  #log{flex:1;overflow-y:auto;padding:1em;display:flex;flex-direction:column;gap:.5em}
+  .m{background:#fdeeee;border-radius:12px;padding:.5em .8em;max-width:85%;overflow-wrap:anywhere}
+  .m.yo{align-self:flex-end;background:var(--rojo);color:#fff}
+  .m b{display:block;font-size:.75em;font-weight:400;opacity:.8}
+  .chat form{display:flex;gap:.5em;padding:.7em;border-top:1px solid var(--linea)}
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1em;margin-bottom:1.5em}
+  .stat{border:1px solid var(--linea);border-radius:14px;padding:1em}
+  .stat b{display:block;font-size:2em;font-weight:400;color:var(--rojo)}
+  .stat span{color:var(--suave);font-size:.85em}
+  .logros{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1em}
+  .logro{border:1px solid var(--linea);border-radius:14px;padding:1.1em;opacity:.5}
+  .logro.ok{opacity:1;border-color:var(--rojo);box-shadow:var(--sombra)}
+  .logro p,.p>p{color:var(--suave);font-size:.9em}
+  details.tuto{border:1px solid var(--linea);border-radius:14px;padding:1em}
+  details.tuto summary{cursor:pointer;color:var(--hondo)}
+  details.tuto ol{color:var(--suave);line-height:1.7}
+  dialog{background:#fff;color:var(--tinta);border:1px solid var(--linea);border-radius:18px;max-width:640px;width:calc(100% - 2em);padding:1.6em;box-shadow:0 30px 80px rgba(42,18,18,.25)}
+  dialog h2{color:var(--rojo)}
+  dialog::backdrop{background:rgba(42,18,18,.45);backdrop-filter:blur(3px)}
+  .planes{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1em;margin:1em 0}
+  .plan{border:1px solid var(--linea);border-radius:14px;padding:1em}
+  .plan.pro{border-color:var(--rojo)}
+  .per{display:grid;gap:.5em;margin:1em 0}
+  .per label{display:flex;gap:.6em;align-items:center}
+  .per input{width:auto}
+  .nota{color:var(--suave)}
+  .slides{background:var(--rojo);color:#fff;border-radius:14px;padding:1.6em;min-height:150px;margin-bottom:1.2em}
+  .slides h3{color:#fff}
+  .slides p{color:#fff;margin:.6em 0 1em}
+  .dots{display:flex;gap:.4em}
+  .dot{width:10px;height:10px;border-radius:50%;border:1px solid #fff;background:none;padding:0;cursor:pointer}
+  .dot.on{background:#fff}
+  .feed{max-width:560px;margin:1.5em auto 0;display:grid;gap:1.4em}
+  @media(max-width:600px){.met span{display:none}.met{padding:.3em .45em}main{padding:1.2em 1em}.top{padding:.8em 1em}.top h1{font-size:1.05em}}
+  @media(prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
-
 <body>
+<header class="top">
+  <h1>Aries Art Gallery</h1>
+  <div class="der">
+    <span class="coins" id="coins">0 monedas</span>
+    <details class="user">
+      <summary id="quien">Mi cuenta</summary>
+      <div class="pop"><p id="role"></p><button class="chip" id="salir">Cerrar sesión</button></div>
+    </details>
+  </div>
+</header>
 
-<header><h1>Panel de Usuario</h1></header>
+<main>
+  <div class="pantalla">
+    <span class="vivo">Galería comunitaria</span>
+    <iframe src="https://www.viverse.com/DsmcDvm" title="Galería 3D en Viverse" allow="fullscreen; autoplay; xr-spatial-tracking; microphone" allowfullscreen></iframe>
+  </div>
 
-<h2 id="userEmail"></h2>
+  <div class="dock" id="dock">
+    <button class="dock-toggle" id="dock-toggle" aria-expanded="true" aria-controls="dock-items">
+      <span>Menú</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+    </button>
+    <nav class="dock-items" id="dock-items" aria-label="Menú del panel">
+      <button class="tile" data-p="crear">Crear galería 3D <i>Pro</i></button>
+      <button class="tile" data-p="edicion">Edición y obras <i>Pro</i></button>
+      <button class="tile" data-p="social">Red social</button>
+      <button class="tile" data-p="comunidad">Comunidad</button>
+      <button class="tile" data-p="canal">Crear canal de chat <i>Pro</i></button>
+      <button class="tile" data-p="market">Marketplace <i>Pro</i></button>
+      <button class="tile" data-p="logros">Logros</button>
+      <button class="tile" data-p="stats">Analíticas</button>
+    </nav>
+    <div class="metricas" id="metricas" aria-label="Tus métricas"></div>
+  </div>
 
-<button onclick="logout()">Cerrar sesión</button>
+  <section class="p" id="p-edicion" hidden>
+    <h2>Edición y obras</h2>
+    <div class="sella" id="s-edicion">
+      <form class="subir" id="subir">
+        <label>Título <input id="t" required maxlength="80"></label>
+        <label>Tipo
+          <select id="k"><option value="2d">Cuadro (imagen)</option><option value="3d">Escultura (archivo .glb)</option></select>
+        </label>
+        <label>Tu precio en USD <input id="p" type="number" min="0" step="0.01" placeholder="Vacío si no está a la venta"></label>
+        <p id="calc">La galería suma 10% sobre tu precio. Tú recibes el 100% de lo que fijes.</p>
+        <label>Archivo <input id="f" type="file" accept="image/*,.glb" required></label>
+        <p id="sm" role="status"></p>
+        <button class="btn" id="sb">Publicar obra</button>
+      </form>
+      <h3>Mis obras</h3><br>
+      <div class="grid" id="mias"></div>
+    </div>
+  </section>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <section class="p" id="p-social" hidden>
+    <h2>Red social</h2>
+    <div class="slides" id="slides" aria-live="off"></div>
+    <div class="acc">
+      <button class="chip si">Aries Art Gallery · canal oficial</button>
+      <button class="chip" id="nuevo-canal">+ Crear canal</button>
+    </div>
+    <form class="subir" id="pf" style="margin-top:1.2em">
+      <label>Publicación <input id="pb" maxlength="300" placeholder="Cuéntale algo a la comunidad"></label>
+      <label>Imagen o video <input id="pm" type="file" accept="image/*,video/*"></label>
+      <label id="pl-precio">Precio en USD, opcional <input id="pp" type="number" min="0" step="0.01"></label>
+      <p id="ps" class="nota" role="status"></p>
+      <button class="btn">Publicar</button>
+    </form>
+    <div class="feed" id="feed"></div>
+  </section>
 
+  <section class="p" id="p-comunidad" hidden>
+    <h2>Comunidad</h2>
+    <div class="grid" id="todas"></div>
+    <div class="sella" id="s-chat">
+      <h3 style="margin-top:1.5em">Grupo de chat de compradores y artistas</h3>
+      <div class="chat">
+        <div id="log" aria-live="polite"></div>
+        <form id="cf"><input id="ci" maxlength="500" placeholder="Escribe un mensaje" required><button class="btn">Enviar</button></form>
+      </div>
+    </div>
+  </section>
+
+  <section class="p" id="p-market" hidden>
+    <h2>Marketplace</h2>
+    <div class="sella" id="s-market">
+      <div class="grid">
+        <div class="obra"><h3>Marcos barrocos</h3><small>Conjuntos ornamentados para tu sala</small></div>
+        <div class="obra"><h3>Estilos de luz</h3><small>Ambientes para realzar cada obra</small></div>
+        <div class="obra"><h3>Música ambiental</h3><small>Pistas para tu experiencia 3D</small></div>
+        <div class="obra"><h3>Avatares especiales</h3><small>Anfitriones de edición limitada</small></div>
+        <div class="obra"><h3>Escenas de temporada</h3><small>Bases y ambientes que ayudan a vender</small></div>
+        <div class="obra"><h3>Cartelas y fuentes</h3><small>Etiquetas con enlace de pago por obra</small></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="p" id="p-logros" hidden>
+    <h2>Logros</h2>
+    <p>Cada insignia desbloqueada suma 50 monedas. Podrás canjearlas en el marketplace.</p>
+    <div class="logros" id="logros"></div>
+  </section>
+
+  <section class="p" id="p-stats" hidden>
+    <h2>Analíticas</h2>
+    <div class="stats" id="stats"></div>
+    <details class="tuto">
+      <summary>Conectar Google Analytics 4</summary>
+      <ol>
+        <li>Crea una cuenta en analytics.google.com y una propiedad de Google Analytics 4.</li>
+        <li>Agrega un flujo de datos web con la dirección de tu sitio.</li>
+        <li>Copia el ID de medición (empieza con G-).</li>
+        <li>Pégalo en lugar de G-XXXXXXXXXX en las dos líneas del encabezado de este archivo.</li>
+        <li>Publica el sitio y revisa "Informes en tiempo real" para confirmar que llegan visitas.</li>
+      </ol>
+    </details>
+  </section>
+</main>
+
+<dialog id="dlg-plan">
+  <h2>Seleccionar plan</h2>
+  <div class="sella" id="s-plan">
+    <div class="planes">
+      <div class="plan"><h3>Básico</h3><p class="nota">Tu galería 3D con obras y precios.</p></div>
+      <div class="plan pro"><h3>Pro</h3><p class="nota">Todo lo anterior, chat de grupo, marketplace y música.</p></div>
+    </div>
+    <div class="per">
+      <label><input type="radio" name="per" checked> Mes a mes, con prueba gratuita y cobro automático</label>
+      <label><input type="radio" name="per"> 3 meses</label>
+      <label><input type="radio" name="per"> 6 meses</label>
+      <label><input type="radio" name="per"> 12 meses</label>
+    </div>
+    <div class="veladura">Próximamente</div>
+  </div>
+  <p class="nota">Pronto podrás crear tu galería de arte 3D personal, conectar con coleccionistas y vender desde ella.</p>
+  <button class="btn" onclick="this.closest('dialog').close()">Cerrar</button>
+</dialog>
+
+<dialog id="dlg-aviso">
+  <h2 id="av-t"></h2><p class="nota" id="av-x"></p>
+  <button class="btn" onclick="this.closest('dialog').close()">Entendido</button>
+</dialog>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const SUPABASE_URL = "TU_URL";
-const SUPABASE_KEY = "TU_ANON_KEY";
+const SUPABASE_URL = 'https://TU_PROYECTO.supabase.co';
+const SUPABASE_KEY = 'TU_ANON_KEY';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const $ = id => document.getElementById(id);
+const COMISION = 0.10;
+let me, perfil, owner = false;
 
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+function el(tag, props = {}, ...kids){
+  const n = Object.assign(document.createElement(tag), props);
+  kids.forEach(k => n.append(k)); return n;
+}
+const urlDe = path => sb.storage.from('artworks').getPublicUrl(path).data.publicUrl;
+const aviso = (t, x) => { $('av-t').textContent = t; $('av-x').textContent = x; $('dlg-aviso').showModal(); };
+const sellar = id => { if (owner) return; const c = $(id); c.inert = true; c.append(el('div', { className: 'veladura', textContent: 'Próximamente' })); };
 
-async function checkUser() {
-    const { data } = await supabase.auth.getUser();
+// Menú
+const suave = matchMedia('(prefers-reduced-motion:reduce)').matches ? 'auto' : 'smooth';
+document.querySelectorAll('.tile').forEach(b => b.onclick = () => {
+  const p = b.dataset.p;
+  if (p === 'crear') { $('dlg-plan').showModal(); return; }
+  if (p === 'canal') { aviso('Canales de chat', 'Pronto podrás crear canales para reunir a compradores y artistas. Será parte del plan Pro.'); return; }
+  document.querySelectorAll('.tile').forEach(t => t.setAttribute('aria-pressed', t === b));
+  document.querySelectorAll('.p').forEach(s => s.hidden = s.id !== 'p-' + p);
+  history.replaceState(null, '', '#' + p);
+  $('p-' + p).scrollIntoView({ behavior: suave, block: 'start' });
+});
+$('dock-toggle').onclick = () => {
+  const cerrado = $('dock').classList.toggle('cerrado');
+  $('dock-toggle').setAttribute('aria-expanded', !cerrado);
+};
+$('salir').onclick = async () => { await sb.auth.signOut(); location.href = 'iniciar-sesion.html'; };
 
-    if (!data.user) {
-        window.location.href = "index.html";
-    } else {
-        document.getElementById("userEmail").innerText = data.user.email;
-    }
+// Precio con 10% de la galería
+const final = p => (Number(p) * (1 + COMISION)).toFixed(2);
+$('p').oninput = e => {
+  $('calc').textContent = e.target.value
+    ? `El comprador verá $${final(e.target.value)}. Tú recibes $${Number(e.target.value).toFixed(2)}.`
+    : 'La galería suma 10% sobre tu precio. Tú recibes el 100% de lo que fijes.';
+};
+
+// Comentarios
+function comentarios(o, T = 'comments', C = 'artwork_id'){
+  const caja = el('div', { className: 'coms', hidden: true });
+  const lista = el('div');
+  const i = el('input', { placeholder: 'Escribe un comentario', maxLength: 300, required: true });
+  const f = el('form', {}, i, el('button', { className: 'chip', textContent: 'Enviar' }));
+  const cargar = async () => {
+    const { data } = await sb.from(T).select('*').eq(C, o.id).order('created_at');
+    lista.replaceChildren(...(data || []).map(c => el('p', {}, el('b', { textContent: (c.author || 'Anónimo') + ': ' }), c.body)));
+  };
+  f.onsubmit = async e => {
+    e.preventDefault();
+    await sb.from(T).insert({ [C]: o.id, user_id: me.id, author: perfil?.display_name, body: i.value.trim() });
+    i.value = ''; cargar();
+  };
+  caja.append(lista, f);
+  return { caja, abrir: () => { caja.hidden = !caja.hidden; if (!caja.hidden) cargar(); } };
 }
 
-async function logout() {
-    await supabase.auth.signOut();
-    window.location.href = "index.html";
+// Tarjetas de obra
+function tarjeta(o){
+  const url = urlDe(o.file_path);
+  const lienzo = el('div', { className: 'lienzo' });
+  if (o.kind === '3d') {
+    const mv = document.createElement('model-viewer');
+    mv.setAttribute('src', url); mv.setAttribute('camera-controls', ''); mv.setAttribute('auto-rotate', '');
+    lienzo.append(mv);
+  } else lienzo.append(el('img', { src: url, alt: o.title, loading: 'lazy' }));
+  const likes = o.likes || [], yaLike = likes.some(l => l.user_id === me.id);
+  const like = el('button', { className: 'chip' + (yaLike ? ' si' : ''), textContent: `♥ ${likes.length}` });
+  like.setAttribute('aria-label', yaLike ? 'Quitar like' : 'Dar like');
+  like.onclick = async () => {
+    if (yaLike) await sb.from('likes').delete().match({ artwork_id: o.id, user_id: me.id });
+    else await sb.from('likes').insert({ artwork_id: o.id, user_id: me.id });
+    cargarObras();
+  };
+  const com = comentarios(o);
+  const cbtn = el('button', { className: 'chip', textContent: `Comentarios ${(o.comments || []).length}`, onclick: com.abrir });
+  const acc = el('div', { className: 'acc' }, like, cbtn);
+  if (o.price != null) {
+    acc.append(el('button', { className: 'chip', textContent: 'Iniciar compra', onclick: () => aviso('Compra próximamente', 'Muy pronto podrás pagar desde aquí. Mientras tanto, escribe un comentario para hablar con el artista.') }));
+  }
+  if (o.owner === me.id) {
+    acc.append(el('button', { className: 'chip', textContent: 'Eliminar', onclick: async () => {
+      if (!confirm('¿Eliminar esta obra?')) return;
+      await sb.storage.from('artworks').remove([o.file_path]);
+      await sb.from('artworks').delete().eq('id', o.id); cargarObras();
+    } }));
+  }
+  const precio = el('div', { className: 'precio' });
+  if (o.price != null) precio.append(`$${final(o.price)}`, el('small', { textContent: 'Incluye 10% de la galería' }));
+  else precio.append('No está a la venta');
+  return el('article', { className: 'obra' }, lienzo, el('h3', { textContent: o.title }),
+    el('small', { textContent: `por ${o.profiles?.display_name || 'Artista'}` }), precio, acc, com.caja);
 }
 
-checkUser();
+async function cargarObras(){
+  const { data, error } = await sb.from('artworks')
+    .select('*, profiles(display_name), likes(user_id), comments(id)').order('created_at', { ascending: false });
+  if (error) { $('todas').textContent = 'No se pudieron cargar las obras. Recarga la página.'; return; }
+  const llenar = (c, l, v) => c.replaceChildren(...(l.length ? l.map(tarjeta) : [el('p', { className: 'nota', textContent: v })]));
+  const mias = data.filter(o => o.owner === me.id);
+  llenar($('todas'), data, 'Aún no hay obras en la comunidad.');
+  llenar($('mias'), mias, 'Todavía no has publicado obras.');
+  resumen(data, mias);
+}
+
+// Estadísticas, logros y monedas
+function resumen(todas, mias){
+  const likes = mias.reduce((a, o) => a + (o.likes || []).length, 0);
+  const coms = mias.reduce((a, o) => a + (o.comments || []).length, 0);
+  $('stats').replaceChildren(...[[mias.length, 'Tus obras'], [likes, 'Likes recibidos'], [coms, 'Comentarios recibidos'], [todas.length, 'Obras en la comunidad']]
+    .map(([n, t]) => el('div', { className: 'stat' }, el('b', { textContent: n }), el('span', { textContent: t }))));
+  const L = [
+    ['Artista emergente', 'Publica tu primera obra.', mias.length >= 1],
+    ['Estrella del momento', 'Recibe 10 likes.', likes >= 10],
+    ['Maestro de las redes', 'Recibe 10 comentarios.', coms >= 10]
+  ];
+  $('logros').replaceChildren(...L.map(([t, d, ok]) => el('div', { className: 'logro' + (ok ? ' ok' : '') }, el('h3', { textContent: t }), el('p', { textContent: ok ? 'Desbloqueado' : d }))));
+  const mon = L.filter(l => l[2]).length * 50;
+  $('coins').textContent = `${mon} monedas`;
+  $('metricas').replaceChildren(...[[mias.length, 'Obras'], [likes, 'Likes'], [coms, 'Comentarios'], [mon, 'Monedas']]
+    .map(([n, t]) => el('button', { className: 'met', title: `${t}: ver Analíticas`, onclick: () => document.querySelector('.tile[data-p=stats]').click() }, el('span', { textContent: t }), el('b', { textContent: n }))));
+}
+
+// Subir obra
+$('subir').onsubmit = async e => {
+  e.preventDefault();
+  const file = $('f').files[0]; if (!file) return;
+  const kind = $('k').value;
+  if (kind === '3d' && !file.name.toLowerCase().endsWith('.glb')) { $('sm').textContent = 'Las esculturas deben ser archivos .glb.'; return; }
+  if (kind === '2d' && !file.type.startsWith('image/')) { $('sm').textContent = 'Los cuadros deben ser imágenes.'; return; }
+  if (file.size > 25 * 1024 * 1024) { $('sm').textContent = 'El archivo supera 25 MB.'; return; }
+  $('sb').disabled = true; $('sm').textContent = 'Subiendo...';
+  const path = `${me.id}/${Date.now()}-${file.name.replace(/[^\w.-]/g, '_')}`;
+  const up = await sb.storage.from('artworks').upload(path, file);
+  if (up.error) { $('sm').textContent = 'No se pudo subir el archivo: ' + up.error.message; $('sb').disabled = false; return; }
+  const ins = await sb.from('artworks').insert({ owner: me.id, title: $('t').value.trim(), kind, price: $('p').value || null, file_path: path });
+  $('sb').disabled = false;
+  if (ins.error) { $('sm').textContent = 'No se pudo guardar la obra: ' + ins.error.message; return; }
+  $('subir').reset(); $('sm').textContent = 'Obra publicada.'; cargarObras();
+};
+
+// Red social
+const PAYPAL_USER = 'AriesGallery';
+const urlPost = path => sb.storage.from('posts').getPublicUrl(path).data.publicUrl;
+async function cargarSlides(){
+  let { data } = await sb.from('news').select('*').order('created_at', { ascending: false }).limit(5);
+  if (!data?.length) data = [
+    { title: 'Bienvenida', body: 'Esta es la galería comunitaria de Aries Art Gallery.' },
+    { title: 'Canal oficial', body: 'Aquí publicamos noticias y nuevas exposiciones.' },
+    { title: 'Comparte tu arte', body: 'Sube imágenes o videos y recibe likes y comentarios.' }];
+  let i = 0;
+  const pintar = () => $('slides').replaceChildren(el('h3', { textContent: data[i].title }), el('p', { textContent: data[i].body }),
+    el('div', { className: 'dots' }, ...data.map((_, k) => el('button', { className: 'dot' + (k === i ? ' on' : ''), title: `Noticia ${k + 1}`, onclick: () => { i = k; pintar(); } }))));
+  pintar();
+  if (!matchMedia('(prefers-reduced-motion:reduce)').matches) setInterval(() => { i = (i + 1) % data.length; pintar(); }, 5000);
+}
+function post(p){
+  const card = el('article', { className: 'obra' }, el('h3', { textContent: p.author || 'Anónimo' }));
+  if (p.media_path) {
+    const u = urlPost(p.media_path);
+    card.append(el('div', { className: 'lienzo' }, p.media_type === 'video'
+      ? el('video', { src: u, controls: true, preload: 'metadata' }) : el('img', { src: u, alt: 'Publicación de ' + p.author, loading: 'lazy' })));
+  }
+  if (p.body) card.append(el('p', { className: 'precio', textContent: p.body, style: 'color:inherit' }));
+  const likes = p.post_likes || [], ya = likes.some(l => l.user_id === me.id);
+  const acc = el('div', { className: 'acc' }, el('button', { className: 'chip' + (ya ? ' si' : ''), textContent: `♥ ${likes.length}`, onclick: async () => {
+    if (ya) await sb.from('post_likes').delete().match({ post_id: p.id, user_id: me.id });
+    else await sb.from('post_likes').insert({ post_id: p.id, user_id: me.id });
+    cargarPosts();
+  } });
+  const com = comentarios(p, 'post_comments', 'post_id');
+  acc.append(el('button', { className: 'chip', textContent: `Comentarios ${(p.post_comments || []).length}`, onclick: com.abrir }),
+    el('button', { className: 'chip', textContent: 'Chatear', onclick: () => aviso('Mensajes privados', 'Pronto podrás chatear en privado con artistas y coleccionistas. Mientras tanto, usa los comentarios.') }));
+  if (p.price != null) acc.append(el('button', { className: 'chip si', textContent: `Pagar $${final(p.price)}`, title: 'Incluye 10% de la galería',
+    onclick: () => window.open(`https://www.paypal.me/${PAYPAL_USER}/${final(p.price)}USD`, '_blank', 'noopener') }));
+  card.append(acc, com.caja);
+  return card;
+}
+async function cargarPosts(){
+  const { data, error } = await sb.from('posts').select('*, post_likes(user_id), post_comments(id)').order('created_at', { ascending: false }).limit(30);
+  if (error) { $('feed').textContent = 'No se pudo cargar el feed. Recarga la página.'; return; }
+  $('feed').replaceChildren(...(data.length ? data.map(post) : [el('p', { className: 'nota', textContent: 'Aún no hay publicaciones. Sé la primera persona en compartir algo.' })]));
+}
+$('pf').onsubmit = async e => {
+  e.preventDefault();
+  const f = $('pm').files[0], body = $('pb').value.trim();
+  let path = null, type = null;
+  if (!body && !f) return;
+  if (f) {
+    const img = f.type.startsWith('image/'), vid = f.type.startsWith('video/');
+    if (!img && !vid) { $('ps').textContent = 'Solo imágenes o videos.'; return; }
+    if (f.size > 40 * 1024 * 1024) { $('ps').textContent = 'El archivo supera 40 MB.'; return; }
+    $('ps').textContent = 'Subiendo...';
+    path = `${me.id}/${Date.now()}-${f.name.replace(/[^\w.-]/g, '_')}`;
+    const up = await sb.storage.from('posts').upload(path, f);
+    if (up.error) { $('ps').textContent = 'No se pudo subir: ' + up.error.message; return; }
+    type = vid ? 'video' : 'image';
+  }
+  const r = await sb.from('posts').insert({ user_id: me.id, author: perfil?.display_name, body, media_path: path, media_type: type, price: $('pp').value || null });
+  if (r.error) { $('ps').textContent = 'No se pudo publicar: ' + r.error.message; return; }
+  $('pf').reset(); $('ps').textContent = 'Publicado.'; cargarPosts();
+};
+$('nuevo-canal').onclick = () => aviso('Canales de chat', 'Pronto podrás crear canales para reunir a compradores y artistas. Será parte del plan Pro.');
+
+// Chat de grupo
+function burbuja(m){
+  $('log').append(el('div', { className: 'm' + (m.user_id === me.id ? ' yo' : '') }, el('b', { textContent: m.author || 'Anónimo' }), m.body));
+  $('log').scrollTop = $('log').scrollHeight;
+}
+async function iniciarChat(){
+  const { data } = await sb.from('messages').select('*').order('created_at', { ascending: false }).limit(50);
+  (data || []).reverse().forEach(burbuja);
+  sb.channel('chat').on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, p => burbuja(p.new)).subscribe();
+}
+$('cf').onsubmit = async e => {
+  e.preventDefault();
+  const body = $('ci').value.trim(); if (!body) return;
+  $('ci').value = '';
+  await sb.from('messages').insert({ user_id: me.id, author: perfil?.display_name, body });
+};
+
+// Inicio automático tras el login
+(async () => {
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) { location.href = 'iniciar-sesion.html'; return; }
+  me = session.user;
+  perfil = (await sb.from('profiles').select('*').eq('id', me.id).single()).data;
+  owner = perfil?.role === 'owner';
+  $('quien').textContent = perfil?.display_name || 'Mi cuenta';
+  $('role').textContent = owner ? 'Acceso total gratuito' : 'Cuenta de miembro';
+  ['s-edicion', 's-chat', 's-market'].forEach(sellar);
+  if (owner) document.querySelectorAll('.tile:not([data-p=crear]):not([data-p=canal]) i').forEach(i => i.remove());
+  $('s-plan').inert = true;
+  if (!owner) $('pl-precio').style.display = 'none';
+  cargarObras(); iniciarChat(); cargarSlides(); cargarPosts();
+  const h = location.hash.slice(1);
+  [...document.querySelectorAll('.tile')].find(t => t.dataset.p === h)?.click();
+})();
 </script>
-
 </body>
 </html>
