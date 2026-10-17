@@ -137,33 +137,31 @@
         }
     </style>
     <script>
-        let slideIndex = 0;
+        let slideIndex = 0, timer;
 
         function showSlides() {
-            let i;
-            let slides = document.getElementsByClassName("slides");
-            let dots = document.getElementsByClassName("dot");
-            
+            const slides = document.getElementsByClassName("slides");
+            const dots = document.getElementsByClassName("dot");
             if (slides.length === 0) return;
 
-            for (i = 0; i < slides.length; i++) {
-                slides[i].style.display = "none";  
-            }
-            
-            slideIndex++;
-            if (slideIndex > slides.length) { slideIndex = 1 }
-            
-            for (i = 0; i < dots.length; i++) {
-                dots[i].className = dots[i].className.replace(" active", "");
-            }
-            
-            slides[slideIndex - 1].style.display = "block";  
-            dots[slideIndex - 1].className += " active";
+            if (slideIndex > slides.length) slideIndex = 1;
+            if (slideIndex < 1) slideIndex = slides.length;
 
-            setTimeout(showSlides, 3000); 
+            for (const s of slides) s.style.display = "none";
+            for (const d of dots) d.classList.remove("active");
+
+            slides[slideIndex - 1].style.display = "block";
+            dots[slideIndex - 1].classList.add("active");
+
+            clearTimeout(timer);
+            timer = setTimeout(nextAuto, 3000);
         }
 
-        window.onload = showSlides;
+        function nextAuto() { slideIndex++; showSlides(); }
+        function plusSlides(n) { slideIndex += n; showSlides(); }
+        function currentSlide(n) { slideIndex = n; showSlides(); }
+
+        window.onload = nextAuto;
     </script>
 </head>
 <body>
@@ -173,30 +171,31 @@
     </header>
     <nav>
         <a href="index.html">Inicio</a>
-        <a href="registro.html">Registrarse</a>
+        <a href="iniciar.html">Registrarse</a>
         <a href="iniciar.html">Iniciar Sesión</a>
         <a href="galeria.html">Galería</a>
         <a href="contacto.html">Contacto</a>
-        <a href="EVENTOS.HTML">Eventos</a>
+        <a href="eventos.html">Eventos</a>
         <a href="tienda.html">Tienda</a>
         <a href="news.html">Noticias</a>
         <a href="subs.html">Planes</a>
+        <a href="dashboard.html">Mi panel</a>
     </nav>
     <div class="slideshow-container">
         <div class="slides">
-            <a href="https://example.com">
+            <a href="iniciar.html">
                 <img src="Default_obra_pictorica_eslilo_modigliani_hermosa_copia_1.jpg" alt="Slide 1">
                 <div class="text">Participa Como Artista</div>
             </a>
         </div>
         <div class="slides">
-            <a href="https://example.com">
+            <a href="subs.html">
                 <img src="Default_obra_pictorica_eslilo_modigliani_hermosa_copia_2.jpg" alt="Slide 2">
                 <div class="text">Muestra tus obras en tu propia galería virtual</div>
             </a>
         </div>
         <div class="slides">
-            <a href="https://example.com">
+            <a href="galeria.html">
                 <img src="Default_obra_pictorica_eslilo_modigliani_hermosa_copia_3.jpg" alt="Slide 3">
                 <div class="text">Obras de todas partes del mundo</div>
             </a>
@@ -205,9 +204,9 @@
         <a class="next" onclick="plusSlides(1)">&#10095;</a>
     </div>
     <div class="dot-container">
-        <span class="dot" onclick="currentSlide(1)"></span> 
-        <span class="dot" onclick="currentSlide(2)"></span> 
-        <span class="dot" onclick="currentSlide(3)"></span> 
+        <span class="dot" onclick="currentSlide(1)"></span>
+        <span class="dot" onclick="currentSlide(2)"></span>
+        <span class="dot" onclick="currentSlide(3)"></span>
     </div>
     <div class="container">
         <div class="hero">
@@ -217,7 +216,7 @@
         </div>
     </div>
     <footer>
-        <p>&copy; 2024 Aries Art Gallery. Todos los derechos reservados.</p>
+        <p>&copy; 2026 Aries Art Gallery. Todos los derechos reservados.</p>
     </footer>
 </body>
 </html>
