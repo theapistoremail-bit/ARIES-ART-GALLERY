@@ -289,7 +289,7 @@ $('dock-toggle').onclick = () => {
   const cerrado = $('dock').classList.toggle('cerrado');
   $('dock-toggle').setAttribute('aria-expanded', !cerrado);
 };
-$('salir').onclick = async () => { await sb.auth.signOut(); location.href = 'iniciar-sesion.html'; };
+$('salir').onclick = async () => { await sb.auth.signOut(); location.href = 'iniciar.html'; };
 
 // Precio con 10% de la galería
 const final = p => (Number(p) * (1 + COMISION)).toFixed(2);
@@ -485,7 +485,7 @@ $('cf').onsubmit = async e => {
 // Inicio automático tras el login
 (async () => {
   const { data: { session } } = await sb.auth.getSession();
-  if (!session) { location.href = 'iniciar-sesion.html'; return; }
+  if (!session) { location.href = 'iniciar.html'; return; }
   me = session.user;
   perfil = (await sb.from('profiles').select('*').eq('id', me.id).single()).data;
   owner = perfil?.role === 'owner';
