@@ -110,9 +110,15 @@
     </nav>
     <main>
         <div class="slideshow-container" id="galeria">
-            <div class="slides">
+            <!-- La primera diapositiva ya viene activa, así el visor se ve aunque falle el JS -->
+            <div class="slides is-active">
                 <div class="iframe-container">
-                    <iframe id="visor" title="Aries Art Gallery" allow="fullscreen; xr-spatial-tracking" allowfullscreen></iframe>
+                    <iframe
+                        id="visor"
+                        src="https://www.viverse.com/MvmFPs6?full3d=&no-cookie="
+                        title="Aries Art Gallery And Store"
+                        allow="fullscreen; xr-spatial-tracking; autoplay; microphone; camera"
+                        allowfullscreen></iframe>
                 </div>
             </div>
             <div class="slides">
@@ -127,19 +133,14 @@
             </div>
         </div>
         <div class="dot-container" id="dots"></div>
-        <p class="entrar-box"><a id="entrar" class="entrar" href="#" target="_blank" rel="noopener noreferrer">Entrar a la galería</a></p>
+        <p class="entrar-box"><a id="entrar" class="entrar" href="https://www.viverse.com/MvmFPs6?full3d=&no-cookie=" target="_blank" rel="noopener noreferrer">Entrar a la galería</a></p>
     </main>
     <footer>
-        <p>&copy; 2024 Aries Art Gallery. Todos los derechos reservados.</p>
+        <p>&copy; 2026 Aries Art Gallery. Todos los derechos reservados.</p>
     </footer>
 
     <script>
         (function () {
-            // Cambia aquí el enlace de tu galería: lo usan el visor y el botón.
-            const GALERIA_URL = "<iframe width="970" height="600" src="https://www.viverse.com/MvmFPs6?full3d=&no-cookie=" title="Aries Art Gallery And Store " frameborder="0" allowfullscreen></iframe>";
-            document.getElementById("visor").src = GALERIA_URL + "?full3d=&no-cookie=";
-            document.getElementById("entrar").href = GALERIA_URL;
-
             const slides = document.querySelectorAll(".slides");
             const dotsBox = document.getElementById("dots");
             const dots = Array.from(slides).map(function (_, i) {
