@@ -73,7 +73,9 @@
             color: red;
         }
 
-        .form-group input {
+        .form-group input[type="text"],
+        .form-group input[type="email"],
+        .form-group input[type="password"] {
             width: 100%;
             padding: 0.5em;
             border: 1px solid #ccc;
@@ -81,6 +83,69 @@
             box-sizing: border-box;
             background-color: white;
             color: black;
+        }
+
+        /* ---- Selector de rol ---- */
+        .rol-label {
+            display: block;
+            margin-bottom: 0.5em;
+            color: red;
+        }
+
+        .rol-opciones {
+            display: flex;
+            gap: 0.8em;
+        }
+
+        .rol-opcion {
+            flex: 1;
+            position: relative;
+        }
+
+        .rol-opcion input {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .rol-opcion .tarjeta {
+            display: block;
+            padding: 1em 0.5em;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            background-color: white;
+            color: black;
+            transition: all 0.2s ease;
+        }
+
+        .rol-opcion .tarjeta strong {
+            display: block;
+            font-size: 1.1em;
+            margin-bottom: 0.3em;
+        }
+
+        .rol-opcion .tarjeta small {
+            font-family: sans-serif;
+            font-size: 0.75em;
+            color: #666;
+        }
+
+        .rol-opcion input:checked + .tarjeta {
+            border-color: red;
+            background-color: red;
+            color: white;
+        }
+
+        .rol-opcion input:checked + .tarjeta small {
+            color: #ffe0e0;
+        }
+
+        .rol-opcion input:focus-visible + .tarjeta {
+            outline: 2px solid black;
+            outline-offset: 2px;
         }
 
         .cta-button {
@@ -146,6 +211,26 @@
 
         <form id="formRegistro">
             <div class="form-group">
+                <span class="rol-label">Quiero registrarme como</span>
+                <div class="rol-opciones">
+                    <label class="rol-opcion">
+                        <input type="radio" name="rol" value="artista" required>
+                        <span class="tarjeta">
+                            <strong>Artista</strong>
+                            <small>Exhibir y vender mis obras</small>
+                        </span>
+                    </label>
+                    <label class="rol-opcion">
+                        <input type="radio" name="rol" value="comprador" required>
+                        <span class="tarjeta">
+                            <strong>Comprador</strong>
+                            <small>Descubrir y coleccionar arte</small>
+                        </span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group">
                 <label>Nombre Completo</label>
                 <input type="text" id="nombre" required>
             </div>
@@ -200,22 +285,32 @@
         const email = document.getElementById("email").value.trim();
         const password = document.getElementById("password").value;
         const confirm = document.getElementById("confirm-password").value;
+        const rolSeleccionado = document.querySelector('input[name="rol"]:checked');
+
+        if (!rolSeleccionado) {
+            mostrarMensaje("Elige si eres artista o comprador.", "error");
+            return;
+        }
 
         if (password !== confirm) {
             mostrarMensaje("Las contraseñas no coinciden.", "error");
             return;
         }
 
+        const rol = rolSeleccionado.value; // "artista" | "comprador"
+
         btn.disabled = true;
         btn.textContent = "Registrando...";
 
-        // Crea la cuenta en Supabase Auth y guarda el nombre como metadata del usuario
+        // Crea la cuenta en Supabase Auth. Nombre y rol viajan como metadata;
+        // un trigger en la base de datos crea el perfil en "perfiles" (ver schema-roles.sql)
         const { data, error } = await supabaseClient.auth.signUp({
             email: email,
             password: password,
             options: {
                 data: {
-                    nombre: nombre
+                    nombre: nombre,
+                    rol: rol
                 }
             }
         });
@@ -226,15 +321,6 @@
         if (error) {
             mostrarMensaje("Error: " + error.message, "error");
             return;
-        }
-
-        // Crea también el perfil público (plan, biografía) usado por galeria.html
-        if (data.user) {
-            await supabaseClient.from("perfiles").upsert({
-                id: data.user.id,
-                nombre: nombre,
-                plan: "free"
-            });
         }
 
         mostrarMensaje("¡Cuenta creada! Revisa tu correo para confirmar.", "ok");
