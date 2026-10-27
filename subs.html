@@ -127,6 +127,17 @@
             margin-top: 3em;
         }
 
+        .paypal-box {
+            margin-top: 1em;
+            min-height: 45px;
+        }
+
+        .msg {
+            margin-top: 1em;
+            font-size: 0.85em;
+            color: red;
+        }
+
         @media (max-width: 900px) {
             .plans {
                 flex-direction: column;
@@ -177,7 +188,7 @@
                 <li>Soporte estándar</li>
             </ul>
 
-            <a href="#suscribirse" class="cta-button">
+            <a href="registro.html" class="cta-button">
                 Comenzar Gratis
             </a>
         </div>
@@ -195,9 +206,7 @@
                 <li>Soporte mejorado</li>
             </ul>
 
-            <a href="#suscribirse" class="cta-button">
-                Suscribirse
-            </a>
+            <div id="paypal-creator" class="paypal-box"><a href="https://www.paypal.me/AriesGallery/5USD" target="_blank" rel="noopener" class="cta-button">Suscribirse</a></div>
         </div>
 
         <div class="plan">
@@ -213,9 +222,7 @@
                 <li>Soporte prioritario</li>
             </ul>
 
-            <a href="#suscribirse" class="cta-button">
-                Suscribirse
-            </a>
+            <div id="paypal-pro" class="paypal-box"><a href="https://www.paypal.me/AriesGallery/15USD" target="_blank" rel="noopener" class="cta-button">Suscribirse</a></div>
         </div>
 
         <div class="plan">
@@ -231,9 +238,7 @@
                 <li>Acceso anticipado a funciones</li>
             </ul>
 
-            <a href="#suscribirse" class="cta-button">
-                Suscribirse
-            </a>
+            <div id="paypal-vip" class="paypal-box"><a href="https://www.paypal.me/AriesGallery/25USD" target="_blank" rel="noopener" class="cta-button">Suscribirse</a></div>
         </div>
 
         <div class="plan featured">
@@ -260,9 +265,7 @@
                 Ahorra más que pagando mes a mes.
             </p>
 
-            <a href="#suscribirse" class="cta-button">
-                Obtener Membresía Anual
-            </a>
+            <div id="paypal-anual" class="paypal-box"><a href="https://www.paypal.me/AriesGallery/1699MXN" target="_blank" rel="noopener" class="cta-button">Obtener Membresía Anual</a></div>
 
         </div>
 
@@ -273,6 +276,57 @@
 <footer>
     <p>&copy; 2026 Aries Art Gallery. Todos los derechos reservados.</p>
 </footer>
+
+<script>
+// ====== CONFIGURA AQUÍ (opcional, para cobro automático mensual) ======
+const PAYPAL_CLIENT_ID = "";   // tu Client ID (modo Live). Vacío = se usan los enlaces de PayPal.me
+const PLANES = {
+    "paypal-creator": { id: "", nombre: "creator" },  // ID de plan de PayPal (P-XXXX)
+    "paypal-pro":     { id: "", nombre: "pro" },
+    "paypal-vip":     { id: "", nombre: "vip" },
+    "paypal-anual":   { id: "", nombre: "anual" }
+};
+const CONFIRM_URL = "/api/confirmar-suscripcion"; // servidor que marca al usuario como premium
+// =====================================================================
+
+function listoParaSuscripciones() {
+    return PAYPAL_CLIENT_ID && Object.values(PLANES).every(p => p.id);
+}
+
+function activarSuscripciones() {
+    Object.entries(PLANES).forEach(([divId, plan]) => {
+        const box = document.getElementById(divId);
+        box.innerHTML = "";
+        paypal.Buttons({
+            style: { shape: "rect", color: "gold", layout: "vertical", label: "subscribe" },
+            createSubscription: (data, actions) =>
+                actions.subscription.create({ plan_id: plan.id }),
+            onApprove: async (data) => {
+                try {
+                    const r = await fetch(CONFIRM_URL, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ subscriptionID: data.subscriptionID, plan: plan.nombre })
+                    });
+                    if (!r.ok) throw new Error("confirmacion");
+                    window.location.href = "dashboard.html";
+                } catch (e) {
+                    alert("Tu pago se realizó, pero no pudimos activarlo todavía. Escríbenos. ID: " + data.subscriptionID);
+                }
+            }
+        }).render("#" + divId);
+    });
+}
+
+// Si falta algo o PayPal no carga, se quedan los botones con enlace a PayPal.me
+if (listoParaSuscripciones()) {
+    const sdk = document.createElement("script");
+    sdk.src = "https://www.paypal.com/sdk/js?client-id=" + PAYPAL_CLIENT_ID +
+              "&vault=true&intent=subscription&currency=MXN";
+    sdk.onload = activarSuscripciones;
+    document.head.appendChild(sdk);
+}
+</script>
 
 </body>
 </html>
