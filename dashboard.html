@@ -82,7 +82,7 @@ input,select,textarea{width:100%;padding:.6em;border:1px solid #ccc;border-radiu
 <footer>&copy; 2026 Aries Art Gallery</footer>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const SUPABASE_URL='https://TU_PROYECTO.supabase.co', SUPABASE_KEY='TU_ANON_KEY';
+const SUPABASE_URL='https://ervucqpuhttdztiikelw.supabase.co', SUPABASE_KEY='sb_publishable_b4thpt6kZH9dInOnp1ii0w_Up1xO43t';
 const VIDEO_URL=''; // opcional: enlace a un video .mp4; si lo pones, reemplaza el slideshow
 const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY),$=i=>document.getElementById(i);
 const say=t=>{$('msg').textContent=t;};
@@ -102,7 +102,7 @@ function banner(){const b=$('banner');let i=0;const p=()=>{b.style.opacity=0;set
 
 (async()=>{
   const {data:{session}}=await sb.auth.getSession();
-  if(!session){location.href='iniciar-sesion.html';return;}
+  if(!session){location.href='iniciar.html';return;}
   user=session.user;$('mail').value=user.email;
   const [p,c,s,g,m]=await Promise.all([
     sb.from('perfiles').select('*').eq('id',user.id).maybeSingle(),
@@ -135,5 +135,5 @@ $('foto').onchange=async e=>{
   const url=sb.storage.from('avatares').getPublicUrl(ruta).data.publicUrl+'?t='+Date.now();
   await sb.from('perfiles').update({avatar_url:url}).eq('id',user.id);
   $('av').src=url;say('Foto actualizada ✓');};
-$('salir').onclick=async()=>{await sb.auth.signOut();location.href='iniciar-sesion.html';};
+$('salir').onclick=async()=>{await sb.auth.signOut();location.href='iniciar.html';};
 </script></body></html>
