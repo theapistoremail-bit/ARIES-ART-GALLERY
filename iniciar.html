@@ -29,11 +29,11 @@
 <header><h1>Aries Art Gallery</h1></header>
 <nav>
   <a href="index.html">Inicio</a>
-  <a href="iniciar.html">Registrarse</a>
+  <a href="registro.html">Registrarse</a>
   <a href="iniciar.html">Iniciar Sesión</a>
   <a href="galeria.html">Galería</a>
   <a href="contacto.html">Contacto</a>
-  <a href="eventos.html">Eventos</a>
+  <a href="EVENTOS.HTML">Eventos</a>
   <a href="tienda.html">Tienda</a>
   <a href="news.html">Noticias</a>
   <a href="subs.html">Planes</a>
@@ -62,8 +62,8 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   // Pega aquí los datos de Supabase > Project Settings > API
-  const SUPABASE_URL = 'https://TU_PROYECTO.supabase.co';
-  const SUPABASE_KEY = 'TU_ANON_KEY';
+  const SUPABASE_URL = 'https://ervucqpuhttdztiikelw.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_b4thpt6kZH9dInOnp1ii0w_Up1xO43t';
   const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
   const msg = document.getElementById('msg');
   const creds = () => ({ email: email.value.trim(), password: password.value });
@@ -77,14 +77,8 @@
     else location.href = 'dashboard.html';
   });
 
-  document.getElementById('signup').addEventListener('click', async () => {
-    msg.textContent = '';
-    if (!email.checkValidity() || !password.checkValidity()) { msg.textContent = 'Escribe un correo válido y una contraseña de 6 o más caracteres.'; return; }
-    const { data, error } = await sb.auth.signUp(creds());
-    if (error) msg.textContent = error.message;
-    else if (data.session) location.href = 'dashboard.html';
-    else msg.textContent = 'Cuenta creada. Revisa tu correo para confirmarla y luego inicia sesión.';
-  });
+  // El registro con rol (artista / comprador) vive en registro.html
+  document.getElementById('signup').addEventListener('click', () => { location.href = 'registro.html'; });
 </script>
 </body>
 </html>
