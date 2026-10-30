@@ -43,6 +43,28 @@ input,select,textarea{width:100%;padding:.6em;border:1px solid #ccc;border-radiu
 .mini{width:28px;height:28px;border-radius:50%;object-fit:cover;background:#eee}
 .seg{padding:.3em .9em;margin:0;font-size:.8em}
 .vacio{text-align:center;color:#555;grid-column:1/-1}
+.subs{display:flex;gap:.5em;justify-content:center;margin-bottom:1em}
+.sub{border:1px solid red;background:#fff;color:red;border-radius:20px;padding:.4em 1.2em;font-family:inherit;cursor:pointer}
+.sub.on{background:red;color:#fff}
+.pane{display:none}.pane.on{display:block}
+.ig{display:grid;gap:16px;grid-template-columns:minmax(0,1fr)}
+#yo{order:-1;margin:0;text-align:center}
+#yo .cuenta{display:flex;align-items:center;gap:.8em;justify-content:center}
+#yo .cuenta img{width:64px;height:64px;border-radius:50%;object-fit:cover;border:2px solid red;background:#eee}
+#yo .nums{display:flex;justify-content:space-around;margin-top:.8em}
+#yo .nums b{display:block;color:red;font-size:1.4em}
+@media(min-width:800px){.ig{grid-template-columns:minmax(0,520px) 260px;justify-content:center}#yo{order:0;grid-column:2;grid-row:1;align-self:start}}
+#hist{display:flex;gap:14px;overflow-x:auto;padding:.4em 0 .8em}
+#hist button{background:none;border:0;font-family:inherit;cursor:pointer;text-align:center;width:72px;flex:none;color:#000}
+#hist img{width:60px;height:60px;border-radius:50%;object-fit:cover;padding:2px;border:2px solid red;background:#eee}
+#hist .sel img{background:red}
+#hist small{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.7em}
+.post{border:1px solid #f3b3b3;border-radius:10px;margin-bottom:16px;overflow:hidden}
+.ph{display:flex;align-items:center;gap:.6em;padding:.6em .8em}
+.pn{flex:1;min-width:0}.pn b{display:block}.pn small{color:#777}
+.pi{width:100%;aspect-ratio:1;object-fit:cover;display:block;background:#eee}
+.pa{padding:.5em .8em 0}.lk{background:none;border:0;color:red;font-family:inherit;font-size:1.2em;cursor:pointer;padding:0}
+.pc{margin:.3em .8em;font:15px sans-serif}.pp{margin:.2em .8em .8em;color:red}
 </style></head><body>
 <header><h1>Aries Art Gallery</h1>
 <nav id="tabs"><button data-t="inicio" class="on">Inicio</button><button data-t="social">Social</button><button data-t="perfil">Perfil</button><button data-t="metricas">Métricas</button><button data-t="tienda">Tienda</button>
@@ -67,10 +89,13 @@ input,select,textarea{width:100%;padding:.6em;border:1px solid #ccc;border-radiu
 </div>
 <button class="btn" id="ir2d">Mi galería 2D</button></section>
 
-<section id="social"><h2>Obras recientes</h2>
-<div class="viewer" id="rec"></div>
-<h2>Publicar una obra</h2>
-<div class="card" id="subir">
+<section id="social">
+<div class="subs"><button class="sub on" data-s="p-inicio">Inicio</button><button class="sub" data-s="p-expl">Explorar</button><button class="sub" data-s="p-pub">Publicar</button></div>
+<div class="pane on" id="p-inicio"><div class="ig"><div>
+<p id="hist-t"></p><div id="hist"></div><div id="feed"></div></div>
+<aside id="yo" class="card"></aside></div></div>
+<div class="pane" id="p-expl"><div class="viewer" id="rec"></div><h2>Todas las obras</h2><div class="grid" id="expl"></div></div>
+<div class="pane" id="p-pub"><div class="card" id="subir">
 <div class="drop" id="drop"><p id="drop-t">Arrastra tu obra aquí o toca para elegirla (JPG, PNG o WebP, máx. 5 MB)</p></div>
 <input type="file" id="obra" accept="image/jpeg,image/png,image/webp" hidden>
 <label>Título</label><input id="o-t" maxlength="120">
@@ -80,9 +105,7 @@ input,select,textarea{width:100%;padding:.6em;border:1px solid #ccc;border-radiu
 <p id="pv"></p>
 <button class="btn" id="pub">Publicar obra</button>
 <div class="veil"><p>Con un plan activo puedes publicar tus obras.</p><a class="btn" href="cuenta.html#plan">Ver planes</a></div>
-</div>
-<h2>Galerías de la comunidad</h2>
-<div class="grid" id="feed"></div></section>
+</div></div></section>
 
 <section id="perfil"><h2>Mi perfil</h2>
 <img id="av" alt="Foto de perfil"><label>Foto (JPG, PNG o WebP, máx. 2 MB)</label><input type="file" id="foto" accept="image/jpeg,image/png,image/webp">
@@ -134,38 +157,74 @@ $('cerrar').onclick=()=>$('pop').classList.remove('on');
 function banner(){const b=$('banner');let i=0;const p=()=>{b.style.opacity=0;setTimeout(()=>{b.innerHTML=MENSAJES[i++%MENSAJES.length]+' <a href="cuenta.html#plan">Ver planes</a>';b.style.opacity=1;},400);};p();setInterval(p,4500);}
 
 // ---- Social ----
+let datos=[],cnt={},gus=new Set(),filtro=null;
 const urlObra=p=>sb.storage.from('obras').getPublicUrl(p).data.publicUrl;
+const fotoDe=(img,u)=>{img.src=u||PH;img.onerror=()=>{img.src=PH};return img;};
 function tarjeta(o){
   const c=E('div','obra'),i=E('img');i.src=o.url;i.alt=o.titulo;
   c.append(i,E('h3',0,o.titulo),E('small',0,[o.tecnica,o.medidas].filter(Boolean).join(' · ')),E('b',0,'$'+Number(o.precio_final).toFixed(2)+' MXN'));
-  const a=E('div','autor'),av=E('img','mini');av.src=o.avatar_url||PH;av.onerror=()=>{av.src=PH};
-  a.append(av,E('span',0,o.nombre||'Artista'));
-  if(o.user_id!==user.id){const bt=E('button','btn seg',sigo.has(o.user_id)?'Siguiendo':'Seguir');bt.onclick=()=>seguir(o.user_id,bt);a.append(bt);}
+  const a=E('div','autor');a.append(fotoDe(E('img','mini'),o.avatar_url),E('span',0,o.nombre||'Artista'));
+  if(o.user_id!==user.id){const bt=E('button','btn seg',sigo.has(o.user_id)?'Siguiendo':'Seguir');bt.onclick=()=>seguir(o.user_id);a.append(bt);}
   c.append(a);return c;}
+function post(o){
+  const c=E('article','post'),h=E('div','ph'),n=E('div','pn');
+  n.append(E('b',0,o.nombre||'Artista'),E('small',0,Number((cnt[o.user_id]||{}).seguidores||0)+' seguidores'));
+  h.append(fotoDe(E('img','mini'),o.avatar_url),n);
+  if(o.user_id!==user.id){const bt=E('button','btn seg',sigo.has(o.user_id)?'Siguiendo':'Seguir');bt.onclick=()=>seguir(o.user_id);h.append(bt);}
+  const i=E('img','pi');i.src=o.url;i.alt=o.titulo;
+  const a=E('div','pa'),lk=E('button','lk',(gus.has(o.id)?'♥ ':'♡ ')+o.likes);lk.onclick=()=>like(o,lk);a.append(lk);
+  const cap=E('p','pc');cap.append(E('b',0,o.titulo+' '),document.createTextNode([o.tecnica,o.medidas].filter(Boolean).join(' · ')));
+  c.append(h,i,a,cap,E('p','pp','$'+Number(o.precio_final).toFixed(2)+' MXN'));return c;}
+async function like(o,b){
+  const g=gus.has(o.id);
+  const {error}=await(g?sb.from('obra_likes').delete().eq('obra_id',o.id).eq('user_id',user.id):sb.from('obra_likes').insert({obra_id:o.id,user_id:user.id}));
+  if(error)return say('No se pudo dar like.');
+  g?gus.delete(o.id):gus.add(o.id);o.likes=Number(o.likes)+(g?-1:1);b.textContent=(g?'♡ ':'♥ ')+o.likes;}
+function pintar(){
+  const yo=cnt[user.id]||{},y=$('yo');y.replaceChildren();
+  const cu=E('div','cuenta'),nm=E('div');nm.append(E('b',0,$('nombre').value||user.email.split('@')[0]));
+  cu.append(fotoDe(E('img'),$('av').src===PH?null:$('av').src),nm);
+  const nums=E('div','nums');[['publicaciones','Obras'],['seguidores','Seguidores'],['siguiendo','Siguiendo']].forEach(([k,t])=>{const d=E('div');d.append(E('b',0,Number(yo[k]||0)),E('small',0,t));nums.append(d);});
+  const bp=E('button','btn',activo?'Publicar obra':'Ver planes');bp.onclick=()=>activo?document.querySelector('[data-s=p-pub]').click():(location.href='cuenta.html#plan');
+  y.append(cu,nums,bp);
+  // Historias: artistas que sigues, o los destacados si aún no sigues a nadie
+  const h=$('hist');h.replaceChildren();
+  const por=new Map();datos.forEach(o=>{if(!por.has(o.user_id))por.set(o.user_id,o);});
+  let l=[...por.values()];l=sigo.size?l.filter(o=>sigo.has(o.user_id)):l.slice(0,10);
+  $('hist-t').textContent=l.length?(sigo.size?'Artistas que sigues':'Artistas destacados'):'';
+  l.forEach(o=>{const b=E('button',filtro===o.user_id?'sel':'');b.append(fotoDe(E('img'),o.avatar_url),E('small',0,o.nombre||'Artista'));b.onclick=()=>{filtro=filtro===o.user_id?null:o.user_id;pintar();};h.append(b);});
+  const f=$('feed');f.replaceChildren();
+  const v=filtro?datos.filter(o=>o.user_id===filtro):datos;
+  v.forEach(o=>f.append(post(o)));
+  if(!v.length)f.append(E('p','vacio','Aún no hay obras. Publica la primera.'));}
 async function feed(){
-  const [f,sg]=await Promise.all([
+  const [f,sg,lk,cn]=await Promise.all([
     sb.from('feed_obras').select('*').order('rango',{ascending:false}).order('created_at',{ascending:false}).limit(60),
-    sb.from('seguidores').select('seguido_id').eq('seguidor_id',user.id)]);
+    sb.from('seguidores').select('seguido_id').eq('seguidor_id',user.id),
+    sb.from('obra_likes').select('obra_id').eq('user_id',user.id),
+    sb.from('perfil_conteos').select('*')]);
   if(f.error)return say('No se pudo cargar el feed.');
-  sigo=new Set((sg.data||[]).map(r=>r.seguido_id));
-  let d=(f.data||[]).map(o=>({...o,url:urlObra(o.imagen_path)}));
-  // Mayor plan primero; si sigues a alguien, sus obras van antes (el orden se conserva)
-  if(sigo.size)d.sort((a,b)=>sigo.has(b.user_id)-sigo.has(a.user_id));
-  const g=$('feed'),m=$('mis'),r=$('rec');g.replaceChildren();m.replaceChildren();r.replaceChildren();clearInterval(rot);
-  d.forEach(o=>g.append(tarjeta(o)));
-  if(!d.length)g.append(E('p','vacio','Aún no hay obras. Publica la primera.'));
-  const mine=d.filter(o=>o.user_id===user.id);
-  mine.forEach(o=>m.append(tarjeta(o)));
+  sigo=new Set((sg.data||[]).map(r=>r.seguido_id));gus=new Set((lk.data||[]).map(r=>r.obra_id));
+  cnt={};(cn.data||[]).forEach(r=>cnt[r.id]=r);
+  datos=(f.data||[]).map(o=>({...o,url:urlObra(o.imagen_path)}));
+  // Mayor plan primero; las obras de quienes sigues van antes (el orden se conserva)
+  if(sigo.size)datos.sort((a,b)=>sigo.has(b.user_id)-sigo.has(a.user_id));
+  if(filtro&&!datos.some(o=>o.user_id===filtro))filtro=null;
+  pintar();
+  const x=$('expl'),m=$('mis'),r=$('rec');x.replaceChildren();m.replaceChildren();r.replaceChildren();clearInterval(rot);
+  datos.forEach(o=>x.append(tarjeta(o)));
+  const mine=datos.filter(o=>o.user_id===user.id);mine.forEach(o=>m.append(tarjeta(o)));
   if(!mine.length)m.append(E('p','vacio','Tu galería 2D está vacía. Publica una obra desde Social.'));
-  const rec=[...d].sort((a,b)=>b.created_at.localeCompare(a.created_at)).slice(0,4);
-  if(!rec.length){r.append(E('div','slide on','Las obras nuevas aparecerán aquí'));r.firstChild.style.background='#222';return;}
+  const rec=[...datos].sort((a,b)=>b.created_at.localeCompare(a.created_at)).slice(0,4);
+  if(!rec.length){const s=E('div','slide on','Las obras nuevas aparecerán aquí');s.style.background='#222';r.append(s);return;}
   rec.forEach((o,k)=>{const s=E('div','slide'+(k?'':' on'),o.titulo+(o.nombre?' · '+o.nombre:''));s.style.backgroundImage='url("'+o.url+'")';r.append(s);});
   let k=0;rot=setInterval(()=>{const s=r.children;s[k].classList.remove('on');k=(k+1)%s.length;s[k].classList.add('on');},3500);}
-async function seguir(id,bt){
+async function seguir(id){
   const s=sigo.has(id);
   const {error}=await(s?sb.from('seguidores').delete().eq('seguidor_id',user.id).eq('seguido_id',id):sb.from('seguidores').insert({seguidor_id:user.id,seguido_id:id}));
   if(error)return say('No se pudo actualizar.');
-  s?sigo.delete(id):sigo.add(id);bt.textContent=s?'Seguir':'Siguiendo';}
+  feed();}
+document.querySelectorAll('.sub').forEach(b=>b.onclick=()=>{document.querySelectorAll('.sub,.pane').forEach(e=>e.classList.remove('on'));b.classList.add('on');$(b.dataset.s).classList.add('on');});
 
 // Arrastrar y soltar
 const elegir=f=>{
