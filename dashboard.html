@@ -65,6 +65,8 @@ input,select,textarea{width:100%;padding:.6em;border:1px solid #ccc;border-radiu
 .pi{width:100%;aspect-ratio:1;object-fit:cover;display:block;background:#eee}
 .pa{padding:.5em .8em 0}.lk{background:none;border:0;color:red;font-family:inherit;font-size:1.2em;cursor:pointer;padding:0}
 .pc{margin:.3em .8em;font:15px sans-serif}.pp{margin:.2em .8em .8em;color:red}
+#toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:red;color:#fff;padding:.7em 1.2em;border-radius:20px;z-index:9;display:none;max-width:90%;text-align:center;font:15px sans-serif}
+#o-ayuda,#cupo{font:14px sans-serif;color:#555}
 </style></head><body>
 <header><h1>Aries Art Gallery</h1>
 <nav id="tabs"><button data-t="inicio" class="on">Inicio</button><button data-t="social">Social</button><button data-t="perfil">Perfil</button><button data-t="metricas">Métricas</button><button data-t="tienda">Tienda</button>
@@ -96,15 +98,16 @@ input,select,textarea{width:100%;padding:.6em;border:1px solid #ccc;border-radiu
 <aside id="yo" class="card"></aside></div></div>
 <div class="pane" id="p-expl"><div class="viewer" id="rec"></div><h2>Todas las obras</h2><div class="grid" id="expl"></div></div>
 <div class="pane" id="p-pub"><div class="card" id="subir">
-<div class="drop" id="drop"><p id="drop-t">Arrastra tu obra aquí o toca para elegirla (JPG, PNG o WebP, máx. 5 MB)</p></div>
+<p id="cupo"></p>
+<label>¿Qué vas a publicar?</label><select id="o-tipo"><option value="obra">Una obra (con ficha técnica y precio)</option><option value="estudio">Mi estudio o mi día (sin obra terminada)</option></select>
+<p id="o-ayuda">Si en la foto aparece una obra terminada, publícala como obra. Bocetos, materiales, tu mesa de trabajo o una mañana con café van en Mi estudio.</p>
+<div class="drop" id="drop"><p id="drop-t">Arrastra tu foto aquí o toca para elegirla (JPG, PNG o WebP, máx. 5 MB)</p></div>
 <input type="file" id="obra" accept="image/jpeg,image/png,image/webp" hidden>
-<label>Título</label><input id="o-t" maxlength="120">
-<label>Técnica</label><input id="o-te" maxlength="120">
+<label id="l-t">Título</label><input id="o-t" maxlength="120">
+<div id="f-obra"><label>Técnica</label><input id="o-te" maxlength="120">
 <label>Medidas</label><input id="o-m" maxlength="60" placeholder="Ej. 60 x 80 cm">
-<label>Tu precio (MXN)</label><input id="o-p" type="number" min="0" step="0.01">
-<p id="pv"></p>
-<button class="btn" id="pub">Publicar obra</button>
-<div class="veil"><p>Con un plan activo puedes publicar tus obras.</p><a class="btn" href="cuenta.html#plan">Ver planes</a></div>
+<label>Tu precio (MXN)</label><input id="o-p" type="number" min="0" step="0.01"><p id="pv"></p></div>
+<button class="btn" id="pub">Publicar</button>
 </div></div></section>
 
 <section id="perfil"><h2>Mi perfil</h2>
@@ -131,13 +134,14 @@ input,select,textarea{width:100%;padding:.6em;border:1px solid #ccc;border-radiu
 <div class="pack"><small>Edición de temporada · no vuelve</small><h3>Sala Neón Nocturna</h3><button class="btn" disabled>Próximamente</button></div>
 <div class="pack"><small>Edición limitada</small><h3>Paquete Barroco</h3><button class="btn" disabled>Próximamente</button></div></div></section>
 </main>
+<div id="toast"></div>
 <footer>&copy; 2026 Aries Art Gallery</footer>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const SUPABASE_URL='https://ervucqpuhttdztiikelw.supabase.co', SUPABASE_KEY='sb_publishable_b4thpt6kZH9dInOnp1ii0w_Up1xO43t';
 const VIDEO_URL=''; // opcional: enlace a un video .mp4; si lo pones, reemplaza el slideshow
 const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY),$=i=>document.getElementById(i);
-const say=t=>{$('msg').textContent=t;};
+let tt;const say=t=>{$('msg').textContent=t;const o=$('toast');o.textContent=t;o.style.display=t?'block':'none';clearTimeout(tt);if(t)tt=setTimeout(()=>{o.style.display='none'},5000);};
 const E=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e};
 const PH='data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96"><rect width="96" height="96" fill="#eee"/><circle cx="48" cy="38" r="16" fill="#c99"/><ellipse cx="48" cy="84" rx="28" ry="22" fill="#c99"/></svg>');
 const MENSAJES=['Suscríbete a cualquiera de nuestros planes.','Disfruta de una galería de alta gama.','Crea tu propia sala y muestra tu obra al mundo.'];
@@ -158,11 +162,15 @@ function banner(){const b=$('banner');let i=0;const p=()=>{b.style.opacity=0;set
 
 // ---- Social ----
 let datos=[],cnt={},gus=new Set(),filtro=null;
+const precio=o=>o.precio_final!=null?'$'+Number(o.precio_final).toFixed(2)+' MXN':'';
+let cupo={};
+function ui(){const e=$('o-tipo').value==='estudio';$('f-obra').style.display=e?'none':'block';$('l-t').textContent=e?'Pie de foto':'Título';
+  const c=cupo;$('cupo').textContent=c.con_plan?'Plan activo: sin límite de obras.':'Obras gratis este mes: '+Number(c.obras_mes||0)+' de '+Number(c.limite_obras||3)+'. Mi estudio: '+Number(c.estudio_mes||0)+' de '+Number(c.limite_estudio||20)+'.';}
 const urlObra=p=>sb.storage.from('obras').getPublicUrl(p).data.publicUrl;
 const fotoDe=(img,u)=>{img.src=u||PH;img.onerror=()=>{img.src=PH};return img;};
 function tarjeta(o){
   const c=E('div','obra'),i=E('img');i.src=o.url;i.alt=o.titulo;
-  c.append(i,E('h3',0,o.titulo),E('small',0,[o.tecnica,o.medidas].filter(Boolean).join(' · ')),E('b',0,'$'+Number(o.precio_final).toFixed(2)+' MXN'));
+  c.append(i,E('h3',0,o.titulo),E('small',0,[o.tecnica,o.medidas].filter(Boolean).join(' · ')),E('b',0,precio(o)));
   const a=E('div','autor');a.append(fotoDe(E('img','mini'),o.avatar_url),E('span',0,o.nombre||'Artista'));
   if(o.user_id!==user.id){const bt=E('button','btn seg',sigo.has(o.user_id)?'Siguiendo':'Seguir');bt.onclick=()=>seguir(o.user_id);a.append(bt);}
   c.append(a);return c;}
@@ -174,7 +182,7 @@ function post(o){
   const i=E('img','pi');i.src=o.url;i.alt=o.titulo;
   const a=E('div','pa'),lk=E('button','lk',(gus.has(o.id)?'♥ ':'♡ ')+o.likes);lk.onclick=()=>like(o,lk);a.append(lk);
   const cap=E('p','pc');cap.append(E('b',0,o.titulo+' '),document.createTextNode([o.tecnica,o.medidas].filter(Boolean).join(' · ')));
-  c.append(h,i,a,cap,E('p','pp','$'+Number(o.precio_final).toFixed(2)+' MXN'));return c;}
+  c.append(h,i,a,cap,E('p','pp',precio(o)));return c;}
 async function like(o,b){
   const g=gus.has(o.id);
   const {error}=await(g?sb.from('obra_likes').delete().eq('obra_id',o.id).eq('user_id',user.id):sb.from('obra_likes').insert({obra_id:o.id,user_id:user.id}));
@@ -185,7 +193,7 @@ function pintar(){
   const cu=E('div','cuenta'),nm=E('div');nm.append(E('b',0,$('nombre').value||user.email.split('@')[0]));
   cu.append(fotoDe(E('img'),$('av').src===PH?null:$('av').src),nm);
   const nums=E('div','nums');[['publicaciones','Obras'],['seguidores','Seguidores'],['siguiendo','Siguiendo']].forEach(([k,t])=>{const d=E('div');d.append(E('b',0,Number(yo[k]||0)),E('small',0,t));nums.append(d);});
-  const bp=E('button','btn',activo?'Publicar obra':'Ver planes');bp.onclick=()=>activo?document.querySelector('[data-s=p-pub]').click():(location.href='cuenta.html#plan');
+  const bp=E('button','btn','Publicar');bp.onclick=()=>document.querySelector('[data-s=p-pub]').click();
   y.append(cu,nums,bp);
   // Historias: artistas que sigues, o los destacados si aún no sigues a nadie
   const h=$('hist');h.replaceChildren();
@@ -198,14 +206,15 @@ function pintar(){
   v.forEach(o=>f.append(post(o)));
   if(!v.length)f.append(E('p','vacio','Aún no hay obras. Publica la primera.'));}
 async function feed(){
-  const [f,sg,lk,cn]=await Promise.all([
+  const [f,sg,lk,cn,cu]=await Promise.all([
     sb.from('feed_obras').select('*').order('rango',{ascending:false}).order('created_at',{ascending:false}).limit(60),
     sb.from('seguidores').select('seguido_id').eq('seguidor_id',user.id),
     sb.from('obra_likes').select('obra_id').eq('user_id',user.id),
-    sb.from('perfil_conteos').select('*')]);
+    sb.from('perfil_conteos').select('*'),
+    sb.from('mi_cupo').select('*').maybeSingle()]);
   if(f.error)return say('No se pudo cargar el feed.');
   sigo=new Set((sg.data||[]).map(r=>r.seguido_id));gus=new Set((lk.data||[]).map(r=>r.obra_id));
-  cnt={};(cn.data||[]).forEach(r=>cnt[r.id]=r);
+  cnt={};(cn.data||[]).forEach(r=>cnt[r.id]=r);cupo=cu.data||{};ui();
   datos=(f.data||[]).map(o=>({...o,url:urlObra(o.imagen_path)}));
   // Mayor plan primero; las obras de quienes sigues van antes (el orden se conserva)
   if(sigo.size)datos.sort((a,b)=>sigo.has(b.user_id)-sigo.has(a.user_id));
@@ -213,7 +222,7 @@ async function feed(){
   pintar();
   const x=$('expl'),m=$('mis'),r=$('rec');x.replaceChildren();m.replaceChildren();r.replaceChildren();clearInterval(rot);
   datos.forEach(o=>x.append(tarjeta(o)));
-  const mine=datos.filter(o=>o.user_id===user.id);mine.forEach(o=>m.append(tarjeta(o)));
+  const mine=datos.filter(o=>o.user_id===user.id&&o.tipo!=='estudio');mine.forEach(o=>m.append(tarjeta(o)));
   if(!mine.length)m.append(E('p','vacio','Tu galería 2D está vacía. Publica una obra desde Social.'));
   const rec=[...datos].sort((a,b)=>b.created_at.localeCompare(a.created_at)).slice(0,4);
   if(!rec.length){const s=E('div','slide on','Las obras nuevas aparecerán aquí');s.style.background='#222';r.append(s);return;}
@@ -237,18 +246,23 @@ $('obra').onchange=e=>elegir(e.target.files[0]);
 ['dragleave','drop'].forEach(n=>$('drop').addEventListener(n,e=>{e.preventDefault();$('drop').classList.remove('hov');}));
 $('drop').addEventListener('drop',e=>elegir(e.dataTransfer.files[0]));
 $('o-p').oninput=()=>{const p=parseFloat($('o-p').value);$('pv').textContent=p>=0?'Se publica en $'+(p*1.1).toFixed(2)+' MXN (incluye 10% de la galería).':'';};
+$('o-tipo').onchange=ui;
 $('pub').onclick=async()=>{
-  const t=$('o-t').value.trim(),p=parseFloat($('o-p').value);
-  if(!arch)return say('Elige la imagen de tu obra.');
-  if(!t||!(p>=0))return say('Escribe el título y el precio.');
+  const es=$('o-tipo').value==='estudio',t=$('o-t').value.trim(),p=parseFloat($('o-p').value);
+  if(!arch)return say('Elige la imagen.');
+  if(!t)return say(es?'Escribe un pie de foto.':'Escribe el título de tu obra.');
+  if(!es&&!(p>=0))return say('Escribe el precio de tu obra.');
+  if(!es&&!cupo.con_plan&&Number(cupo.obras_mes)>=Number(cupo.limite_obras))return say('Llegaste al límite de obras gratis de este mes. Con un plan puedes publicar más.');
   const ruta=user.id+'/'+Date.now()+'.'+arch.type.split('/')[1];
   const u=await sb.storage.from('obras').upload(ruta,arch,{contentType:arch.type});
-  if(u.error)return say('No se pudo subir la imagen.');
-  const {error}=await sb.from('obras').insert({user_id:user.id,titulo:t,tecnica:$('o-te').value.trim(),medidas:$('o-m').value.trim(),precio_base:p,imagen_path:ruta});
-  if(error){await sb.storage.from('obras').remove([ruta]);return say('No se pudo publicar. Revisa que tu plan esté activo.');}
-  arch=null;$('drop').replaceChildren(E('p',0,'Arrastra tu obra aquí o toca para elegirla (JPG, PNG o WebP, máx. 5 MB)'));
+  if(u.error)return say('No se pudo subir la imagen: '+u.error.message);
+  const fila={user_id:user.id,titulo:t,tipo:es?'estudio':'obra',imagen_path:ruta};
+  if(!es)Object.assign(fila,{tecnica:$('o-te').value.trim(),medidas:$('o-m').value.trim(),precio_base:p});
+  const {error}=await sb.from('obras').insert(fila);
+  if(error){await sb.storage.from('obras').remove([ruta]);return say('No se pudo publicar: '+error.message);}
+  arch=null;$('drop').replaceChildren(E('p',0,'Arrastra tu foto aquí o toca para elegirla (JPG, PNG o WebP, máx. 5 MB)'));
   ['o-t','o-te','o-m','o-p'].forEach(i=>$(i).value='');$('pv').textContent='';
-  say('Obra publicada ✓');feed();};
+  say('Publicado ✓');feed();};
 
 (async()=>{
   const {data:{session}}=await sb.auth.getSession();
@@ -265,7 +279,7 @@ $('pub').onclick=async()=>{
   activo=!!s.data&&s.data.estado==='ACTIVE';
   $('plan').textContent=activo?'Plan activo: '+(s.data.plan||''):'Plan gratuito.';
   if(activo){
-    $('banner').style.display='none';['editor','mcard','subir'].forEach(i=>$(i).classList.add('unlocked'));
+    $('banner').style.display='none';['editor','mcard'].forEach(i=>$(i).classList.add('unlocked'));
     if(g.data){$('tipo').value=g.data.tipo;$('sala').value=g.data.sala;}
     if(m.data){$('m-likes').textContent=m.data.likes;$('m-ventas').textContent=m.data.ventas;$('m-ing').textContent='$'+m.data.ingresos;}
   }else{banner();setTimeout(()=>$('pop').classList.add('on'),6000);}
@@ -278,14 +292,19 @@ $('g-cobro').onclick=()=>guardar('datos_cobro',{titular:$('titular').value.trim(
 $('guardar').onclick=async()=>{const {error}=await sb.from('galerias').upsert({user_id:user.id,tipo:$('tipo').value,sala:$('sala').value});
   say(error?'No se pudo guardar. Revisa que tu plan esté activo.':'Galería guardada ✓');};
 $('foto').onchange=async e=>{
-  const f=e.target.files[0];if(!f)return;
+  const inp=e.target,f=inp.files[0];inp.value=''; // permite volver a elegir el mismo archivo
+  if(!f)return;
   if(!['image/jpeg','image/png','image/webp'].includes(f.type)||f.size>2097152)return say('Usa una imagen JPG, PNG o WebP de máximo 2 MB.');
+  $('av').src=URL.createObjectURL(f);say('Subiendo foto…');
   const ruta=user.id+'/avatar';
-  const {error}=await sb.storage.from('avatares').upload(ruta,f,{upsert:true,contentType:f.type});
-  if(error)return say('No se pudo subir la foto.');
+  const u=await sb.storage.from('avatares').upload(ruta,f,{upsert:true,contentType:f.type});
+  if(u.error)return say('No se pudo subir la foto: '+u.error.message);
   const url=sb.storage.from('avatares').getPublicUrl(ruta).data.publicUrl+'?t='+Date.now();
   const r=await sb.from('perfiles').upsert({id:user.id,avatar_url:url});
-  if(r.error)return say('La foto subió, pero no se pudo guardar en tu perfil.');
-  $('av').src=url;say('Foto actualizada ✓');};
+  if(r.error)return say('La foto subió, pero no se guardó en tu perfil: '+r.error.message);
+  const t=new Image();
+  t.onload=()=>{$('av').src=url;say('Foto actualizada ✓');pintar();};
+  t.onerror=()=>say('La foto se guardó, pero su enlace no abre. En Supabase, Storage, marca el bucket avatares como público.');
+  t.src=url;};
 $('salir').onclick=async()=>{await sb.auth.signOut();location.href='iniciar.html';};
 </script></body></html>
