@@ -14,7 +14,7 @@ h2{color:red}
 #banner{background:red;color:#fff;padding:1em;border-radius:10px;text-align:center;transition:opacity .4s;margin-bottom:1em}
 #banner a{color:#fff;font-weight:bold}
 .viewer{position:relative;aspect-ratio:16/9;background:#000;border:3px solid red;border-radius:10px;overflow:hidden}
-.slide,.viewer video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:flex;align-items:flex-end;justify-content:center;padding:1em;box-sizing:border-box;color:#fff;font-size:1.3em;opacity:0;transition:opacity 1s}
+.slide,.viewer video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:flex;align-items:flex-end;justify-content:center;padding:1em;box-sizing:border-box;color:#fff;font-size:1.3em;opacity:0;transition:opacity 1s;background-size:cover;background-position:center;text-shadow:0 1px 6px #000}
 .slide.on{opacity:1}
 .viewer video{opacity:1}
 .pop{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:80%;max-width:360px;background:rgba(255,255,255,.92);backdrop-filter:blur(6px);border:1px solid red;border-radius:10px;padding:1em;text-align:center;display:none;z-index:2}
@@ -29,14 +29,23 @@ input,select,textarea{width:100%;padding:.6em;border:1px solid #ccc;border-radiu
 .btn[disabled]{opacity:.5;cursor:not-allowed}
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;text-align:center}
 .stats b{display:block;font-size:2em;color:red}
-.shop{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
-.pack{border:1px solid red;border-radius:10px;padding:1em;text-align:center}
+.shop,.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
+.pack,.obra{border:1px solid red;border-radius:10px;padding:1em;text-align:center}
 .pack small{color:red}
 #av{width:96px;height:96px;border-radius:50%;object-fit:cover;border:2px solid red;background:#eee;display:block;margin:0 auto}
 #msg{color:red;text-align:center;min-height:1.4em}
+.drop{border:2px dashed red;border-radius:10px;padding:2em 1em;text-align:center;cursor:pointer}
+.drop.hov{background:#fff0f0}
+.drop img{max-width:100%;max-height:200px;border-radius:6px}
+.obra>img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:6px}
+.obra h3{margin:.5em 0 .2em}.obra small{display:block;color:#555}.obra b{display:block;color:red;margin-top:.3em}
+.autor{display:flex;align-items:center;gap:.5em;justify-content:center;margin-top:.6em}
+.mini{width:28px;height:28px;border-radius:50%;object-fit:cover;background:#eee}
+.seg{padding:.3em .9em;margin:0;font-size:.8em}
+.vacio{text-align:center;color:#555;grid-column:1/-1}
 </style></head><body>
 <header><h1>Aries Art Gallery</h1>
-<nav id="tabs"><button data-t="inicio" class="on">Inicio</button><button data-t="perfil">Perfil</button><button data-t="metricas">Métricas</button><button data-t="tienda">Tienda</button>
+<nav id="tabs"><button data-t="inicio" class="on">Inicio</button><button data-t="social">Social</button><button data-t="perfil">Perfil</button><button data-t="metricas">Métricas</button><button data-t="tienda">Tienda</button>
 <a href="cuenta.html#plan">Planes y pago</a><button id="salir">Salir</button></nav></header>
 <main>
 <p id="msg" role="alert"></p>
@@ -45,7 +54,7 @@ input,select,textarea{width:100%;padding:.6em;border:1px solid #ccc;border-radiu
 <div id="banner"></div>
 <div class="viewer" id="viewer">
  <div class="slide on" style="background:linear-gradient(135deg,#8b0000,#222)">Galería clásica</div>
- <div class="slide" style="background:linear-gradient(135deg,#ddd,#fff0f0);color:#000">Galería moderna</div>
+ <div class="slide" style="background:linear-gradient(135deg,#ddd,#fff0f0);color:#000;text-shadow:none">Galería moderna</div>
  <div class="slide" style="background:linear-gradient(135deg,#000,#ff0080)">Galería neón</div>
  <div class="pop" id="pop"><button class="x" id="cerrar" aria-label="Cerrar">×</button><p>Crea tu propia galería de alta gama.</p><a class="btn" href="cuenta.html#plan">Conocer los planes</a></div>
 </div>
@@ -55,13 +64,33 @@ input,select,textarea{width:100%;padding:.6em;border:1px solid #ccc;border-radiu
 <label>Sala</label><select id="sala"><option value="clasica">Clásica</option><option value="moderna">Moderna</option><option value="neon">Neón</option></select>
 <button class="btn" id="guardar">Guardar galería</button>
 <div class="veil"><p>Suscríbete para elegir sala y tipo de galería.</p><a class="btn" href="cuenta.html#plan">Ver planes</a></div>
-</div></section>
+</div>
+<button class="btn" id="ir2d">Mi galería 2D</button></section>
+
+<section id="social"><h2>Obras recientes</h2>
+<div class="viewer" id="rec"></div>
+<h2>Publicar una obra</h2>
+<div class="card" id="subir">
+<div class="drop" id="drop"><p id="drop-t">Arrastra tu obra aquí o toca para elegirla (JPG, PNG o WebP, máx. 5 MB)</p></div>
+<input type="file" id="obra" accept="image/jpeg,image/png,image/webp" hidden>
+<label>Título</label><input id="o-t" maxlength="120">
+<label>Técnica</label><input id="o-te" maxlength="120">
+<label>Medidas</label><input id="o-m" maxlength="60" placeholder="Ej. 60 x 80 cm">
+<label>Tu precio (MXN)</label><input id="o-p" type="number" min="0" step="0.01">
+<p id="pv"></p>
+<button class="btn" id="pub">Publicar obra</button>
+<div class="veil"><p>Con un plan activo puedes publicar tus obras.</p><a class="btn" href="cuenta.html#plan">Ver planes</a></div>
+</div>
+<h2>Galerías de la comunidad</h2>
+<div class="grid" id="feed"></div></section>
 
 <section id="perfil"><h2>Mi perfil</h2>
 <img id="av" alt="Foto de perfil"><label>Foto (JPG, PNG o WebP, máx. 2 MB)</label><input type="file" id="foto" accept="image/jpeg,image/png,image/webp">
 <label>Nombre</label><input id="nombre" maxlength="60"><label>Biografía</label><textarea id="bio" rows="3" maxlength="400"></textarea>
 <label>Correo de registro</label><input id="mail" disabled>
 <button class="btn" id="g-perfil">Guardar perfil</button>
+<h2>Mi galería 2D</h2>
+<div class="grid" id="mis"></div>
 <h2>Datos para recibir mis pagos</h2>
 <p>PayPal o CLABE. No guardamos números de tarjeta.</p>
 <label>Titular</label><input id="titular" maxlength="80"><label>Correo de PayPal o CLABE</label><input id="cuenta" maxlength="80">
@@ -86,19 +115,81 @@ const SUPABASE_URL='https://ervucqpuhttdztiikelw.supabase.co', SUPABASE_KEY='sb_
 const VIDEO_URL=''; // opcional: enlace a un video .mp4; si lo pones, reemplaza el slideshow
 const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY),$=i=>document.getElementById(i);
 const say=t=>{$('msg').textContent=t;};
+const E=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e};
+const PH='data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96"><rect width="96" height="96" fill="#eee"/><circle cx="48" cy="38" r="16" fill="#c99"/><ellipse cx="48" cy="84" rx="28" ry="22" fill="#c99"/></svg>');
 const MENSAJES=['Suscríbete a cualquiera de nuestros planes.','Disfruta de una galería de alta gama.','Crea tu propia sala y muestra tu obra al mundo.'];
-let user,activo=false;
+let user,activo=false,sigo=new Set(),arch=null,rot;
+$('av').src=PH;$('av').onerror=()=>{$('av').src=PH};
 
 document.querySelectorAll('#tabs [data-t]').forEach(b=>b.onclick=()=>{
   document.querySelectorAll('#tabs [data-t],section').forEach(e=>e.classList.remove('on'));
   b.classList.add('on');$(b.dataset.t).classList.add('on');say('');});
+$('ir2d').onclick=()=>document.querySelector('[data-t=perfil]').click();
 
 // Viewer: slideshow o video
 if(VIDEO_URL){const v=document.createElement('video');v.src=VIDEO_URL;v.autoplay=v.muted=v.loop=v.playsInline=true;$('viewer').prepend(v);}
-else{const s=[...document.querySelectorAll('.slide')];let i=0;setInterval(()=>{s[i].classList.remove('on');i=(i+1)%s.length;s[i].classList.add('on');},3500);}
+else{const s=[...document.querySelectorAll('#viewer .slide')];let i=0;setInterval(()=>{s[i].classList.remove('on');i=(i+1)%s.length;s[i].classList.add('on');},3500);}
 $('cerrar').onclick=()=>$('pop').classList.remove('on');
 
 function banner(){const b=$('banner');let i=0;const p=()=>{b.style.opacity=0;setTimeout(()=>{b.innerHTML=MENSAJES[i++%MENSAJES.length]+' <a href="cuenta.html#plan">Ver planes</a>';b.style.opacity=1;},400);};p();setInterval(p,4500);}
+
+// ---- Social ----
+const urlObra=p=>sb.storage.from('obras').getPublicUrl(p).data.publicUrl;
+function tarjeta(o){
+  const c=E('div','obra'),i=E('img');i.src=o.url;i.alt=o.titulo;
+  c.append(i,E('h3',0,o.titulo),E('small',0,[o.tecnica,o.medidas].filter(Boolean).join(' · ')),E('b',0,'$'+Number(o.precio_final).toFixed(2)+' MXN'));
+  const a=E('div','autor'),av=E('img','mini');av.src=o.avatar_url||PH;av.onerror=()=>{av.src=PH};
+  a.append(av,E('span',0,o.nombre||'Artista'));
+  if(o.user_id!==user.id){const bt=E('button','btn seg',sigo.has(o.user_id)?'Siguiendo':'Seguir');bt.onclick=()=>seguir(o.user_id,bt);a.append(bt);}
+  c.append(a);return c;}
+async function feed(){
+  const [f,sg]=await Promise.all([
+    sb.from('feed_obras').select('*').order('rango',{ascending:false}).order('created_at',{ascending:false}).limit(60),
+    sb.from('seguidores').select('seguido_id').eq('seguidor_id',user.id)]);
+  if(f.error)return say('No se pudo cargar el feed.');
+  sigo=new Set((sg.data||[]).map(r=>r.seguido_id));
+  let d=(f.data||[]).map(o=>({...o,url:urlObra(o.imagen_path)}));
+  // Mayor plan primero; si sigues a alguien, sus obras van antes (el orden se conserva)
+  if(sigo.size)d.sort((a,b)=>sigo.has(b.user_id)-sigo.has(a.user_id));
+  const g=$('feed'),m=$('mis'),r=$('rec');g.replaceChildren();m.replaceChildren();r.replaceChildren();clearInterval(rot);
+  d.forEach(o=>g.append(tarjeta(o)));
+  if(!d.length)g.append(E('p','vacio','Aún no hay obras. Publica la primera.'));
+  const mine=d.filter(o=>o.user_id===user.id);
+  mine.forEach(o=>m.append(tarjeta(o)));
+  if(!mine.length)m.append(E('p','vacio','Tu galería 2D está vacía. Publica una obra desde Social.'));
+  const rec=[...d].sort((a,b)=>b.created_at.localeCompare(a.created_at)).slice(0,4);
+  if(!rec.length){r.append(E('div','slide on','Las obras nuevas aparecerán aquí'));r.firstChild.style.background='#222';return;}
+  rec.forEach((o,k)=>{const s=E('div','slide'+(k?'':' on'),o.titulo+(o.nombre?' · '+o.nombre:''));s.style.backgroundImage='url("'+o.url+'")';r.append(s);});
+  let k=0;rot=setInterval(()=>{const s=r.children;s[k].classList.remove('on');k=(k+1)%s.length;s[k].classList.add('on');},3500);}
+async function seguir(id,bt){
+  const s=sigo.has(id);
+  const {error}=await(s?sb.from('seguidores').delete().eq('seguidor_id',user.id).eq('seguido_id',id):sb.from('seguidores').insert({seguidor_id:user.id,seguido_id:id}));
+  if(error)return say('No se pudo actualizar.');
+  s?sigo.delete(id):sigo.add(id);bt.textContent=s?'Seguir':'Siguiendo';}
+
+// Arrastrar y soltar
+const elegir=f=>{
+  if(!f)return;
+  if(!['image/jpeg','image/png','image/webp'].includes(f.type)||f.size>5242880)return say('Usa una imagen JPG, PNG o WebP de máximo 5 MB.');
+  arch=f;say('');const im=E('img');im.src=URL.createObjectURL(f);$('drop').replaceChildren(im);};
+$('drop').onclick=()=>$('obra').click();
+$('obra').onchange=e=>elegir(e.target.files[0]);
+['dragenter','dragover'].forEach(n=>$('drop').addEventListener(n,e=>{e.preventDefault();$('drop').classList.add('hov');}));
+['dragleave','drop'].forEach(n=>$('drop').addEventListener(n,e=>{e.preventDefault();$('drop').classList.remove('hov');}));
+$('drop').addEventListener('drop',e=>elegir(e.dataTransfer.files[0]));
+$('o-p').oninput=()=>{const p=parseFloat($('o-p').value);$('pv').textContent=p>=0?'Se publica en $'+(p*1.1).toFixed(2)+' MXN (incluye 10% de la galería).':'';};
+$('pub').onclick=async()=>{
+  const t=$('o-t').value.trim(),p=parseFloat($('o-p').value);
+  if(!arch)return say('Elige la imagen de tu obra.');
+  if(!t||!(p>=0))return say('Escribe el título y el precio.');
+  const ruta=user.id+'/'+Date.now()+'.'+arch.type.split('/')[1];
+  const u=await sb.storage.from('obras').upload(ruta,arch,{contentType:arch.type});
+  if(u.error)return say('No se pudo subir la imagen.');
+  const {error}=await sb.from('obras').insert({user_id:user.id,titulo:t,tecnica:$('o-te').value.trim(),medidas:$('o-m').value.trim(),precio_base:p,imagen_path:ruta});
+  if(error){await sb.storage.from('obras').remove([ruta]);return say('No se pudo publicar. Revisa que tu plan esté activo.');}
+  arch=null;$('drop').replaceChildren(E('p',0,'Arrastra tu obra aquí o toca para elegirla (JPG, PNG o WebP, máx. 5 MB)'));
+  ['o-t','o-te','o-m','o-p'].forEach(i=>$(i).value='');$('pv').textContent='';
+  say('Obra publicada ✓');feed();};
 
 (async()=>{
   const {data:{session}}=await sb.auth.getSession();
@@ -115,10 +206,11 @@ function banner(){const b=$('banner');let i=0;const p=()=>{b.style.opacity=0;set
   activo=!!s.data&&s.data.estado==='ACTIVE';
   $('plan').textContent=activo?'Plan activo: '+(s.data.plan||''):'Plan gratuito.';
   if(activo){
-    $('banner').style.display='none';$('editor').classList.add('unlocked');$('mcard').classList.add('unlocked');
+    $('banner').style.display='none';['editor','mcard','subir'].forEach(i=>$(i).classList.add('unlocked'));
     if(g.data){$('tipo').value=g.data.tipo;$('sala').value=g.data.sala;}
     if(m.data){$('m-likes').textContent=m.data.likes;$('m-ventas').textContent=m.data.ventas;$('m-ing').textContent='$'+m.data.ingresos;}
   }else{banner();setTimeout(()=>$('pop').classList.add('on'),6000);}
+  feed();
 })();
 
 const guardar=async(t,f)=>{const {error}=await sb.from(t).upsert({id:user.id,...f});say(error?'No se pudo guardar.':'Guardado ✓');};
@@ -133,7 +225,8 @@ $('foto').onchange=async e=>{
   const {error}=await sb.storage.from('avatares').upload(ruta,f,{upsert:true,contentType:f.type});
   if(error)return say('No se pudo subir la foto.');
   const url=sb.storage.from('avatares').getPublicUrl(ruta).data.publicUrl+'?t='+Date.now();
-  await sb.from('perfiles').update({avatar_url:url}).eq('id',user.id);
+  const r=await sb.from('perfiles').upsert({id:user.id,avatar_url:url});
+  if(r.error)return say('La foto subió, pero no se pudo guardar en tu perfil.');
   $('av').src=url;say('Foto actualizada ✓');};
 $('salir').onclick=async()=>{await sb.auth.signOut();location.href='iniciar.html';};
 </script></body></html>
