@@ -73,6 +73,21 @@ input,select,textarea{width:100%;padding:.6em;border:1px solid #ccc;border-radiu
 .slot .n{position:absolute;top:4px;left:4px;background:red;color:#fff;border-radius:10px;padding:0 .5em;font:12px sans-serif}
 .slot button{position:absolute;bottom:4px;background:rgba(255,255,255,.92);color:red;border:1px solid red;border-radius:5px;width:28px;height:28px;font-size:1em;line-height:1;cursor:pointer;padding:0}
 .slot .q{right:4px}.slot .c{left:4px}
+.rejilla{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
+#lista-obras{display:contents}
+.nuevo{position:relative;display:flex;min-height:240px}
+.nuevo .drop{flex:1;margin:0;display:flex;flex-direction:column;align-items:center;justify-content:center;border:3px dotted red;min-height:240px}
+.nuevo .drop .mas{font-size:3em;line-height:1}
+.nuevo .drop p{margin:.3em 0}
+.nuevo .veil p{margin:.2em 0;font-size:.85em}
+.nuevo .veil .btn{margin-top:.6em;padding:.5em 1.2em}
+.obra .base{font-weight:normal;color:#666;font-size:.78em}
+.obra h4{overflow-wrap:anywhere}
+#nueva-obra{display:none}
+#nueva-obra .fila{display:flex;gap:1em;flex-wrap:wrap}
+#nueva-obra .prev{width:160px;aspect-ratio:4/5;object-fit:cover;border:1px solid red;border-radius:8px}
+.pubnote{font-family:sans-serif;font-size:.85em;color:#333;margin:.5em 0}
+
 
 #msg{color:red;text-align:center;min-height:1.4em}
 </style></head><body>
@@ -130,18 +145,26 @@ input,select,textarea{width:100%;padding:.6em;border:1px solid #ccc;border-radiu
 <h2>Mi plan</h2><p id="plan">Cargando…</p><a class="btn" href="cuenta.html#plan">Ver planes y pagar</a></section>
 
 <section id="obras"><h2>Mis obras</h2>
-<div class="card" id="obras-card">
-<div class="drop" id="drop"><p>Arrastra una imagen aquí o toca para elegir<br><small>JPG, PNG o WebP, máx. 5 MB</small></p><input type="file" id="archivo-obra" accept="image/jpeg,image/png,image/webp"></div>
+<div id="obras-card">
+<div class="rejilla">
+<div class="nuevo">
+<div class="drop" id="drop"><div class="mas">+</div><p>Añadir obra<br><small>Arrastra una imagen o toca para elegir<br>JPG, PNG o WebP, máx. 5 MB</small></p><input type="file" id="archivo-obra" accept="image/jpeg,image/png,image/webp"></div>
+<div class="veil"><p>Sube tus obras con cualquier plan activo.</p><a class="btn" href="cuenta.html#plan">Ver planes</a></div>
+</div>
+<div id="lista-obras"></div>
+</div>
+<div class="card" id="nueva-obra">
+<div class="fila"><img id="o-prev" class="prev" alt="Vista previa de la obra"><div style="flex:1;min-width:220px">
 <label>Título</label><input id="o-titulo" maxlength="80">
+<label>Tu precio (MXN)</label><input id="o-precio" type="number" min="0" step="1" inputmode="decimal">
+<p class="pubnote" id="o-publico"></p></div></div>
 <label>Técnica</label><input id="o-tecnica" maxlength="60" placeholder="Óleo sobre tela, escultura en bronce...">
 <label>Medidas</label><input id="o-medidas" maxlength="40" placeholder="60 x 80 cm">
 <label>Año</label><input id="o-anio" maxlength="4" inputmode="numeric">
-<label>Precio (MXN)</label><input id="o-precio" type="number" min="0" step="1">
 <button class="btn" id="subir-obra" disabled>Subir obra</button>
-<div class="veil"><p>Sube tus obras con cualquier plan activo.</p><a class="btn" href="cuenta.html#plan">Ver planes</a></div>
+<button class="btn" id="cancelar-obra" type="button" style="background:#fff;color:red;border:1px solid red">Cancelar</button>
 </div>
-<h2>Recientes</h2>
-<div class="obras" id="lista-obras"></div>
+</div>
 </section>
 
 <section id="metricas"><h2>Métricas</h2>
@@ -227,53 +250,75 @@ $('foto').onchange=async e=>{
 $('salir').onclick=async()=>{await sb.auth.signOut();location.href='iniciar.html';};
 
 // ---- Mis obras: subir con drag & drop, listar 3-4 recientes ----
+const EXCEDENTE_PCT=10; // sobreprecio que se suma al precio que fija el artista
+const MXN=new Intl.NumberFormat('es-MX',{style:'currency',currency:'MXN',minimumFractionDigits:0,maximumFractionDigits:2});
+const precioPublico=p=>Math.round((Number(p)||0)*(100+EXCEDENTE_PCT))/100;
+
 const dz=$('drop'), inputObra=$('archivo-obra');
+let archivoObraActual=null, prevObra=null;
 dz.onclick=()=>inputObra.click();
+inputObra.onclick=e=>e.stopPropagation();
 ['dragover','dragleave','drop'].forEach(ev=>dz.addEventListener(ev,e=>e.preventDefault()));
 dz.addEventListener('dragover',()=>dz.classList.add('over'));
 dz.addEventListener('dragleave',()=>dz.classList.remove('over'));
 dz.addEventListener('drop',e=>{dz.classList.remove('over');if(e.dataTransfer.files[0])manejarArchivoObra(e.dataTransfer.files[0]);});
-inputObra.onchange=e=>{if(e.target.files[0])manejarArchivoObra(e.target.files[0]);};
+inputObra.onchange=e=>{if(e.target.files[0])manejarArchivoObra(e.target.files[0]);e.target.value='';};
 
-let archivoObraActual=null;
 function manejarArchivoObra(f){
   if(!['image/jpeg','image/png','image/webp'].includes(f.type)||f.size>5242880){say('Usa una imagen JPG, PNG o WebP de máximo 5 MB.');return;}
-  archivoObraActual=f;
-  dz.querySelector('p').innerHTML='Lista para subir: '+f.name;
+  archivoObraActual=f;if(prevObra)URL.revokeObjectURL(prevObra);prevObra=URL.createObjectURL(f);
+  $('o-prev').src=prevObra;$('nueva-obra').style.display='block';actualizarPrecioPublico();
+  $('nueva-obra').scrollIntoView({behavior:'smooth',block:'nearest'});$('o-titulo').focus();
 }
+function actualizarPrecioPublico(){
+  const p=Number($('o-precio').value)||0;
+  $('o-publico').textContent=p>0
+    ?'Precio al público: '+MXN.format(precioPublico(p))+' (tu precio + '+EXCEDENTE_PCT+' %). Tú recibes '+MXN.format(p)+'.'
+    :'Escribe tu precio para ver cómo se mostrará al público.';
+}
+$('o-precio').addEventListener('input',actualizarPrecioPublico);
+function cerrarNuevaObra(){
+  archivoObraActual=null;if(prevObra){URL.revokeObjectURL(prevObra);prevObra=null;}
+  ['o-titulo','o-tecnica','o-medidas','o-anio','o-precio'].forEach(id=>$(id).value='');
+  $('o-prev').removeAttribute('src');$('nueva-obra').style.display='none';
+}
+$('cancelar-obra').onclick=cerrarNuevaObra;
 
 $('subir-obra').onclick=async()=>{
   if(!archivoObraActual)return say('Elige o arrastra una imagen primero.');
   const titulo=$('o-titulo').value.trim();
   if(!titulo)return say('Ponle un título a la obra.');
+  const precio=Number($('o-precio').value)||0;
+  if(precio<0)return say('El precio no puede ser negativo.');
   $('subir-obra').disabled=true;$('subir-obra').textContent='Subiendo...';
+  const volver=()=>{$('subir-obra').disabled=false;$('subir-obra').textContent='Subir obra';};
   const ruta=user.id+'/'+Date.now()+'-'+archivoObraActual.name.replace(/[^a-zA-Z0-9.]/g,'_');
   const {error:upErr}=await sb.storage.from('obras').upload(ruta,archivoObraActual,{contentType:archivoObraActual.type});
-  if(upErr){say('No se pudo subir la imagen.');$('subir-obra').disabled=false;$('subir-obra').textContent='Subir obra';return;}
+  if(upErr){say('No se pudo subir la imagen.');volver();return;}
   const imagen_url=sb.storage.from('obras').getPublicUrl(ruta).data.publicUrl;
   const {error:dbErr}=await sb.from('obras').insert({
     user_id:user.id,titulo,tecnica:$('o-tecnica').value.trim(),medidas:$('o-medidas').value.trim(),
-    anio:$('o-anio').value.trim(),precio:Number($('o-precio').value)||0,imagen_url});
-  $('subir-obra').disabled=false;$('subir-obra').textContent='Subir obra';
+    anio:$('o-anio').value.trim(),precio,imagen_url});
+  volver();
   if(dbErr){say('No se pudo guardar la obra.');return;}
-  say('Obra subida ✓');
-  ['o-titulo','o-tecnica','o-medidas','o-anio','o-precio'].forEach(id=>$(id).value='');
-  archivoObraActual=null;dz.querySelector('p').innerHTML='Arrastra una imagen aquí o toca para elegir<br><small>JPG, PNG o WebP, máx. 5 MB</small>';
-  cargarObras();
+  say('Obra subida ✓');cerrarNuevaObra();cargarObras();llenarObrasSocial();
 };
 
 async function cargarObras(){
   if(!user)return;
-  const {data}=await sb.from('obras').select('*').eq('user_id',user.id).order('created_at',{ascending:false}).limit(4);
+  const {data}=await sb.from('obras').select('*').eq('user_id',user.id).order('created_at',{ascending:false}).limit(24);
   const cont=$('lista-obras');cont.innerHTML='';
   (data||[]).forEach(o=>{
+    const base=Number(o.precio)||0;
     const el=document.createElement('div');el.className='obra';
-    el.innerHTML=`<img src="${o.imagen_url}" alt="${o.titulo}"><div class="d"><h4>${o.titulo}</h4><p>${o.tecnica||''} ${o.medidas?'· '+o.medidas:''} ${o.anio?'· '+o.anio:''}</p><p class="precio">$${o.precio}</p><button data-id="${o.id}">Eliminar</button></div>`;
-    el.querySelector('button').onclick=async()=>{await sb.from('obras').delete().eq('id',o.id);cargarObras();};
+    el.innerHTML='<img src="'+esc(o.imagen_url)+'" alt="'+esc(o.titulo)+'"><div class="d"><h4>'+esc(o.titulo)+'</h4>'+
+      '<p>'+esc([o.tecnica,o.medidas,o.anio].filter(Boolean).join(' · '))+'</p>'+
+      (base>0?'<p class="precio">'+MXN.format(precioPublico(base))+'</p><p class="base">Tú recibes '+MXN.format(base)+' · incluye '+EXCEDENTE_PCT+' %</p>':'<p class="precio">Sin precio</p>')+
+      '<button type="button">Eliminar</button></div>';
+    el.querySelector('button').onclick=async()=>{if(!confirm('¿Eliminar esta obra?'))return;await sb.from('obras').delete().eq('id',o.id);cargarObras();llenarObrasSocial();};
     cont.appendChild(el);
   });
 }
-
 
 // ---- Config de salas 3D disponibles por nivel ----
 const SALAS = {
