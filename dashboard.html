@@ -44,55 +44,34 @@ input,select,textarea{width:100%;padding:.6em;border:1px solid #ccc;border-radiu
 .obra .precio{font-weight:bold;color:red}
 .obra button{background:none;border:1px solid red;color:red;border-radius:5px;padding:.3em .6em;font-family:sans-serif;font-size:.8em;cursor:pointer;margin-top:.4em}
 #av{width:96px;height:96px;border-radius:50%;object-fit:cover;border:2px solid red;background:#eee;display:block;margin:0 auto}
-
-.post{border:1px solid red;border-radius:10px;margin:1em 0;overflow:hidden}
-.post .cab{display:flex;align-items:center;gap:.7em;padding:.7em 1em}
-.post .cab img{width:40px;height:40px;border-radius:50%;object-fit:cover;border:1px solid red;background:#eee}
-.post .cab b{flex:1}
-.post .cab button,.acc button{background:none;border:1px solid red;color:red;border-radius:5px;padding:.3em .8em;font-family:inherit;cursor:pointer}
-.post .cab button.sig{background:red;color:#fff}
-.post>img{width:100%;max-height:520px;object-fit:cover;display:block}
-.post .acc{display:flex;gap:.6em;padding:.7em 1em;align-items:center}
-.post .acc button.on{background:red;color:#fff}
-.post .tx{padding:0 1em .5em;font-family:sans-serif;font-size:.9em}
-.coms{padding:0 1em 1em;font-family:sans-serif;font-size:.85em}
-.coms p{margin:.3em 0}.coms b{color:red}
-.coms form{display:flex;gap:.5em;margin-top:.6em}
-.coms form input{flex:1}
-.coms form button{background:red;color:#fff;border:0;border-radius:5px;padding:.4em 1em;cursor:pointer}
-.filtro{display:flex;gap:.6em;margin:1em 0}
-.filtro button{background:none;border:1px solid red;color:red;border-radius:20px;padding:.4em 1.2em;font-family:inherit;cursor:pointer}
-.filtro button.on{background:red;color:#fff}
-.slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:10px;margin:.8em 0}
-.slot{position:relative;aspect-ratio:4/5;border:2px dashed red;border-radius:8px;overflow:hidden;cursor:pointer;display:flex;align-items:center;justify-content:center;background:#fff;touch-action:manipulation;user-select:none}
-.slot.lleno{border-style:solid}
-.slot.sel{outline:3px solid #000;outline-offset:2px}
-.slot.over{background:#ffecec}
-.slot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none}
-.slot .vacio{color:red;font-size:2em}
-.slot .n{position:absolute;top:4px;left:4px;background:red;color:#fff;border-radius:10px;padding:0 .5em;font:12px sans-serif}
-.slot button{position:absolute;bottom:4px;background:rgba(255,255,255,.92);color:red;border:1px solid red;border-radius:5px;width:28px;height:28px;font-size:1em;line-height:1;cursor:pointer;padding:0}
-.slot .q{right:4px}.slot .c{left:4px}
-.rejilla{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
-#lista-obras{display:contents}
-.nuevo{position:relative;display:flex;min-height:240px}
-.nuevo .drop{flex:1;margin:0;display:flex;flex-direction:column;align-items:center;justify-content:center;border:3px dotted red;min-height:240px}
-.nuevo .drop .mas{font-size:3em;line-height:1}
-.nuevo .drop p{margin:.3em 0}
-.nuevo .veil p{margin:.2em 0;font-size:.85em}
-.nuevo .veil .btn{margin-top:.6em;padding:.5em 1.2em}
-.obra .base{font-weight:normal;color:#666;font-size:.78em}
-.obra h4{overflow-wrap:anywhere}
-#nueva-obra{display:none}
-#nueva-obra .fila{display:flex;gap:1em;flex-wrap:wrap}
-#nueva-obra .prev{width:160px;aspect-ratio:4/5;object-fit:cover;border:1px solid red;border-radius:8px}
-.pubnote{font-family:sans-serif;font-size:.85em;color:#333;margin:.5em 0}
-
-
 #msg{color:red;text-align:center;min-height:1.4em}
+.social-nav{display:flex;gap:.6em;justify-content:center;margin:1em 0 1.4em;flex-wrap:wrap}
+.social-nav button{background:#fff;color:red;border:1px solid red;border-radius:20px;padding:.5em 1.2em;font-family:inherit;cursor:pointer}
+.social-nav button.on{background:red;color:#fff}
+.social-grid{display:grid;grid-template-columns:2fr 1fr;gap:1.4em}
+@media (max-width:700px){.social-grid{grid-template-columns:1fr}}
+.avatar-circ{width:56px;height:56px;border-radius:50%;object-fit:cover;background:red}
+.destacado{display:flex;align-items:center;gap:.8em;margin-bottom:1em}
+.destacado .stats{display:flex;gap:1.4em;font-family:sans-serif;font-size:.85em;text-align:center}
+.destacado .stats b{display:block;color:red;font-size:1.1em;font-family:'Aboreto',cursive}
+.post{border:1px solid red;border-radius:10px;overflow:hidden;margin-bottom:1.4em}
+.post header{display:flex;align-items:center;gap:.6em;padding:.8em}
+.post header .avatar-circ{width:36px;height:36px}
+.post header span{font-weight:bold}
+.post header small{display:block;color:#888;font-family:sans-serif;font-weight:normal}
+.post img,.post video{width:100%;display:block;max-height:480px;object-fit:cover;background:#111}
+.post .acciones{padding:.6em .8em 0;display:flex;align-items:center;gap:.6em}
+.post .acciones button{background:none;border:0;font-size:1.3em;cursor:pointer;color:red}
+.post .info{padding:.3em .8em 1em;font-family:sans-serif;font-size:.9em}
+.post .info b{font-family:'Aboreto',cursive;color:red}
+.perfil-resumen{border:1px solid red;border-radius:10px;padding:1.2em;text-align:center;margin-bottom:1em}
+.perfil-resumen .stats{display:flex;justify-content:center;gap:1.6em;margin:.8em 0;font-family:sans-serif;font-size:.85em}
+.perfil-resumen .stats b{display:block;color:red;font-size:1.2em;font-family:'Aboreto',cursive}
+.explorar-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
+.explorar-grid img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:8px;border:1px solid red}
 </style></head><body>
 <header><h1>Aries Art Gallery</h1>
-<nav id="tabs"><button data-t="inicio" class="on">Inicio</button><button data-t="perfil">Perfil</button><button data-t="obras">Mis obras</button><button data-t="metricas">Métricas</button><button data-t="social">Social</button><button data-t="tienda">Tienda</button>
+<nav id="tabs"><button data-t="inicio" class="on">Inicio</button><button data-t="social">Social</button><button data-t="perfil">Perfil</button><button data-t="metricas">Métricas</button><button data-t="tienda">Tienda</button>
 <a href="cuenta.html#plan">Planes y pago</a><button id="salir">Salir</button></nav></header>
 <main>
 <p id="msg" role="alert"></p>
@@ -124,13 +103,45 @@ input,select,textarea{width:100%;padding:.6em;border:1px solid #ccc;border-radiu
 <div style="background:#fff;border:1px solid red;border-radius:10px;padding:1.4em;max-width:480px;width:100%;max-height:85vh;overflow:auto">
 <h3 style="color:red;margin-top:0">Publicar obras</h3>
 <p id="modal-info" style="font-family:sans-serif;font-size:.9em;color:#333"></p>
-<div class="drop" id="drop-cuadros"><p>Arrastra varias imágenes aquí o toca para elegir<br><small>Llenan los cuadros vacíos en orden · JPG, PNG o WebP, máx. 5 MB</small></p>
+<div class="drop" id="drop-cuadros"><p>Arrastra tus imágenes aquí o toca para elegir<br><small>Se acomodan en orden, una por cuadro</small></p>
 <input type="file" id="archivo-cuadros" accept="image/jpeg,image/png,image/webp" multiple></div>
-<p id="slot-hint" style="font-family:sans-serif;font-size:.85em;color:#666;margin:.4em 0"></p>
-<div class="slots" id="miniaturas-cuadros"></div>
+<div class="obras" id="miniaturas-cuadros" style="grid-template-columns:repeat(auto-fill,minmax(90px,1fr))"></div>
 <button class="btn" id="confirmar-publicar">Publicar en la sala</button>
 <button class="btn" id="cerrar-publicar" style="background:#fff;color:red;border:1px solid red">Cancelar</button>
 </div></div>
+</section>
+
+<section id="social"><h2>Social</h2>
+<div class="social-nav"><button data-sv="inicio" class="on">Inicio</button><button data-sv="explorar">Explorar</button><button data-sv="publicar">Publicar</button></div>
+
+<div class="social-grid">
+<div id="sv-inicio" class="sv on">
+<h3 style="color:red">Artistas destacados</h3>
+<div id="destacados"></div>
+<div id="feed"></div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:1em">
+<div class="perfil-resumen" id="resumen-social">
+<img class="avatar-circ" id="rs-av" style="width:72px;height:72px;margin:0 auto" alt="">
+<p id="rs-nombre" style="font-weight:bold;margin:.4em 0 0"></p>
+<div class="stats"><div><b id="rs-obras">0</b>Obras</div><div><b id="rs-seg">0</b>Seguidores</div><div><b id="rs-sig">0</b>Siguiendo</div></div>
+<button class="btn" id="ir-publicar">Publicar</button>
+</div>
+</div>
+</div>
+
+<div id="sv-explorar" class="sv" style="display:none">
+<h3 style="color:red">Explorar</h3>
+<div class="explorar-grid" id="explorar-grid"></div>
+</div>
+
+<div id="sv-publicar" class="sv" style="display:none;max-width:480px">
+<h3 style="color:red">Nueva publicación</h3>
+<div class="drop" id="drop-post"><p>Arrastra una imagen o video, o toca para elegir<br><small>JPG, PNG, WebP o MP4, máx. 20 MB</small></p><input type="file" id="archivo-post" accept="image/jpeg,image/png,image/webp,video/mp4"></div>
+<textarea id="post-texto" rows="3" maxlength="300" placeholder="Escribe algo sobre esta publicación..."></textarea>
+<button class="btn" id="g-post">Publicar</button>
+</div>
 </section>
 
 <section id="perfil"><h2>Mi perfil</h2>
@@ -138,48 +149,31 @@ input,select,textarea{width:100%;padding:.6em;border:1px solid #ccc;border-radiu
 <label>Nombre</label><input id="nombre" maxlength="60"><label>Biografía</label><textarea id="bio" rows="3" maxlength="400"></textarea>
 <label>Correo de registro</label><input id="mail" disabled>
 <button class="btn" id="g-perfil">Guardar perfil</button>
+
+<h2>Mi galería 2D</h2>
+<div class="card" id="obras-card">
+<p id="obras-limite" style="font-family:sans-serif;font-size:.85em;color:#333"></p>
+<div class="drop" id="drop"><p>Arrastra una imagen aquí o toca para elegir<br><small>JPG, PNG o WebP, máx. 5 MB</small></p><input type="file" id="archivo-obra" accept="image/jpeg,image/png,image/webp"></div>
+<label>Título</label><input id="o-titulo" maxlength="80">
+<label>Técnica</label><input id="o-tecnica" maxlength="60" placeholder="Óleo sobre tela, escultura en bronce...">
+<label>Medidas</label><input id="o-medidas" maxlength="40" placeholder="60 x 80 cm">
+<label>Año</label><input id="o-anio" maxlength="4" inputmode="numeric">
+<label>Precio (MXN)</label><input id="o-precio" type="number" min="0" step="1">
+<button class="btn" id="subir-obra" disabled>Subir obra</button>
+<div class="veil"><p>Sube tus obras con cualquier plan activo.</p><a class="btn" href="cuenta.html#plan">Ver planes</a></div>
+</div>
+<div class="obras" id="lista-obras"></div>
+
 <h2>Datos para recibir mis pagos</h2>
 <p>PayPal o CLABE. No guardamos números de tarjeta.</p>
 <label>Titular</label><input id="titular" maxlength="80"><label>Correo de PayPal o CLABE</label><input id="cuenta" maxlength="80">
 <button class="btn" id="g-cobro">Guardar datos de cobro</button>
 <h2>Mi plan</h2><p id="plan">Cargando…</p><a class="btn" href="cuenta.html#plan">Ver planes y pagar</a></section>
 
-<section id="obras"><h2>Mis obras</h2>
-<div id="obras-card">
-<div class="rejilla">
-<div class="nuevo">
-<div class="drop" id="drop"><div class="mas">+</div><p>Añadir obra<br><small>Arrastra una imagen o toca para elegir<br>JPG, PNG o WebP, máx. 5 MB</small></p><input type="file" id="archivo-obra" accept="image/jpeg,image/png,image/webp"></div>
-<div class="veil"><p>Sube tus obras con cualquier plan activo.</p><a class="btn" href="cuenta.html#plan">Ver planes</a></div>
-</div>
-<div id="lista-obras"></div>
-</div>
-<div class="card" id="nueva-obra">
-<div class="fila"><img id="o-prev" class="prev" alt="Vista previa de la obra"><div style="flex:1;min-width:220px">
-<label>Título</label><input id="o-titulo" maxlength="80">
-<label>Tu precio (MXN)</label><input id="o-precio" type="number" min="0" step="1" inputmode="decimal">
-<p class="pubnote" id="o-publico"></p></div></div>
-<label>Técnica</label><input id="o-tecnica" maxlength="60" placeholder="Óleo sobre tela, escultura en bronce...">
-<label>Medidas</label><input id="o-medidas" maxlength="40" placeholder="60 x 80 cm">
-<label>Año</label><input id="o-anio" maxlength="4" inputmode="numeric">
-<button class="btn" id="subir-obra" disabled>Subir obra</button>
-<button class="btn" id="cancelar-obra" type="button" style="background:#fff;color:red;border:1px solid red">Cancelar</button>
-</div>
-</div>
-</section>
-
 <section id="metricas"><h2>Métricas</h2>
 <div class="card" id="mcard"><div class="stats"><div><b id="m-likes">0</b>Likes</div><div><b id="m-ventas">0</b>Ventas</div><div><b id="m-ing">$0</b>Ingresos</div><div><b id="m-entradas">0</b>Entradas a la red</div></div>
 <p style="text-align:center"><a class="btn" href="comunidad.html">Ir a la red social</a></p>
 <div class="veil"><p>Las métricas son parte de los planes de pago.</p><a class="btn" href="cuenta.html#plan">Desbloquear</a></div></div></section>
-
-
-<section id="social"><h2>Red social</h2>
-<div class="card"><label>Comparte una obra con la comunidad</label>
-<select id="s-obra"></select>
-<label>Texto (opcional)</label><textarea id="s-texto" rows="2" maxlength="300" placeholder="Cuenta algo sobre esta obra..."></textarea>
-<button class="btn" id="s-publicar">Publicar en la red</button></div>
-<div class="filtro"><button class="on" data-f="todos">Todos</button><button data-f="siguiendo">Siguiendo</button><button data-f="mios">Míos</button></div>
-<div id="feed"></div></section>
 
 <section id="tienda"><h2>Tienda de salas y paquetes</h2>
 <div class="shop">
@@ -195,15 +189,17 @@ const VIDEO_URL=''; // opcional: enlace a un video .mp4; si lo pones, reemplaza 
 const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY),$=i=>document.getElementById(i);
 const say=t=>{$('msg').textContent=t;};
 const MENSAJES=['Suscríbete a cualquiera de nuestros planes.','Disfruta de una galería de alta gama.','Crea tu propia sala y muestra tu obra al mundo.'];
-let user,activo=false;
+let user,activo=false,planActual='free';
+const LIMITE_OBRAS={free:5,creator:15,pro:40,vip:Infinity};
 
 document.querySelectorAll('#tabs [data-t]').forEach(b=>b.onclick=()=>{
   document.querySelectorAll('#tabs [data-t],section').forEach(e=>e.classList.remove('on'));
-  b.classList.add('on');$(b.dataset.t).classList.add('on');say('');});
+  b.classList.add('on');$(b.dataset.t).classList.add('on');say('');
+  if(b.dataset.t==='social'){cargarSocial();cargarExplorar();}});
 
 // Viewer: slideshow o video
 if(VIDEO_URL){const v=document.createElement('video');v.src=VIDEO_URL;v.autoplay=v.muted=v.loop=v.playsInline=true;$('viewer').prepend(v);}
-else{let i=0;setInterval(()=>{const s=[...document.querySelectorAll('.slide')];if(!s.length)return;s.forEach(x=>x.classList.remove('on'));i=(i+1)%s.length;s[i].classList.add('on');},3500);}
+else{const s=[...document.querySelectorAll('.slide')];let i=0;setInterval(()=>{s[i].classList.remove('on');i=(i+1)%s.length;s[i].classList.add('on');},3500);}
 $('cerrar').onclick=()=>$('pop').classList.remove('on');
 
 function banner(){const b=$('banner');let i=0;const p=()=>{b.style.opacity=0;setTimeout(()=>{b.innerHTML=MENSAJES[i++%MENSAJES.length]+' <a href="cuenta.html#plan">Ver planes</a>';b.style.opacity=1;},400);};p();setInterval(p,4500);}
@@ -221,8 +217,9 @@ function banner(){const b=$('banner');let i=0;const p=()=>{b.style.opacity=0;set
   if(p.data){$('nombre').value=p.data.nombre||'';$('bio').value=p.data.bio||'';if(p.data.avatar_url)$('av').src=p.data.avatar_url;}
   if(c.data){$('titular').value=c.data.titular||'';$('cuenta').value=c.data.cuenta||'';}
   activo=!!s.data&&s.data.estado==='ACTIVE';
+  planActual=activo?(s.data.plan||'free'):'free';
   $('plan').textContent=activo?'Plan activo: '+(s.data.plan||''):'Plan gratuito.';
-  planActual=activo?(s.data.plan||'free'):'free';llenarSalas(planActual);slideshowSalas();
+  llenarSalas(activo?(s.data.plan||'free'):'free');
   actualizarVistaPrevia();
   if(activo){
     $('banner').style.display='none';$('editor').classList.add('unlocked');$('mcard').classList.add('unlocked');$('obras-card').classList.add('unlocked');
@@ -230,7 +227,7 @@ function banner(){const b=$('banner');let i=0;const p=()=>{b.style.opacity=0;set
     if(g.data){$('tipo').value=g.data.tipo;$('sala').value=g.data.sala;}
     if(m.data){$('m-likes').textContent=m.data.likes;$('m-ventas').textContent=m.data.ventas;$('m-ing').textContent='$'+m.data.ingresos;$('m-entradas').textContent=m.data.entradas||0;}
   }else{banner();setTimeout(()=>$('pop').classList.add('on'),6000);}
-  cargarObras();llenarObrasSocial();cargarFeed();
+  cargarObras();
 })();
 
 const guardar=async(t,f)=>{const {error}=await sb.from(t).upsert({id:user.id,...f});say(error?'No se pudo guardar.':'Guardado ✓');};
@@ -250,75 +247,60 @@ $('foto').onchange=async e=>{
 $('salir').onclick=async()=>{await sb.auth.signOut();location.href='iniciar.html';};
 
 // ---- Mis obras: subir con drag & drop, listar 3-4 recientes ----
-const EXCEDENTE_PCT=10; // sobreprecio que se suma al precio que fija el artista
-const MXN=new Intl.NumberFormat('es-MX',{style:'currency',currency:'MXN',minimumFractionDigits:0,maximumFractionDigits:2});
-const precioPublico=p=>Math.round((Number(p)||0)*(100+EXCEDENTE_PCT))/100;
-
 const dz=$('drop'), inputObra=$('archivo-obra');
-let archivoObraActual=null, prevObra=null;
 dz.onclick=()=>inputObra.click();
-inputObra.onclick=e=>e.stopPropagation();
 ['dragover','dragleave','drop'].forEach(ev=>dz.addEventListener(ev,e=>e.preventDefault()));
 dz.addEventListener('dragover',()=>dz.classList.add('over'));
 dz.addEventListener('dragleave',()=>dz.classList.remove('over'));
 dz.addEventListener('drop',e=>{dz.classList.remove('over');if(e.dataTransfer.files[0])manejarArchivoObra(e.dataTransfer.files[0]);});
-inputObra.onchange=e=>{if(e.target.files[0])manejarArchivoObra(e.target.files[0]);e.target.value='';};
+inputObra.onchange=e=>{if(e.target.files[0])manejarArchivoObra(e.target.files[0]);};
 
+let archivoObraActual=null;
 function manejarArchivoObra(f){
   if(!['image/jpeg','image/png','image/webp'].includes(f.type)||f.size>5242880){say('Usa una imagen JPG, PNG o WebP de máximo 5 MB.');return;}
-  archivoObraActual=f;if(prevObra)URL.revokeObjectURL(prevObra);prevObra=URL.createObjectURL(f);
-  $('o-prev').src=prevObra;$('nueva-obra').style.display='block';actualizarPrecioPublico();
-  $('nueva-obra').scrollIntoView({behavior:'smooth',block:'nearest'});$('o-titulo').focus();
+  archivoObraActual=f;
+  dz.querySelector('p').innerHTML='Lista para subir: '+f.name;
 }
-function actualizarPrecioPublico(){
-  const p=Number($('o-precio').value)||0;
-  $('o-publico').textContent=p>0
-    ?'Precio al público: '+MXN.format(precioPublico(p))+' (tu precio + '+EXCEDENTE_PCT+' %). Tú recibes '+MXN.format(p)+'.'
-    :'Escribe tu precio para ver cómo se mostrará al público.';
-}
-$('o-precio').addEventListener('input',actualizarPrecioPublico);
-function cerrarNuevaObra(){
-  archivoObraActual=null;if(prevObra){URL.revokeObjectURL(prevObra);prevObra=null;}
-  ['o-titulo','o-tecnica','o-medidas','o-anio','o-precio'].forEach(id=>$(id).value='');
-  $('o-prev').removeAttribute('src');$('nueva-obra').style.display='none';
-}
-$('cancelar-obra').onclick=cerrarNuevaObra;
 
 $('subir-obra').onclick=async()=>{
   if(!archivoObraActual)return say('Elige o arrastra una imagen primero.');
   const titulo=$('o-titulo').value.trim();
   if(!titulo)return say('Ponle un título a la obra.');
-  const precio=Number($('o-precio').value)||0;
-  if(precio<0)return say('El precio no puede ser negativo.');
   $('subir-obra').disabled=true;$('subir-obra').textContent='Subiendo...';
-  const volver=()=>{$('subir-obra').disabled=false;$('subir-obra').textContent='Subir obra';};
   const ruta=user.id+'/'+Date.now()+'-'+archivoObraActual.name.replace(/[^a-zA-Z0-9.]/g,'_');
   const {error:upErr}=await sb.storage.from('obras').upload(ruta,archivoObraActual,{contentType:archivoObraActual.type});
-  if(upErr){say('No se pudo subir la imagen.');volver();return;}
+  if(upErr){say('No se pudo subir la imagen.');$('subir-obra').disabled=false;$('subir-obra').textContent='Subir obra';return;}
   const imagen_url=sb.storage.from('obras').getPublicUrl(ruta).data.publicUrl;
   const {error:dbErr}=await sb.from('obras').insert({
     user_id:user.id,titulo,tecnica:$('o-tecnica').value.trim(),medidas:$('o-medidas').value.trim(),
-    anio:$('o-anio').value.trim(),precio,imagen_url});
-  volver();
+    anio:$('o-anio').value.trim(),precio:Number($('o-precio').value)||0,imagen_url});
+  $('subir-obra').disabled=false;$('subir-obra').textContent='Subir obra';
   if(dbErr){say('No se pudo guardar la obra.');return;}
-  say('Obra subida ✓');cerrarNuevaObra();cargarObras();llenarObrasSocial();
+  say('Obra subida ✓');
+  ['o-titulo','o-tecnica','o-medidas','o-anio','o-precio'].forEach(id=>$(id).value='');
+  archivoObraActual=null;dz.querySelector('p').innerHTML='Arrastra una imagen aquí o toca para elegir<br><small>JPG, PNG o WebP, máx. 5 MB</small>';
+  cargarObras();
 };
 
 async function cargarObras(){
   if(!user)return;
-  const {data}=await sb.from('obras').select('*').eq('user_id',user.id).order('created_at',{ascending:false}).limit(24);
+  const {data}=await sb.from('obras').select('*').eq('user_id',user.id).order('created_at',{ascending:false});
+  const todas=data||[], limite=LIMITE_OBRAS[planActual]??5;
   const cont=$('lista-obras');cont.innerHTML='';
-  (data||[]).forEach(o=>{
-    const base=Number(o.precio)||0;
+  todas.forEach(o=>{
     const el=document.createElement('div');el.className='obra';
-    el.innerHTML='<img src="'+esc(o.imagen_url)+'" alt="'+esc(o.titulo)+'"><div class="d"><h4>'+esc(o.titulo)+'</h4>'+
-      '<p>'+esc([o.tecnica,o.medidas,o.anio].filter(Boolean).join(' · '))+'</p>'+
-      (base>0?'<p class="precio">'+MXN.format(precioPublico(base))+'</p><p class="base">Tú recibes '+MXN.format(base)+' · incluye '+EXCEDENTE_PCT+' %</p>':'<p class="precio">Sin precio</p>')+
-      '<button type="button">Eliminar</button></div>';
-    el.querySelector('button').onclick=async()=>{if(!confirm('¿Eliminar esta obra?'))return;await sb.from('obras').delete().eq('id',o.id);cargarObras();llenarObrasSocial();};
+    el.innerHTML=`<img src="${o.imagen_url}" alt="${o.titulo}"><div class="d"><h4>${o.titulo}</h4><p>${o.tecnica||''} ${o.medidas?'· '+o.medidas:''} ${o.anio?'· '+o.anio:''}</p><p class="precio">$${o.precio}</p><button data-id="${o.id}">Eliminar</button></div>`;
+    el.querySelector('button').onclick=async()=>{await sb.from('obras').delete().eq('id',o.id);cargarObras();};
     cont.appendChild(el);
   });
+  const alLimite = todas.length>=limite;
+  $('obras-limite').textContent = Number.isFinite(limite)
+    ? `${todas.length} de ${limite} obras usadas en tu plan.`
+    : `${todas.length} obras · tu plan no tiene límite.`;
+  $('subir-obra').disabled = !activo || alLimite;
+  if(alLimite) $('obras-limite').innerHTML += ' <a href="cuenta.html#plan">Sube de plan</a> para agregar más.';
 }
+
 
 // ---- Config de salas 3D disponibles por nivel ----
 const SALAS = {
@@ -355,13 +337,13 @@ $('tipo').onchange=llenarSelectSala;
 const SALA_ARCHIVO = {neon:'salas/sala-basica-neon.html','neon-calma':'salas/sala-pro-neon-calma.html',
   complejo:'salas/sala-pro-complejo.html','galerias-pro':'salas/sala-pro-galerias-pro.html',
   ensueno:'salas/sala-plus-ensueno.html',psicodelia:'salas/sala-plus-psicodelia.html',orbital:'salas/sala-plus-orbital.html'};
-const SALA_CUADROS = {neon:12,complejo:8,'galerias-pro':8,ensueno:9,orbital:9}; // salas que ya leen tus imágenes
-const SALA_COMPATIBLE = s => s in SALA_CUADROS; // neon-calma y psicodelia aún usan arte generado por código
+const SALA_CUADROS = {neon:12,'neon-calma':10,complejo:8,'galerias-pro':8};
+const SALA_COMPATIBLE = s => s in SALA_CUADROS; // las 3 salas Plus aún no soportan imágenes reales
 
 function actualizarVistaPrevia(){
   const salaId=$('sala').value, archivo=SALA_ARCHIVO[salaId], vp=$('vista-previa'), nota=$('vista-nota');
   if(!archivo){vp.style.display='none';return;}
-  vp.src = archivo + (user ? '?artista='+user.id+'&v='+Date.now() : '');
+  vp.src = archivo + (user ? '?artista='+user.id : '');
   vp.style.display='block';
   nota.textContent = SALA_COMPATIBLE(salaId)
     ? 'Esta vista ya muestra tus obras publicadas en esta sala.'
@@ -370,194 +352,146 @@ function actualizarVistaPrevia(){
 $('sala').addEventListener('change', actualizarVistaPrevia);
 $('tipo').addEventListener('change', ()=>setTimeout(actualizarVistaPrevia, 0));
 
-let slots=[],selSlot=null,saveBusy=false,cargaId=0;
-const TIPOS_OK=['image/jpeg','image/png','image/webp'],MAX_IMG=5242880;
-const pickOne=document.createElement('input');pickOne.type='file';pickOne.accept=TIPOS_OK.join(',');
+let archivosCuadros = [];
+$('abrir-publicar').onclick = () => {
+  const salaId = $('sala').value;
+  if(!SALA_COMPATIBLE(salaId)){ say('Esta sala todavía no admite imágenes propias.'); return; }
+  archivosCuadros = [];
+  $('miniaturas-cuadros').innerHTML='';
+  $('modal-info').textContent = 'Esta sala tiene ' + SALA_CUADROS[salaId] + ' cuadros. Elige hasta esa cantidad de imágenes, en el orden en que quieres que aparezcan.';
+  $('modal-publicar').style.display='flex';
+};
+$('cerrar-publicar').onclick = () => { $('modal-publicar').style.display='none'; };
 
-const liberar=sl=>{if(sl&&sl.prev)URL.revokeObjectURL(sl.prev)};
-const srcDe=sl=>sl?(sl.prev||sl.url):'';
-function okFile(f){if(!TIPOS_OK.includes(f.type)||f.size>MAX_IMG){say('Usa imágenes JPG, PNG o WebP de máximo 5 MB.');return false}return true}
-function poner(i,f){if(i<0||i>=slots.length||!okFile(f))return false;liberar(slots[i]);slots[i]={file:f,prev:URL.createObjectURL(f)};return true}
-function llenarVacios(files,desde){let i=desde||0;files.forEach(f=>{while(i<slots.length&&slots[i])i++;if(i<slots.length)poner(i,f)})}
-function intercambiar(a,b){const t=slots[a];slots[a]=slots[b];slots[b]=t}
-function elegirPara(i){pickOne.onchange=e=>{const f=e.target.files[0];e.target.value='';if(f&&poner(i,f))pintarSlots()};pickOne.click()}
+const dzc = $('drop-cuadros'), inputCuadros = $('archivo-cuadros');
+dzc.onclick = () => inputCuadros.click();
+['dragover','dragleave','drop'].forEach(ev => dzc.addEventListener(ev, e => e.preventDefault()));
+dzc.addEventListener('dragover', () => dzc.classList.add('over'));
+dzc.addEventListener('dragleave', () => dzc.classList.remove('over'));
+dzc.addEventListener('drop', e => { dzc.classList.remove('over'); agregarCuadros([...e.dataTransfer.files]); });
+inputCuadros.onchange = e => agregarCuadros([...e.target.files]);
 
-function pintarSlots(){
-  const cont=$('miniaturas-cuadros');cont.innerHTML='';
-  $('slot-hint').textContent=selSlot===null
-    ?'Toca un cuadro vacío para añadir una imagen. Para cambiar de lugar, arrastra un cuadro sobre otro o tócalos en turno.'
-    :'Cuadro '+(selSlot+1)+' elegido: toca otro cuadro para intercambiarlos (o el mismo para soltarlo).';
-  slots.forEach((sl,i)=>{
-    const d=document.createElement('div');d.className='slot'+(sl?' lleno':'')+(selSlot===i?' sel':'');d.dataset.i=i;
-    d.innerHTML=(sl?'<img src="'+esc(srcDe(sl))+'" alt="cuadro '+(i+1)+'">':'<span class="vacio">+</span>')+'<b class="n">'+(i+1)+'</b>'+
-      (sl?'<button type="button" class="c" aria-label="Cambiar imagen">↻</button><button type="button" class="q" aria-label="Quitar">×</button>':'');
-    d.draggable=!!sl;
-    d.addEventListener('dragstart',e=>{e.dataTransfer.setData('text/plain','slot:'+i);e.dataTransfer.effectAllowed='move'});
-    d.addEventListener('dragover',e=>{e.preventDefault();d.classList.add('over')});
-    d.addEventListener('dragleave',()=>d.classList.remove('over'));
-    d.addEventListener('drop',e=>{
-      e.preventDefault();e.stopPropagation();d.classList.remove('over');
-      const files=[...(e.dataTransfer.files||[])];
-      if(files.length){if(poner(i,files[0]))llenarVacios(files.slice(1),i+1);else llenarVacios(files.slice(1),i+1);selSlot=null;pintarSlots();return}
-      const t=e.dataTransfer.getData('text/plain');
-      if(t.startsWith('slot:')){const a=Number(t.slice(5));if(a!==i&&a>=0&&a<slots.length)intercambiar(a,i);selSlot=null;pintarSlots()}});
-    d.addEventListener('click',e=>{
-      if(e.target.closest('.q')||e.target.closest('.c'))return;
-      if(selSlot===null){if(sl)selSlot=i;else{elegirPara(i);return}}
-      else if(selSlot===i)selSlot=null;
-      else{intercambiar(selSlot,i);selSlot=null}
-      pintarSlots()});
-    const q=d.querySelector('.q');if(q)q.onclick=e=>{e.stopPropagation();liberar(slots[i]);slots[i]=null;if(selSlot===i)selSlot=null;pintarSlots()};
-    const c=d.querySelector('.c');if(c)c.onclick=e=>{e.stopPropagation();elegirPara(i)};
+function agregarCuadros(files){
+  const salaId = $('sala').value, max = SALA_CUADROS[salaId] || 0;
+  files.filter(f => ['image/jpeg','image/png','image/webp'].includes(f.type)).forEach(f => {
+    if(archivosCuadros.length >= max) return;
+    archivosCuadros.push(f);
+  });
+  pintarMiniaturas();
+}
+function pintarMiniaturas(){
+  const cont = $('miniaturas-cuadros'); cont.innerHTML='';
+  archivosCuadros.forEach((f,i) => {
+    const url = URL.createObjectURL(f);
+    const d = document.createElement('div'); d.className='obra';
+    d.innerHTML = `<img src="${url}" alt="cuadro ${i+1}"><div class="d"><button data-i="${i}">Quitar</button></div>`;
+    d.querySelector('button').onclick = () => { archivosCuadros.splice(i,1); pintarMiniaturas(); };
     cont.appendChild(d);
   });
 }
 
-function cerrarModalCuadros(){slots.forEach(liberar);slots=[];selSlot=null;$('modal-publicar').style.display='none'}
-$('abrir-publicar').onclick=async()=>{
-  const salaId=$('sala').value;
-  if(!SALA_COMPATIBLE(salaId)){say('Esta sala todavía no admite imágenes propias.');return}
-  const max=SALA_CUADROS[salaId],id=++cargaId;
-  slots.forEach(liberar);slots=Array(max).fill(null);selSlot=null;
-  $('modal-info').textContent='Esta sala tiene '+max+' cuadros. Llénalos y acomódalos como quieras: el número es el lugar que ocupan en la sala.';
-  $('miniaturas-cuadros').innerHTML='<p>Cargando…</p>';$('slot-hint').textContent='';
-  $('modal-publicar').style.display='flex';
-  const {data}=await sb.from('galeria_cuadros').select('urls').eq('user_id',user.id).eq('sala',salaId).maybeSingle();
-  if(id!==cargaId)return;
-  if(data&&Array.isArray(data.urls))data.urls.slice(0,max).forEach((u,i)=>{if(u)slots[i]={url:u}});
-  pintarSlots();
-};
-$('cerrar-publicar').onclick=cerrarModalCuadros;
-$('modal-publicar').addEventListener('dragover',e=>e.preventDefault());
-$('modal-publicar').addEventListener('drop',e=>e.preventDefault());
-
-const dzc=$('drop-cuadros'),inputCuadros=$('archivo-cuadros');
-dzc.onclick=()=>inputCuadros.click();
-['dragover','dragleave','drop'].forEach(ev=>dzc.addEventListener(ev,e=>e.preventDefault()));
-dzc.addEventListener('dragover',()=>dzc.classList.add('over'));
-dzc.addEventListener('dragleave',()=>dzc.classList.remove('over'));
-dzc.addEventListener('drop',e=>{dzc.classList.remove('over');llenarVacios([...e.dataTransfer.files],0);pintarSlots()});
-inputCuadros.onchange=e=>{llenarVacios([...e.target.files],0);e.target.value='';pintarSlots()};
-
-$('confirmar-publicar').onclick=async()=>{
-  if(saveBusy)return;
-  const salaId=$('sala').value,b=$('confirmar-publicar');
-  if(!slots.some(Boolean))return say('Agrega al menos una imagen.');
-  saveBusy=true;b.disabled=true;b.textContent='Publicando...';
-  const urls=[];
-  try{
-    for(let i=0;i<slots.length;i++){
-      const sl=slots[i];
-      if(!sl){urls.push('');continue}
-      if(sl.file){
-        const ruta=user.id+'/salas/'+salaId+'/'+i+'-'+Date.now()+'.'+(sl.file.type.split('/')[1]||'jpg');
-        const {error}=await sb.storage.from('obras').upload(ruta,sl.file,{contentType:sl.file.type});
-        if(error)throw error;
-        urls.push(sb.storage.from('obras').getPublicUrl(ruta).data.publicUrl);
-      }else urls.push(sl.url);
-    }
-    const {error:dbErr}=await sb.from('galeria_cuadros').upsert({user_id:user.id,sala:salaId,urls,updated_at:new Date().toISOString()});
-    if(dbErr)throw dbErr;
-  }catch(e){say('No se pudieron guardar los cuadros. Inténtalo de nuevo.');saveBusy=false;b.disabled=false;b.textContent='Publicar en la sala';return}
-  saveBusy=false;b.disabled=false;b.textContent='Publicar en la sala';
-  cerrarModalCuadros();say('Obras publicadas en la sala ✓');actualizarVistaPrevia();
-};
-
-// ================= SLIDESHOW ALIMENTADO POR LAS SALAS =================
-// Cada sala de SALAS aparece como diapositiva; al tocarla se selecciona en el editor.
-const GRADIENTES={neon:'#000,#ff0080','neon-calma':'#101030,#40e0d0',complejo:'#222,#999','galerias-pro':'#ddd,#fff0f0',
-  ensueno:'#2a0a4a,#ff9ad5',psicodelia:'#ff0080,#00e5ff',orbital:'#000,#1e3cff'};
-function slideshowSalas(){
-  if(VIDEO_URL)return;
-  const v=$('viewer');v.querySelectorAll('.slide').forEach(e=>e.remove());
-  const lista=[];Object.keys(SALAS).forEach(n=>SALAS[n].forEach(sa=>lista.push({n,...sa})));
-  lista.forEach((sa,k)=>{
-    const d=document.createElement('div');d.className='slide'+(k?'':' on');
-    d.style.cssText='background:linear-gradient(135deg,'+(GRADIENTES[sa.v]||'#8b0000,#222')+');cursor:pointer';
-    d.innerHTML='<span>'+sa.t+' · '+sa.n.toUpperCase()+'</span>';
-    d.onclick=()=>{
-      const permitidos=NIVELES_PERMITIDOS[planActual]||['basica'];
-      if(!permitidos.includes(sa.n)){$('pop').classList.add('on');return;}
-      $('tipo').value=sa.n;llenarSelectSala();$('sala').value=sa.v;actualizarVistaPrevia();
-      $('editor').scrollIntoView({behavior:'smooth'});say('Sala elegida: '+sa.t+'. Pulsa Guardar galería.');};
-    v.insertBefore(d,$('pop'));
-  });
-}
-let planActual='free';
-
-
-// ================= RED SOCIAL (feed, likes, comentarios, seguir) =================
-// Tablas esperadas en Supabase: publicaciones, likes, comentarios, seguidores (ver SQL aparte)
-let filtroSocial='todos';
-document.querySelectorAll('.filtro button').forEach(b=>b.onclick=()=>{
-  document.querySelectorAll('.filtro button').forEach(x=>x.classList.remove('on'));
-  b.classList.add('on');filtroSocial=b.dataset.f;cargarFeed();});
-
-const esc=t=>String(t==null?'':t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-
-async function llenarObrasSocial(){
-  const {data}=await sb.from('obras').select('id,titulo').eq('user_id',user.id).order('created_at',{ascending:false});
-  $('s-obra').innerHTML=(data||[]).map(o=>'<option value="'+o.id+'">'+esc(o.titulo)+'</option>').join('')||'<option value="">Sube una obra primero</option>';
-}
-
-$('s-publicar').onclick=async()=>{
-  const obra_id=$('s-obra').value;if(!obra_id)return say('Elige una obra para compartir.');
-  const {error}=await sb.from('publicaciones').insert({user_id:user.id,obra_id,texto:$('s-texto').value.trim()});
-  if(error)return say('No se pudo publicar en la red.');
-  $('s-texto').value='';say('Publicado en la red ✓');cargarFeed();
-};
-
-async function cargarFeed(){
-  if(!user)return;
-  const cont=$('feed');cont.innerHTML='<p>Cargando…</p>';
-  let q=sb.from('publicaciones').select('id,texto,created_at,user_id,obras(titulo,imagen_url,precio),perfiles(nombre,avatar_url)').order('created_at',{ascending:false}).limit(30);
-  if(filtroSocial==='mios')q=q.eq('user_id',user.id);
-  if(filtroSocial==='siguiendo'){
-    const {data:sg}=await sb.from('seguidores').select('seguido_id').eq('seguidor_id',user.id);
-    const ids=(sg||[]).map(x=>x.seguido_id);
-    if(!ids.length){cont.innerHTML='<p>Aún no sigues a nadie. Ve a "Todos" y sigue a algún artista.</p>';return;}
-    q=q.in('user_id',ids);
+$('confirmar-publicar').onclick = async () => {
+  const salaId = $('sala').value;
+  if(!archivosCuadros.length) return say('Agrega al menos una imagen.');
+  $('confirmar-publicar').disabled = true; $('confirmar-publicar').textContent = 'Publicando...';
+  const urls = [];
+  for(let i=0; i<archivosCuadros.length; i++){
+    const f = archivosCuadros[i];
+    const ruta = user.id + '/salas/' + salaId + '/' + i + '-' + Date.now() + '.' + (f.type.split('/')[1]||'jpg');
+    const { error: upErr } = await sb.storage.from('obras').upload(ruta, f, { contentType: f.type });
+    if(upErr){ say('No se pudo subir una imagen.'); $('confirmar-publicar').disabled=false; $('confirmar-publicar').textContent='Publicar en la sala'; return; }
+    urls.push(sb.storage.from('obras').getPublicUrl(ruta).data.publicUrl);
   }
-  const {data:posts,error}=await q;
-  if(error){cont.innerHTML='<p>No se pudo cargar el feed.</p>';return;}
-  if(!posts.length){cont.innerHTML='<p>Todavía no hay publicaciones. ¡Sé el primero!</p>';return;}
-  const pids=posts.map(p=>p.id);
-  const [lk,cm,sg]=await Promise.all([
-    sb.from('likes').select('publicacion_id,user_id').in('publicacion_id',pids),
-    sb.from('comentarios').select('id,publicacion_id,texto,user_id,perfiles(nombre)').in('publicacion_id',pids).order('created_at'),
-    sb.from('seguidores').select('seguido_id').eq('seguidor_id',user.id)]);
-  const siguiendo=new Set((sg.data||[]).map(x=>x.seguido_id));
-  cont.innerHTML='';
-  posts.forEach(p=>{
-    const likes=(lk.data||[]).filter(l=>l.publicacion_id===p.id), yoLike=likes.some(l=>l.user_id===user.id);
-    const coms=(cm.data||[]).filter(c=>c.publicacion_id===p.id);
-    const autor=p.perfiles&&p.perfiles.nombre?p.perfiles.nombre:'Artista';
-    const el=document.createElement('div');el.className='post';
-    el.innerHTML=
-      '<div class="cab"><img src="'+esc(p.perfiles&&p.perfiles.avatar_url||'')+'" alt=""><b>'+esc(autor)+'</b>'+
-      (p.user_id!==user.id?'<button class="sig">'+(siguiendo.has(p.user_id)?'Siguiendo':'Seguir')+'</button>':'')+'</div>'+
-      (p.obras?'<img src="'+esc(p.obras.imagen_url)+'" alt="'+esc(p.obras.titulo)+'">':'')+
-      '<div class="acc"><button class="lk'+(yoLike?' on':'')+'">♥ '+likes.length+'</button><span style="font-family:sans-serif">'+coms.length+' comentarios</span></div>'+
-      '<div class="tx"><b>'+esc(p.obras&&p.obras.titulo||'')+'</b> '+esc(p.texto)+'</div>'+
-      '<div class="coms">'+coms.map(c=>'<p><b>'+esc(c.perfiles&&c.perfiles.nombre||'Artista')+'</b> '+esc(c.texto)+'</p>').join('')+
-      '<form><input maxlength="200" placeholder="Escribe un comentario..." required><button>Enviar</button></form></div>';
-    // seguir / dejar de seguir
-    const bs=el.querySelector('.sig');
-    if(bs)bs.onclick=async()=>{
-      if(siguiendo.has(p.user_id))await sb.from('seguidores').delete().eq('seguidor_id',user.id).eq('seguido_id',p.user_id);
-      else await sb.from('seguidores').insert({seguidor_id:user.id,seguido_id:p.user_id});
-      cargarFeed();};
-    // like / quitar like
-    el.querySelector('.lk').onclick=async()=>{
-      if(yoLike)await sb.from('likes').delete().eq('publicacion_id',p.id).eq('user_id',user.id);
-      else await sb.from('likes').insert({publicacion_id:p.id,user_id:user.id});
-      cargarFeed();};
-    // comentar
-    el.querySelector('form').onsubmit=async e=>{
-      e.preventDefault();const t=e.target.querySelector('input').value.trim();if(!t)return;
-      await sb.from('comentarios').insert({publicacion_id:p.id,user_id:user.id,texto:t});cargarFeed();};
-    cont.appendChild(el);
+  const { error: dbErr } = await sb.from('galeria_cuadros').upsert({ user_id: user.id, sala: salaId, urls, updated_at: new Date().toISOString() });
+  $('confirmar-publicar').disabled = false; $('confirmar-publicar').textContent = 'Publicar en la sala';
+  if(dbErr){ say('No se pudieron guardar los cuadros.'); return; }
+  say('Obras publicadas en la sala ✓');
+  $('modal-publicar').style.display = 'none';
+  actualizarVistaPrevia();
+};
+
+
+// ---- Pestaña Social: subnav, feed, explorar, publicar ----
+document.querySelectorAll('.social-nav [data-sv]').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('.social-nav [data-sv]').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on');
+  document.querySelectorAll('.sv').forEach(s=>s.style.display='none');
+  const target = b.dataset.sv==='inicio' ? $('sv-inicio') : (b.dataset.sv==='explorar'?$('sv-explorar'):$('sv-publicar'));
+  target.style.display = b.dataset.sv==='inicio' ? 'block' : 'block';
+});
+$('ir-publicar').onclick=()=>document.querySelector('.social-nav [data-sv="publicar"]').click();
+
+async function cargarSocial(){
+  if(!user)return;
+  const [perfil,obrasCount,seg,sig,pubs,destacado] = await Promise.all([
+    sb.from('perfiles').select('nombre,avatar_url').eq('id',user.id).maybeSingle(),
+    sb.from('obras').select('id',{count:'exact',head:true}).eq('user_id',user.id),
+    sb.from('seguidores').select('seguidor_id',{count:'exact',head:true}).eq('seguido_id',user.id),
+    sb.from('seguidores').select('seguido_id',{count:'exact',head:true}).eq('seguidor_id',user.id),
+    sb.from('publicaciones').select('*,perfiles(nombre,avatar_url)').order('created_at',{ascending:false}).limit(12),
+    sb.from('publicaciones').select('user_id,perfiles(nombre,avatar_url)').order('created_at',{ascending:false}).limit(1)
+  ]);
+  if(perfil.data){ $('rs-nombre').textContent=perfil.data.nombre||'Sin nombre'; if(perfil.data.avatar_url)$('rs-av').src=perfil.data.avatar_url; }
+  $('rs-obras').textContent=obrasCount.count||0; $('rs-seg').textContent=seg.count||0; $('rs-sig').textContent=sig.count||0;
+
+  const dest=$('destacados'); dest.innerHTML='';
+  if(destacado.data&&destacado.data[0]){
+    const d=destacado.data[0], p=d.perfiles||{};
+    const el=document.createElement('div'); el.className='destacado';
+    el.innerHTML=`<img class="avatar-circ" src="${p.avatar_url||''}" alt=""><div><b>${p.nombre||'Artista'}</b></div>`;
+    dest.appendChild(el);
+  }
+
+  const feed=$('feed'); feed.innerHTML='';
+  (pubs.data||[]).forEach(p=>{
+    const au=p.perfiles||{};
+    const el=document.createElement('div'); el.className='post';
+    const media = p.tipo==='video'
+      ? `<video src="${p.archivo_url}" controls playsinline></video>`
+      : `<img src="${p.archivo_url}" alt="">`;
+    el.innerHTML = `<header><img class="avatar-circ" src="${au.avatar_url||''}" alt=""><span>${au.nombre||'Artista'}</span></header>
+      ${media}
+      <div class="acciones"><button data-id="${p.id}">♥</button><span>${p.likes||0}</span></div>
+      <div class="info">${p.texto||''}</div>`;
+    el.querySelector('.acciones button').onclick=async e=>{
+      await sb.from('publicaciones').update({likes:(p.likes||0)+1}).eq('id',p.id);
+      e.target.nextElementSibling.textContent=(p.likes||0)+1; p.likes=(p.likes||0)+1;
+    };
+    feed.appendChild(el);
   });
 }
+
+async function cargarExplorar(){
+  const {data}=await sb.from('obras').select('imagen_url,titulo').order('created_at',{ascending:false}).limit(40);
+  const g=$('explorar-grid'); g.innerHTML='';
+  (data||[]).forEach(o=>{const img=document.createElement('img');img.src=o.imagen_url;img.alt=o.titulo;g.appendChild(img);});
+}
+
+const dzp=$('drop-post'), inputPost=$('archivo-post');
+dzp.onclick=()=>inputPost.click();
+['dragover','dragleave','drop'].forEach(ev=>dzp.addEventListener(ev,e=>e.preventDefault()));
+dzp.addEventListener('dragover',()=>dzp.classList.add('over'));
+dzp.addEventListener('dragleave',()=>dzp.classList.remove('over'));
+let archivoPost=null;
+dzp.addEventListener('drop',e=>{dzp.classList.remove('over');if(e.dataTransfer.files[0])archivoPost=e.dataTransfer.files[0];});
+inputPost.onchange=e=>{if(e.target.files[0])archivoPost=e.target.files[0];};
+
+$('g-post').onclick=async()=>{
+  if(!archivoPost)return say('Elige o arrastra una imagen o video.');
+  if(archivoPost.size>20971520)return say('El archivo no puede pesar más de 20 MB.');
+  const esVideo=archivoPost.type.startsWith('video/');
+  $('g-post').disabled=true;$('g-post').textContent='Publicando...';
+  const ruta=user.id+'/'+Date.now()+'-'+archivoPost.name.replace(/[^a-zA-Z0-9.]/g,'_');
+  const {error:upErr}=await sb.storage.from('publicaciones').upload(ruta,archivoPost,{contentType:archivoPost.type});
+  if(upErr){say('No se pudo subir el archivo.');$('g-post').disabled=false;$('g-post').textContent='Publicar';return;}
+  const archivo_url=sb.storage.from('publicaciones').getPublicUrl(ruta).data.publicUrl;
+  const {error:dbErr}=await sb.from('publicaciones').insert({user_id:user.id,tipo:esVideo?'video':'imagen',archivo_url,texto:$('post-texto').value.trim()});
+  $('g-post').disabled=false;$('g-post').textContent='Publicar';
+  if(dbErr)return say('No se pudo guardar la publicación.');
+  say('Publicado ✓');archivoPost=null;$('post-texto').value='';
+  dzp.querySelector('p').innerHTML='Arrastra una imagen o video, o toca para elegir<br><small>JPG, PNG, WebP o MP4, máx. 20 MB</small>';
+  document.querySelector('.social-nav [data-sv="inicio"]').click();
+  cargarSocial();
+};
 
 </script></body></html>
