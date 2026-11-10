@@ -69,6 +69,16 @@ input,select,textarea{width:100%;padding:.6em;border:1px solid #ccc;border-radiu
 .perfil-resumen .stats b{display:block;color:red;font-size:1.2em;font-family:'Aboreto',cursive}
 .explorar-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
 .explorar-grid img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:8px;border:1px solid red}
+.slide-sala{position:absolute;inset:0;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;opacity:0;transition:opacity 1s;cursor:pointer;text-align:center;padding:1em;box-sizing:border-box}
+.slide-sala.on{opacity:1}
+.slide-sala .badge{font-family:sans-serif;font-size:.7em;letter-spacing:.08em;text-transform:uppercase;background:rgba(255,255,255,.15);padding:.2em .8em;border-radius:12px;margin-bottom:.5em}
+.slide-sala .badge.bloqueada{background:rgba(0,0,0,.4)}
+.slide-sala .nombre{font-size:1.3em}
+.slide-sala .candado{font-size:1.6em;margin-top:.3em}
+.lock-msg{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);background:rgba(255,255,255,.95);color:red;border:1px solid red;border-radius:8px;padding:.5em 1em;font-family:sans-serif;font-size:.85em;display:none;z-index:3;text-align:center}
+.lock-msg a{color:red;font-weight:bold}
+.lock-msg.on{display:block}
+#fullscreen-previa{background:#fff;color:red;border:1px solid red;border-radius:5px;padding:.4em 1em;font-family:inherit;cursor:pointer;margin:.5em 0}
 </style></head><body>
 <header><h1>Aries Art Gallery</h1>
 <nav id="tabs"><button data-t="inicio" class="on">Inicio</button><button data-t="social">Social</button><button data-t="perfil">Perfil</button><button data-t="metricas">Métricas</button><button data-t="tienda">Tienda</button>
@@ -79,9 +89,8 @@ input,select,textarea{width:100%;padding:.6em;border:1px solid #ccc;border-radiu
 <section id="inicio" class="on">
 <div id="banner"></div>
 <div class="viewer" id="viewer">
- <div class="slide on" style="background:linear-gradient(135deg,#8b0000,#222)">Galería clásica</div>
- <div class="slide" style="background:linear-gradient(135deg,#ddd,#fff0f0);color:#000">Galería moderna</div>
- <div class="slide" style="background:linear-gradient(135deg,#000,#ff0080)">Galería neón</div>
+ <div id="slides-salas"></div>
+ <div class="lock-msg" id="lock-msg"></div>
  <div class="pop" id="pop"><button class="x" id="cerrar" aria-label="Cerrar">×</button><p>Crea tu propia galería de alta gama.</p><a class="btn" href="cuenta.html#plan">Conocer los planes</a></div>
 </div>
 <h2>Editar galería</h2>
@@ -96,6 +105,7 @@ input,select,textarea{width:100%;padding:.6em;border:1px solid #ccc;border-radiu
 <button class="btn" id="abrir-publicar" type="button" style="background:#fff;color:red;border:1px solid red">Publicar obras en esta sala</button>
 <p style="font-family:sans-serif;font-size:.85em;color:#666" id="vista-nota"></p>
 <iframe id="vista-previa" title="Vista previa de la sala" style="width:100%;aspect-ratio:16/9;border:1px solid red;border-radius:10px;display:none"></iframe>
+<button id="fullscreen-previa" type="button" style="display:none">Ver en pantalla completa</button>
 <div class="veil"><p>Suscríbete para elegir sala y tipo de galería.</p><a class="btn" href="cuenta.html#plan">Ver planes</a></div>
 </div>
 
@@ -199,7 +209,7 @@ document.querySelectorAll('#tabs [data-t]').forEach(b=>b.onclick=()=>{
 
 // Viewer: slideshow o video
 if(VIDEO_URL){const v=document.createElement('video');v.src=VIDEO_URL;v.autoplay=v.muted=v.loop=v.playsInline=true;$('viewer').prepend(v);}
-else{const s=[...document.querySelectorAll('.slide')];let i=0;setInterval(()=>{s[i].classList.remove('on');i=(i+1)%s.length;s[i].classList.add('on');},3500);}
+else{ construirSlidesSalas(); }
 $('cerrar').onclick=()=>$('pop').classList.remove('on');
 
 function banner(){const b=$('banner');let i=0;const p=()=>{b.style.opacity=0;setTimeout(()=>{b.innerHTML=MENSAJES[i++%MENSAJES.length]+' <a href="cuenta.html#plan">Ver planes</a>';b.style.opacity=1;},400);};p();setInterval(p,4500);}
@@ -221,6 +231,7 @@ function banner(){const b=$('banner');let i=0;const p=()=>{b.style.opacity=0;set
   $('plan').textContent=activo?'Plan activo: '+(s.data.plan||''):'Plan gratuito.';
   llenarSalas(activo?(s.data.plan||'free'):'free');
   actualizarVistaPrevia();
+  if(!VIDEO_URL)construirSlidesSalas();
   if(activo){
     $('banner').style.display='none';$('editor').classList.add('unlocked');$('mcard').classList.add('unlocked');$('obras-card').classList.add('unlocked');
     $('subir-obra').disabled=false;
@@ -340,11 +351,60 @@ const SALA_ARCHIVO = {neon:'salas/sala-basica-neon.html','neon-calma':'salas/sal
 const SALA_CUADROS = {neon:12,'neon-calma':10,complejo:8,'galerias-pro':8};
 const SALA_COMPATIBLE = s => s in SALA_CUADROS; // las 3 salas Plus aún no soportan imágenes reales
 
+const NIVEL_DE_SALA = {neon:'basica','neon-calma':'pro',complejo:'pro','galerias-pro':'pro',ensueno:'plus',psicodelia:'plus',orbital:'plus'};
+const NOMBRE_SALA = {neon:'Neón',"neon-calma":'Neón · Calma',complejo:'Complejo de galerías',"galerias-pro":'Galerías Pro',ensueno:'Ensueño',psicodelia:'Psicodelia flotante',orbital:'Orbital'};
+const FONDO_NIVEL = {basica:'linear-gradient(135deg,#8b0000,#222)',pro:'linear-gradient(135deg,#000,#ff0080)',plus:'linear-gradient(135deg,#1a0030,#ff0080,#00eaff)'};
+let slidesSalaIdx=0, slidesSalaTimer=null;
+
+function construirSlidesSalas(){
+  const cont=$('slides-salas'); cont.innerHTML='';
+  const permitidos = NIVELES_PERMITIDOS[planActual] || ['basica'];
+  Object.keys(SALA_ARCHIVO).forEach((salaId,idx)=>{
+    const nivel = NIVEL_DE_SALA[salaId];
+    const bloqueada = !permitidos.includes(nivel);
+    const el=document.createElement('div'); el.className='slide-sala'+(idx===0?' on':'');
+    el.style.background=FONDO_NIVEL[nivel];
+    el.innerHTML=`<span class="badge${bloqueada?' bloqueada':''}">${nivel}</span><span class="nombre">${NOMBRE_SALA[salaId]}</span>${bloqueada?'<span class="candado">🔒</span>':''}`;
+    el.onclick=()=>seleccionarSalaDesdeSlide(salaId,nivel,bloqueada);
+    cont.appendChild(el);
+  });
+  const slides=[...cont.querySelectorAll('.slide-sala')];
+  if(slidesSalaTimer)clearInterval(slidesSalaTimer);
+  slidesSalaIdx=0;
+  slidesSalaTimer=setInterval(()=>{
+    slides[slidesSalaIdx].classList.remove('on');
+    slidesSalaIdx=(slidesSalaIdx+1)%slides.length;
+    slides[slidesSalaIdx].classList.add('on');
+  },3500);
+}
+
+function seleccionarSalaDesdeSlide(salaId,nivel,bloqueada){
+  const lock=$('lock-msg');
+  if(bloqueada){
+    lock.innerHTML = `No puedes seleccionar esta sala todavía: necesitas subir tu plan a <b>${nivel}</b>. <a href="cuenta.html#plan">Subir de plan</a>`;
+    lock.classList.add('on');
+    setTimeout(()=>lock.classList.remove('on'),5000);
+    return;
+  }
+  lock.classList.remove('on');
+  $('tipo').value=nivel; llenarSelectSala(); $('sala').value=salaId;
+  actualizarVistaPrevia();
+  $('editor').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+$('fullscreen-previa').onclick=()=>{
+  const vp=$('vista-previa');
+  if(vp.requestFullscreen)vp.requestFullscreen();
+  else if(vp.webkitRequestFullscreen)vp.webkitRequestFullscreen();
+};
+
+
 function actualizarVistaPrevia(){
   const salaId=$('sala').value, archivo=SALA_ARCHIVO[salaId], vp=$('vista-previa'), nota=$('vista-nota');
-  if(!archivo){vp.style.display='none';return;}
+  if(!archivo){vp.style.display='none';$('fullscreen-previa').style.display='none';return;}
   vp.src = archivo + (user ? '?artista='+user.id : '');
   vp.style.display='block';
+  $('fullscreen-previa').style.display='inline-block';
   nota.textContent = SALA_COMPATIBLE(salaId)
     ? 'Esta vista ya muestra tus obras publicadas en esta sala.'
     : 'Esta sala todavía usa arte generado por código; la publicación de imágenes propias llega en una próxima actualización.';
