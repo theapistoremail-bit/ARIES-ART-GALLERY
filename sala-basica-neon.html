@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Galería Neón</title>
+<link href="https://fonts.googleapis.com/css2?family=Aboreto&display=swap" rel="stylesheet">
+<style>
+:root{--pink:#ff2bd6;--violet:#8a4dff;--cyan:#24f0ff;--text:#f4eaff}
+html,body{height:100%;margin:0;background:#000;overflow:hidden;color:var(--text);font-family:'Aboreto',Georgia,serif;touch-action:none;-webkit-user-select:none;user-select:none}
+canvas{display:block;position:fixed;inset:0}
+#title{position:fixed;left:0;right:0;bottom:26%;padding:0 20px;text-align:center;pointer-events:none;opacity:0;transition:opacity 1.4s ease;font-size:clamp(24px,6vw,48px);letter-spacing:.08em;text-shadow:0 0 10px var(--pink),0 0 34px var(--violet)}
+#title.on{opacity:1}
+#title small{display:block;margin-top:.7em;font:italic 400 .38em Georgia,serif;letter-spacing:.1em;opacity:.8;text-shadow:0 0 12px var(--violet)}
+#joy{position:fixed;left:calc(24px + env(safe-area-inset-left,0px));bottom:calc(28px + env(safe-area-inset-bottom,0px));width:120px;height:120px;border-radius:50%;border:1px solid rgba(255,43,214,.55);box-shadow:0 0 18px rgba(255,43,214,.35),inset 0 0 18px rgba(138,77,255,.3);touch-action:none}
+#knob{position:absolute;left:50%;top:50%;width:48px;height:48px;margin:-24px 0 0 -24px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#ffb3f2,#8a4dff);box-shadow:0 0 20px var(--pink)}
+#mute{position:fixed;right:calc(18px + env(safe-area-inset-right,0px));top:calc(16px + env(safe-area-inset-top,0px));background:none;color:var(--text);font:inherit;font-size:13px;letter-spacing:.1em;padding:9px 14px;border:1px solid rgba(36,240,255,.5);border-radius:20px;box-shadow:0 0 12px rgba(36,240,255,.25)}
+#card{position:fixed;left:0;right:0;bottom:0;padding:26px 24px calc(30px + env(safe-area-inset-bottom,0px));background:rgba(10,2,22,.88);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid var(--pink);box-shadow:0 -6px 40px rgba(255,43,214,.3);transform:translateY(105%);transition:transform .5s ease}
+#card.on{transform:none}
+#card h2{margin:0 0 4px;font-weight:400;font-size:24px;letter-spacing:.06em}
+#card em{display:block;margin-bottom:12px;font-family:Georgia,serif;opacity:.7}
+#card p{margin:0;max-width:60ch;font:16px/1.55 Georgia,serif;opacity:.9}
+#start{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:24px;text-align:center;background:#000;transition:opacity 1.2s ease}
+#start.off{opacity:0;pointer-events:none}
+#start h1{margin:0;font-weight:400;font-size:clamp(34px,9vw,64px);letter-spacing:.1em;text-shadow:0 0 14px var(--pink),0 0 44px var(--violet)}
+#start p{margin:0;max-width:34ch;font:15px/1.6 Georgia,serif;opacity:.75}
+#start button{margin-top:10px;background:none;color:var(--text);font:inherit;font-size:18px;letter-spacing:.14em;padding:14px 38px;border:1px solid var(--cyan);border-radius:30px;box-shadow:0 0 22px rgba(36,240,255,.45),inset 0 0 14px rgba(36,240,255,.2)}
+@media (prefers-reduced-motion:reduce){#title,#card,#start{transition-duration:.01s}}
+</style>
+</head>
+<body>
+<div id="title"></div>
+<div id="joy"><div id="knob"></div></div>
+<button id="mute" type="button">Silenciar</button>
+<div id="card"></div>
+<div id="start">
+  <h1>Galería Neón</h1>
+  <p>Avanza con el joystick o con WASD. Arrastra para mirar. Toca una obra para ver su ficha. Mejor con audífonos.</p>
+  <button id="go" type="button">Entrar</button>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+
+/* ===== Integración con el panel: lee las obras publicadas del artista (?artista=UUID) ===== */
+const SUPABASE_URL='https://ervucqpuhttdztiikelw.supabase.co',SUPABASE_KEY='sb_publishable_b4thpt6kZH9dInOnp1ii0w_Up1xO43t';
+const _ARTISTA=(()=>{const a=new URLSearchParams(location.search).get('artista');return a&&/^[0-9a-f-]{36}$/i.test(a)?a:null})();
+async function cargarCuadros(sala){
+  if(!_ARTISTA)return[];
+  try{
+    const r=await fetch(SUPABASE_URL+'/rest/v1/galeria_cuadros?select=urls&user_id=eq.'+_ARTISTA+'&sala=eq.'+encodeURIComponent(sala),{headers:{apikey:SUPABASE_KEY,Authorization:'Bearer '+SUPABASE_KEY}});
+    const j=await r.json();return(j&&j[0]&&Array.isArray(j[0].urls))?j[0].urls:[];
+  }catch(e){return[]}
+}
+/* Dibuja la imagen recortada "cover" en un canvas del tamaño del cuadro para que no se deforme */
+function cargarImg(u,cw,ch,cb){
+  const im=new Image();im.crossOrigin='anonymous';
+  im.onload=()=>{const c=document.createElement('canvas');c.width=cw;c.height=ch;const g=c.getContext('2d'),s=Math.max(cw/im.width,ch/im.height),dw=im.width*s,dh=im.height*s;g.drawImage(im,(cw-dw)/2,(ch-dh)/2,dw,dh);cb(c)};
+  im.onerror=()=>{};im.src=u;
+}
+/* Recorte "cover" para texturas cargadas con TextureLoader */
+function fitCover(tx,pw,ph){const im=tx.image;if(!im||!im.width)return;const ia=im.width/im.height,pa=pw/ph;
+  if(ia>pa){tx.repeat.set(pa/ia,1);tx.offset.set((1-pa/ia)/2,0)}else{tx.repeat.set(1,ia/pa);tx.offset.set(0,(1-ia/pa)/2)}}
+/* Para usar tus obras reales agrega src:'url-de-imagen' a cada entrada (funciona en tu propio sitio). */
+const ART=[
+ {t:'Marea de neón',by:'Artista invitado',d:'Olas de luz que respiran despacio sobre un cielo sin estrellas.'},
+ {t:'Pulso lento',by:'Artista invitado',d:'Círculos que se expanden como el latido de una ciudad dormida.'},
+ {t:'Eco violeta',by:'Artista invitado',d:'Manchas de color que flotan y se funden en la oscuridad.'},
+ {t:'Umbral',by:'Artista invitado',d:'Marcos dentro de marcos: una puerta que nunca termina de abrirse.'},
+ {t:'Horizonte líquido',by:'Artista invitado',d:'Una línea de luz que se derrite hacia el fondo del vacío.'},
+ {t:'Órbita quieta',by:'Artista invitado',d:'Anillos de neón girando en silencio alrededor de nada.'},
+ {t:'Lluvia magenta',by:'Artista invitado',d:'Puntos de luz suspendidos justo antes de caer.'},
+ {t:'Luz de fondo',by:'Artista invitado',d:'Cuadrados concéntricos que se acercan como un recuerdo.'},
+ {t:'Sueño de cristal',by:'Artista invitado',d:'Ondas finas, casi transparentes, sobre una noche eléctrica.'},
+ {t:'Respiración',by:'Artista invitado',d:'Un solo círculo que se repite hasta volverse calma.'},
+ {t:'Fuga cian',by:'Artista invitado',d:'Chispas frías que escapan de un cuadro a otro.'},
+ {t:'Última sala',by:'Artista invitado',d:'Un marco abierto hacia el final del pasillo.'}
+];
+const N=ART.length,GAP=7;
+const scene=new THREE.Scene();scene.fog=new THREE.FogExp2(0x000000,.07);
+const cam=new THREE.PerspectiveCamera(70,innerWidth/innerHeight,.1,90);cam.rotation.order='YXZ';cam.position.set(0,1.65,6);
+const ren=new THREE.WebGLRenderer({antialias:true});ren.setPixelRatio(Math.min(devicePixelRatio,2));ren.setSize(innerWidth,innerHeight);ren.setClearColor(0x000000);
+document.body.prepend(ren.domElement);
+const cv=ren.domElement;
+
+function glowTex(){const c=document.createElement('canvas');c.width=c.height=128;const g=c.getContext('2d'),r=g.createRadialGradient(64,64,0,64,64,64);
+ r.addColorStop(0,'rgba(255,255,255,1)');r.addColorStop(.3,'rgba(255,255,255,.35)');r.addColorStop(1,'rgba(255,255,255,0)');g.fillStyle=r;g.fillRect(0,0,128,128);return new THREE.CanvasTexture(c)}
+const GT=glowTex();
+
+function paint(i,h){
+ const c=document.createElement('canvas');c.width=640;c.height=800;const g=c.getContext('2d');
+ const bg=g.createLinearGradient(0,0,0,800);bg.addColorStop(0,'#06020f');bg.addColorStop(1,'#16062e');g.fillStyle=bg;g.fillRect(0,0,640,800);g.lineWidth=2;
+ const k=i%4;
+ if(k===0){for(let j=0;j<26;j++){g.strokeStyle='hsla('+(h+j*4)+',100%,65%,'+(.15+j/40)+')';g.beginPath();for(let x=0;x<=640;x+=8){const y=400+Math.sin(x/70+j*.35+i)*(40+j*7)-j*6;x?g.lineTo(x,y):g.moveTo(x,y)}g.stroke()}}
+ else if(k===1){for(let j=1;j<22;j++){g.strokeStyle='hsla('+(h-j*5)+',100%,65%,'+(.85-j/30)+')';g.beginPath();g.arc(320,400,j*15,0,7);g.stroke()}}
+ else if(k===2){for(let j=0;j<70;j++){const x=(j*97+i*53)%640,y=(j*173+i*29)%800,r=6+(j*7)%38,rg=g.createRadialGradient(x,y,0,x,y,r);rg.addColorStop(0,'hsla('+(h+j*3)+',100%,70%,.9)');rg.addColorStop(1,'rgba(0,0,0,0)');g.fillStyle=rg;g.fillRect(x-r,y-r,2*r,2*r)}}
+ else{for(let j=0;j<16;j++){g.strokeStyle='hsla('+(h+j*6)+',100%,65%,.7)';g.strokeRect(300-j*18,380-j*22,(j*18+20)*2,(j*22+20)*2)}}
+ return new THREE.CanvasTexture(c)
+}
+
+const frames=[];
+ART.forEach((a,i)=>{
+ const t=i/(N-1),hue=320-135*t,col=new THREE.Color().setHSL(hue/360,1,.6),side=i%2?1:-1;
+ const grp=new THREE.Group();grp.position.set(side*2.4,1.7,-i*GAP-4);grp.rotation.y=-side*.35;
+ const mk=(geo,o)=>new THREE.Mesh(geo,new THREE.MeshBasicMaterial(Object.assign({transparent:true,opacity:0},o)));
+ const pic=mk(new THREE.PlaneGeometry(2.2,2.75),{map:paint(i,hue)});pic.userData.i=i;
+ if(a.src)new THREE.TextureLoader().load(a.src,tx=>{pic.material.map=tx;pic.material.needsUpdate=true});
+ const edge=mk(new THREE.PlaneGeometry(2.34,2.89),{color:col});edge.position.z=-.01;
+ const base=mk(new THREE.BoxGeometry(2.4,.05,.25),{color:col});base.position.y=-1.55;
+ const glow=new THREE.Sprite(new THREE.SpriteMaterial({map:GT,color:col,blending:THREE.AdditiveBlending,transparent:true,opacity:0,depthWrite:false}));
+ glow.scale.set(5.4,1.8,1);glow.position.y=-1.55;
+ grp.add(edge,pic,base,glow);scene.add(grp);frames.push({grp,pic,edge,base,glow,i});
+});
+
+(function dust(){const n=700,p=new Float32Array(n*3);for(let i=0;i<n;i++){p[i*3]=(Math.random()-.5)*14;p[i*3+1]=Math.random()*5;p[i*3+2]=6-Math.random()*(N*GAP+16)}
+ const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(p,3));
+ scene.add(new THREE.Points(g,new THREE.PointsMaterial({color:0xb48cff,size:.045,transparent:true,opacity:.7,depthWrite:false})))})();
+
+/* Controles */
+const keys={};addEventListener('keydown',e=>keys[e.code]=1);addEventListener('keyup',e=>keys[e.code]=0);
+let jx=0,jy=0,yaw=0,pitch=0,drag=null,moved=0,vx=0,vz=0;
+const joy=document.getElementById('joy'),knob=document.getElementById('knob');
+function jmove(e){const r=joy.getBoundingClientRect();let x=(e.clientX-r.left-60)/50,y=(e.clientY-r.top-60)/50;const m=Math.hypot(x,y);if(m>1){x/=m;y/=m}jx=x;jy=y;knob.style.transform='translate('+x*36+'px,'+y*36+'px)'}
+const jend=()=>{jx=jy=0;knob.style.transform=''};
+joy.addEventListener('pointerdown',e=>{joy.setPointerCapture(e.pointerId);jmove(e)});
+joy.addEventListener('pointermove',e=>{if(joy.hasPointerCapture(e.pointerId))jmove(e)});
+joy.addEventListener('pointerup',jend);joy.addEventListener('pointercancel',jend);
+cv.addEventListener('pointerdown',e=>{drag={x:e.clientX,y:e.clientY};moved=0});
+addEventListener('pointermove',e=>{if(!drag)return;const dx=e.clientX-drag.x,dy=e.clientY-drag.y;drag.x=e.clientX;drag.y=e.clientY;moved+=Math.abs(dx)+Math.abs(dy);yaw-=dx*.004;pitch=Math.max(-.5,Math.min(.5,pitch-dy*.003))});
+addEventListener('pointerup',e=>{if(drag&&moved<6)pick(e);drag=null});
+
+/* Ficha y títulos efímeros */
+const card=document.getElementById('card'),ttl=document.getElementById('title'),ray=new THREE.Raycaster(),pm=frames.map(f=>f.pic);
+function pick(e){if(card.classList.contains('on')){card.classList.remove('on');return}
+ ray.setFromCamera({x:e.clientX/innerWidth*2-1,y:-(e.clientY/innerHeight)*2+1},cam);
+ const h=ray.intersectObjects(pm)[0];
+ if(h&&h.object.material.opacity>.5){const a=ART[h.object.userData.i];card.innerHTML='<h2>'+a.t+'</h2><em>'+a.by+'</em><p>'+a.d+'</p>';card.classList.add('on')}}
+let cur=-1,tm;
+function showTitle(i){ttl.innerHTML=ART[i].t+'<small>'+ART[i].by+'</small>';ttl.classList.add('on');clearTimeout(tm);tm=setTimeout(()=>ttl.classList.remove('on'),3800)}
+
+/* Música ambiental generada en el navegador */
+let ac,master,muted=false;
+function music(){
+ ac=new (window.AudioContext||window.webkitAudioContext)();master=ac.createGain();master.gain.value=0;master.gain.linearRampToValueAtTime(.5,ac.currentTime+6);
+ const lp=ac.createBiquadFilter();lp.type='lowpass';lp.frequency.value=900;
+ const dl=ac.createDelay(1);dl.delayTime.value=.45;const fb=ac.createGain();fb.gain.value=.45;dl.connect(fb);fb.connect(dl);
+ lp.connect(master);lp.connect(dl);dl.connect(master);master.connect(ac.destination);
+ const ch=[[110,164.8,220,329.6,493.9],[87.3,130.8,196,261.6,392],[130.8,196,261.6,329.6,493.9],[98,146.8,196,293.7,440]];
+ function play(n){const now=ac.currentTime;ch[n%4].forEach((f,k)=>{const o=ac.createOscillator(),g=ac.createGain();o.type=k<2?'sine':'triangle';o.frequency.value=f;o.detune.value=(k-2)*4;
+  g.gain.setValueAtTime(0,now);g.gain.linearRampToValueAtTime(.07,now+3);g.gain.linearRampToValueAtTime(0,now+9);o.connect(g);g.connect(lp);o.start(now);o.stop(now+9.2)})}
+ play(0);let n=1;setInterval(()=>play(n++),6000);
+}
+document.getElementById('go').onclick=()=>{document.getElementById('start').classList.add('off');if(!ac)music();else ac.resume()};
+const mb=document.getElementById('mute');
+mb.onclick=()=>{if(!ac)return;muted=!muted;master.gain.setTargetAtTime(muted?0:.5,ac.currentTime,.3);mb.textContent=muted?'Activar sonido':'Silenciar'};
+
+/* Bucle */
+const clock=new THREE.Clock(),fw=new THREE.Vector3(),tv=new THREE.Vector3();
+function loop(){
+ requestAnimationFrame(loop);
+ const dt=Math.min(clock.getDelta(),.05),t=clock.elapsedTime;
+ const mz=(keys.KeyW||keys.ArrowUp?1:0)-(keys.KeyS||keys.ArrowDown?1:0)-jy;
+ const mx=(keys.KeyD||keys.ArrowRight?1:0)-(keys.KeyA||keys.ArrowLeft?1:0)+jx;
+ const s=Math.sin(yaw),c=Math.cos(yaw),sp=2.8;
+ vx+=((-s*mz+c*mx)*sp-vx)*dt*2.5;vz+=((-c*mz-s*mx)*sp-vz)*dt*2.5;
+ cam.position.x=Math.max(-3.8,Math.min(3.8,cam.position.x+vx*dt));
+ cam.position.z=Math.max(-(N*GAP)-2,Math.min(7,cam.position.z+vz*dt));
+ cam.position.y=1.65+Math.sin(t*.6)*.03;
+ cam.rotation.set(pitch,yaw,0);
+ cam.getWorldDirection(fw);
+ let best=-1,bd=99;
+ frames.forEach(f=>{
+  const d=cam.position.distanceTo(f.grp.position),r=Math.max(0,Math.min(1,(17-d)/6));
+  f.pic.material.opacity=r;f.edge.material.opacity=.4*r;f.base.material.opacity=r;f.glow.material.opacity=.9*r;
+  f.grp.position.y=1.7+Math.sin(t*.8+f.i)*.08-(1-r)*.7;
+  tv.copy(f.grp.position).sub(cam.position);const dd=tv.length();tv.normalize();
+  if(dd<6.5&&tv.dot(fw)>.82&&dd<bd){bd=dd;best=f.i}
+ });
+ if(best!==cur){cur=best;if(best>=0)showTitle(best)}
+ ren.render(scene,cam);
+}
+addEventListener('resize',()=>{cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix();ren.setSize(innerWidth,innerHeight)});
+loop();
+(async()=>{(await cargarCuadros('neon')).forEach((u,i)=>{const f=frames[i];if(!f||!u)return;
+  cargarImg(u,640,800,c=>{f.pic.material.map=new THREE.CanvasTexture(c);f.pic.material.needsUpdate=true})})})();
+</script>
+</body>
+</html>
